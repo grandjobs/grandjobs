@@ -1,5 +1,22 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import firebase from "firebase";
+
+class fireBaseTesting extends React.Component {
+	var test;
+	var config = {
+		apiKey: "AIzaSyCBqt6oDF0MEB17aCvNsno5NM4qozJUGeM",
+		authDomain: "job-push-fbb6a.firebaseapp.com",
+		databaseURL: "https://job-push-fbb6a.firebaseio.com",
+		projectId: "job-push-fbb6a",
+		storageBucket: "job-push-fbb6a.appspot.com",
+		messagingSenderId: "539179420830"
+	};
+
+	firebase.initializeApp(config);
+
+	var rootRef = firebase.database().ref();
+}
 
 export default class App extends React.Component {
   render() {
