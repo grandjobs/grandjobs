@@ -32,10 +32,19 @@ fetch('https://randomuser.me/api?results=10&inc=login,cell')
 		var users = u.results;
 		
 		for (let i = 0; i < users.length; i++) {
-				userRef.push().set({ username: users[i]['login']['username'] });
+				console.log("HELLOOOO");
+				//userRef.push().set({ username: users[i]['login']['username'] });
 		}
 		//console.log(users.length);
 		//console.log(users[0]);
 		//console.log(users[0]['login']['username']);
 		//console.log(users);
+});
+
+fetch('https://openmobilitydata-data.s3-us-west-1.amazonaws.com/public/feeds/the-rapid/380/20190104/original/stops.txt')
+	.then(results => results.text())
+	.then(textBody => {
+		var lines = textBody.split(\n/);
+		console.log(lines);
+		//console.log(t);
 });
