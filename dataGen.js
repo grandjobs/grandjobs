@@ -1,4 +1,6 @@
 const Firebase = require('firebase');
+var DomParser = require('dom-parser');
+var parser = new DomParser();
 
 let config = {
 		apiKey: "AIzaSyCBqt6oDF0MEB17aCvNsno5NM4qozJUGeM",
@@ -13,38 +15,83 @@ let app = Firebase.initializeApp(config);
 const db = app.database();
 
 var rootRef = db.ref();
+var busRef = rootRef.child('BUSES');
 
-//rootRef.once('value', function(snapshot) {
-//	if (!snapshot.hasChild("USERS")) {
-//		console.log("here brah");
-//		rootRef.child.set("USERS");
-//	} else {
-//		console.log("why..");
-//	}
+//fetch('https://randomuser.me/api?results=10&inc=login,cell')
+//	.then(r => r.json())
+//	.then(u => {
+//		var users = u.results;
+		
+//		for (let i = 0; i < users.length; i++) {
+//				userRef.push().set({ username: users[i]['login']['username'] });
+//		}
 //});
 
-var userRef = rootRef.child("USERS");
-//userRef.push().set({ username: "jokes" });
-
-fetch('https://randomuser.me/api?results=10&inc=login,cell')
-	.then(r => r.json())
-	.then(u => {
-		var users = u.results;
-		
-		for (let i = 0; i < users.length; i++) {
-				console.log("HELLOOOO");
-				//userRef.push().set({ username: users[i]['login']['username'] });
-		}
-		//console.log(users.length);
-		//console.log(users[0]);
-		//console.log(users[0]['login']['username']);
-		//console.log(users);
-});
-
-fetch('https://openmobilitydata-data.s3-us-west-1.amazonaws.com/public/feeds/the-rapid/380/20190104/original/stops.txt')
+fetch('https://openmobilitydata-data.s3-us-west-1.amazonaws.com/public/feeds/the-rapid/380/20190104/original/routes.txt')
 	.then(results => results.text())
 	.then(textBody => {
-		var lines = textBody.split(\n/);
-		console.log(lines);
-		//console.log(t);
+		var lines = textBody.split(/\n/);
+		
+		for (let i = 1; i < lines.length - 1; i++) {
+			let line = lines[i].split(",");
+			
+			busRef.child(parseInt(line[9])).set({ Description: line[3].substring(1,(line[3].length - 1)), Stops: "NULL" });
+		}
 });
+
+var routeList = [];
+
+fetch('https://connect.ridetherapid.org/InfoPoint/Minimal')
+	.then(results => results.text())
+	.then(textBody => {
+		var routeListDom = parser.parseFromString(textBody);
+		var routeEntries = routeListDom.getElementsByClassName('routeNameListEntry');
+		
+		for (let i = 0; i < routeEntries.length; i++) {
+			let routeName = routeEntries[i].getAttribute("routeID");
+			
+			routeList.push(routeName);
+		}
+		
+		console.log(routeList[27]);
+		
+		fetch('https://openmobilitydata-data.s3-us-west-1.amazonaws.com/public/feeds/the-rapid/380/20190104/original/stops.txt')
+			.then(results => results.text())
+			.then(textBody => {
+				var lines = textBody.split(/\n/);
+		
+				for (let i = 0; i < 1; i++) {
+					fetch('https://connect.ridetherapid.org/InfoPoint/Minimal/Stops/ForRoute?routeId=' + routeList[27])
+						.then(results => results.text())
+						.then(textBody => {
+							var stopListDom = parser.parseFromString(textBody);
+							var stopEntries = stopListDom.getElementsByClassName('stopNameListEntry');
+
+							var matches = 0;
+							
+							var routeRef = busRef.child(routeList[27])
+							var stopsRef = routeRef.child('Stops');
+							
+							for (let k = 0; k < stopEntries.length; k = k + 2) {
+								var stop_id = stopEntries[k].getAttribute("stopid");
+								
+								for (let j = 1; j < lines.length - 1; j++) {
+									let line = lines[j].split(",");
+								
+									if (line[1] == stop_id) {
+										stopsRef.child(stop_id).set({ Latitude: line[4], Longitude: line[5], Description: line[2]});
+										
+										matches++;
+										j = lines.length - 1;
+									}
+								}
+							}
+							
+							console.log('Matches for the 50: ' + matches);
+						});
+				}
+		});
+});
+
+
+
