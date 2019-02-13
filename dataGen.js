@@ -34,8 +34,12 @@ fetch('https://openmobilitydata-data.s3-us-west-1.amazonaws.com/public/feeds/the
 		
 		for (let i = 1; i < lines.length - 1; i++) {
 			let line = lines[i].split(",");
+
+			console.log('Token trimmed: ' + line[2].substring(1, line[2].length - 1));
 			
-			busRef.child(parseInt(line[9])).set({ Description: line[3].substring(1,(line[3].length - 1)), Stops: "NULL" });
+			var trimmedToken = line[2].substring(1, line[2].length - 1);
+			
+			busRef.child(parseInt(trimmedToken)).set({ Description: line[3].substring(1,(line[3].length - 1)), Stops: "NULL" });
 		}
 });
 
@@ -53,15 +57,13 @@ fetch('https://connect.ridetherapid.org/InfoPoint/Minimal')
 			routeList.push(routeName);
 		}
 		
-		console.log(routeList[27]);
-		
 		fetch('https://openmobilitydata-data.s3-us-west-1.amazonaws.com/public/feeds/the-rapid/380/20190104/original/stops.txt')
 			.then(results => results.text())
 			.then(textBody => {
 				var lines = textBody.split(/\n/);
 		
-				for (let i = 0; i < 1; i++) {
-					fetch('https://connect.ridetherapid.org/InfoPoint/Minimal/Stops/ForRoute?routeId=' + routeList[27])
+				for (let i = 0; i < routeList.length; i++) {
+					fetch('https://connect.ridetherapid.org/InfoPoint/Minimal/Stops/ForRoute?routeId=' + routeList[i])
 						.then(results => results.text())
 						.then(textBody => {
 							var stopListDom = parser.parseFromString(textBody);
@@ -69,7 +71,7 @@ fetch('https://connect.ridetherapid.org/InfoPoint/Minimal')
 
 							var matches = 0;
 							
-							var routeRef = busRef.child(routeList[27])
+							var routeRef = busRef.child(routeList[i])
 							var stopsRef = routeRef.child('Stops');
 							
 							for (let k = 0; k < stopEntries.length; k = k + 2) {
@@ -81,13 +83,13 @@ fetch('https://connect.ridetherapid.org/InfoPoint/Minimal')
 									if (line[1] == stop_id) {
 										stopsRef.child(stop_id).set({ Latitude: line[4], Longitude: line[5], Description: line[2]});
 										
-										matches++;
+										//matches++;
 										j = lines.length - 1;
 									}
 								}
 							}
 							
-							console.log('Matches for the 50: ' + matches);
+							//console.log('Matches for the 50: ' + matches);
 						});
 				}
 		});
