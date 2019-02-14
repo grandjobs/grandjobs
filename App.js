@@ -7,7 +7,7 @@ import AccountSetup from './AccountSetup';
 import StartPage from './StartPage';
 import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
-import SkillsPage from './SkillsPage';
+import SkillsPage from './TempSkillsPage';
 
 const App = () => {
     return (
