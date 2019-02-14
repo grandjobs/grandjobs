@@ -109,7 +109,8 @@ const styles = StyleSheet.create({
     },
     mainButtonDesign:{
         fontSize: 35,
-        fontFamily: 'sans-serif-thin',
+        fontWeight: 'normal',
+        fontFamily: 'Roboto-Thin',
         textAlignVertical: "center",
         height: 200,
         marginTop: 70,
@@ -122,7 +123,8 @@ const styles = StyleSheet.create({
     },
     buttonDesign:{
         fontSize: 20,
-        fontFamily: 'sans-serif-thin',
+        fontWeight: 'normal',
+        fontFamily: 'Roboto-Thin',
         padding: 10,
         width: 80,
         color: '#fff',

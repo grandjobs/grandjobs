@@ -3,25 +3,41 @@ import { StyleSheet, Text, View, Dimensions, ImageBackground } from 'react-nativ
 import Button from 'react-native-button'
 import {createStackNavigator, createAppNavigator} from 'react-navigation';
 import { Actions } from 'react-native-router-flux';
+import { Font } from 'expo';
+
 
 export default class StartPage extends React.Component {
+    state = {
+        fontLoaded: false,
+    };
+
+    async componentWillMount() {
+        await Font.loadAsync({
+            'Roboto-Thin': require('./assets/fonts/Roboto-Thin.ttf'),
+        });
+        this.setState({fontLoaded: true});
+    }
+
     render() {
         return (
-            <ImageBackground source={require('./assets/Images/city-blur.png')}  style={{width: '100%', height: '100%'}}>
-                <View style={styles.mainContainer}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.mainText}>I am looking for...</Text>
+            this.state.fontLoaded ? (
+                <ImageBackground source={require('./assets/Images/city-blur.png')}  style={{width: '100%', height: '100%'}}>
+                    <View style={styles.mainContainer}>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.mainText}>I am looking for...</Text>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <Button style={styles.buttonDesign} onPress={()=>this.employerPressed()}>
+                            Employees
+                            </Button>
+                            <Button style={styles.buttonDesign} onPress={()=>this.jobsPressed()}>
+                            Jobs
+                            </Button>
+                        </View>
                     </View>
-                    <View style={styles.buttonContainer}>
-                        <Button style={styles.buttonDesign} onPress={()=>this.employerPressed()}>
-                        Employees
-                        </Button>
-                        <Button style={styles.buttonDesign} onPress={()=>this.jobsPressed()}>
-                        Jobs
-                        </Button>
-                    </View>
-                </View>
-            </ImageBackground>
+                </ImageBackground>
+            ) : null
+
         );
     }
 
@@ -64,11 +80,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         top: 20,
         color: '#fff',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Roboto-Thin'
     },
     buttonDesign:{
         fontSize: 25,
-        fontFamily: 'sans-serif-thin',
+        fontWeight: 'normal',
         padding: 10,
         margin: 30,
         width: 300,
@@ -76,6 +92,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         borderColor: '#fff',
         borderWidth: 1,
+        fontFamily: 'Roboto-Thin'
         // opacity: 10,
         // backgroundColor: 'rgba(18, 18, 18, 0.5)',
     },

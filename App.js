@@ -9,7 +9,6 @@ import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
 
-
 const App = () => {
     return (
         <Router>
