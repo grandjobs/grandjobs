@@ -7,19 +7,12 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "dom-parser": "^0.1.5",
     "expo": "^32.0.0",
     "firebase": "^5.8.1",
     "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
-    "react-native-button": "^2.3.0",
-    "react-native-paper": "^2.9.1",
-    "react-native-phone-input": "^0.2.1",
-    "react-native-router-flux": "^4.0.6",
-    "react-navigation": "^3.0.9"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz"
   },
   "devDependencies": {
-    "@expo/vector-icons": "^9.0.0",
     "babel-preset-expo": "^5.0.0"
   },
   "private": true
