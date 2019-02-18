@@ -7,7 +7,7 @@ import AccountSetup from './AccountSetup';
 import StartPage from './StartPage';
 import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
-
+import SkillsPage from './SkillsPage';
 
 
 const App = () => {
@@ -34,6 +34,12 @@ const App = () => {
                     key = "EmployerHomepage"
                     component = {EmployerHomepage}
                     title="Account"
+                    hideNavBar={true}
+                />
+                 <Scene
+                    key = "SkillPage"
+                    component = {SkillsPage}
+                    title="Skills"
                     hideNavBar={true}
                 />
             </Scene>

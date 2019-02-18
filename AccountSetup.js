@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
 import Button from 'react-native-button';
 // import { TextInput } from 'react-native-paper';
 import PhoneInput from 'react-native-phone-input';
+import { Actions } from 'react-native-router-flux';
+
 
 export default class AccountSetup extends React.Component {
     render() {
@@ -33,17 +35,30 @@ export default class AccountSetup extends React.Component {
                         placeholder='Email (Optional)'
                     />
                 </View>
+                <View style={styles.bottomContainer}>
+                    <Button style={styles.buttonDesign} onPress={()=>this.nextPressed()}>
+                    Next
+                    </Button>
+                </View>
+
             </View>
         );
     }
+
+    nextPressed(){
+        console.log('Next pressed');
+        Actions.SkillPage();
+    }
+
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: '#1E2027',
-        padding: 10,
-        // justifyContent: 'center'
+        // padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     textContainer:{
         top: Dimensions.get('window').height * 0.05
@@ -58,14 +73,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'Arial'
+        fontFamily: 'sans-serif-thin'
     },
     mainText:{
         fontSize: 25,
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'Arial'
+        fontFamily: 'sans-serif-thin'
     },
     inputText:{
         borderColor: '#fff',
@@ -73,7 +88,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         textAlign: 'center',
         color:'white',
-        fontFamily: 'Arial',
+        fontFamily: 'sans-serif-thin',
         padding: 10,
         margin: 20,
         borderWidth: 1,
@@ -89,5 +104,21 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         textAlign: 'center',
         width: Dimensions.get('window').width * 0.8,
+    },
+    bottomContainer:{
+        flex: 1,
+        justifyContent: 'flex-end',
+        marginBottom: 0
+    },
+    buttonDesign:{
+        fontSize: 20,
+        fontFamily: 'sans-serif-thin',
+        padding: 10,
+        margin: 30,
+        width: 150,
+        color: '#fff',
+        borderRadius: 30,
+        borderColor: '#a9fcd4',
+        borderWidth: 1,
     },
 });
