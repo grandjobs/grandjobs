@@ -8,6 +8,7 @@ import StartPage from './StartPage';
 import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
+import authTesting from './authTesting';
 
 
 const App = () => {
@@ -24,6 +25,11 @@ const App = () => {
                     component = {Employers}
                     hideNavBar={true}
                 />
+				<Scene
+					key = "authTesting"
+					component = {authTesting}
+					hideNavBar={true}
+				/>
                 <Scene
                     key = "AccountSetup"
                     component = {AccountSetup}
