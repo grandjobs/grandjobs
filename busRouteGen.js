@@ -21,6 +21,10 @@ var busRef = rootRef.child('BUSES');
 var gtfsRouteList = [];
 var infoPointRouteList = [];
 
+/* This function returns a promise that tells us we have finished retrieving
+a list of bus routes as listed by GTFS. We also push this list to the database
+in this function but we will error check later to make sure that we have a list
+matching the one on infoPoint. */
 function getGTFSRoutes() {
 	return fetch('https://openmobilitydata-data.s3-us-west-1.amazonaws.com/public/feeds/the-rapid/380/20190104/original/routes.txt')
 		.then(results => results.text())
@@ -40,6 +44,9 @@ function getGTFSRoutes() {
 	});
 }
 
+/* This function returns a promise letting us know we have finished collecting
+a list of routes from infoPoint. We will be using this info to double check
+the list provided by GTFS since we are using info from both sites. */
 function getInfoPointRoutes() {
 	return fetch('https://connect.ridetherapid.org/InfoPoint/Minimal')
 		.then(results => results.text())
@@ -54,12 +61,15 @@ function getInfoPointRoutes() {
 			}	
 	});
 }
-		
+
+/* This function parses through the stops.txt file from GTFS matching each entry
+to a route based on stopid then pushes it to the appropriate route in Firebase */		
 function parseStopsTxt() {
 	return fetch('https://openmobilitydata-data.s3-us-west-1.amazonaws.com/public/feeds/the-rapid/380/20190104/original/stops.txt')
 		.then(results => results.text())
 		.then(textBody => {
 			var lines = textBody.split(/\n/);
+			var matches = 0;
 	
 			for (let i = 0; i < infoPointRouteList.length; i++) {
 				fetch('https://connect.ridetherapid.org/InfoPoint/Minimal/Stops/ForRoute?routeId=' + infoPointRouteList[i])
@@ -67,8 +77,6 @@ function parseStopsTxt() {
 					.then(textBody => {
 						let stopListDom = parser.parseFromString(textBody);
 						let stopEntries = stopListDom.getElementsByClassName('stopNameListEntry');
-
-						var matches = 0;
 						
 						var routeRef = busRef.child(infoPointRouteList[i])
 						var stopsRef = routeRef.child('Stops');
@@ -82,17 +90,19 @@ function parseStopsTxt() {
 								if (line[1] == stop_id) {
 									stopsRef.child(stop_id).set({ Latitude: line[4], Longitude: line[5], Description: line[2]});
 									
-									//matches++;
+									matches++;
 									j = lines.length - 1;
 								}
 							}
 						}
-						//console.log('Matches for the 50: ' + matches);
 					});
 			}
 	});
 }
 
+/* This function waits for the promises to return in paralell
+from a few functions then parses through the stops.txt file.
+It also does some basic error checking by calling another function. */
 function loadDB() {
 	Promise.all([getGTFSRoutes(), getInfoPointRoutes()])
 		.then(function() {
@@ -103,6 +113,9 @@ function loadDB() {
 		});
 }
 
+/* Function to do basic error checking including verifying that
+information obtained from different sources is identical. This should
+be expanded to be more intensive at a later stage in development. */
 function errorCheck() {
 		if (infoPointRouteList.length != gtfsRouteList.length) {
 			console.log("Route lists differ in length ERROR");
@@ -115,5 +128,6 @@ function errorCheck() {
 		}
 }
 
+//Calls the function loadDb which can be considered 'main' for this file
 loadDB();
 
