@@ -2,19 +2,28 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput, Alert } from 'react-native';
 import Button from 'react-native-button';
 import PhoneInput from 'react-native-phone-input';
-import { Actions } from 'react-native-router-flux'
-import { db } from './db';
+import { Actions } from 'react-native-router-flux';
+import Firebase from 'firebase';
+import { firebase } from './db';
 
 export default class authTesting extends React.Component {
     state = { phone: ''}
 	
 	handleSignUp = () => {
-		console.log('handleSignUp')
+		window.recaptchaVerifier = new Firebase.auth.RecaptchaVerifier('sign-in-button', {
+			'size': 'invisible',
+			'callback': function(response) {
+				// reCAPTCHA solved, allow signInWithPhoneNumber.
+				onSignInSubmit();
+			}
+		});
+		
+		console.log(this.state.phone);
 	}
 	
 	render() {
         return (
-			<View style={styles.container}>
+			<View style={styles.mainContainer}>
 				<View style={styles.fillContainer}>
 					<TextInput
 						placeholder='Phone Number'
@@ -23,7 +32,9 @@ export default class authTesting extends React.Component {
 						onChangeText={phone => this.setState({ phone })}
 						value={this.state.phone}
 					/>
-					<Button title="Sign Up" onPress={this.handleSignUp} style={styles.buttonDesign} />
+					<Button onPress={this.handleSignUp} style={styles.buttonDesign}>
+					Signup(maybe)
+					</Button>
 				</View>
 			</View>
 		);
@@ -31,11 +42,16 @@ export default class authTesting extends React.Component {
 }
 	
 const styles = StyleSheet.create({	
-	container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-	},
+	mainContainer: {
+        flex: 1,
+        backgroundColor: '#1E2027',
+        padding: 10,
+    },
+	fillContainer:{
+        top: Dimensions.get('window').height * 0.20,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 	inputText:{
         borderColor: '#fff',
         color: '#fff',
@@ -58,10 +74,5 @@ const styles = StyleSheet.create({
         color: '#bc1c1c',
         borderRadius: 30,
         backgroundColor: '#121212',
-    },
-	fillContainer:{
-        top: Dimensions.get('window').height * 0.20,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
+    }
 });

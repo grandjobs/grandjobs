@@ -9,6 +9,7 @@ import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
 import authTesting from './authTesting';
+import authSol from './authSol';
 
 
 const App = () => {
@@ -27,7 +28,7 @@ const App = () => {
                 />
 				<Scene
 					key = "authTesting"
-					component = {authTesting}
+					component = {authSol}
 					hideNavBar={true}
 				/>
                 <Scene
