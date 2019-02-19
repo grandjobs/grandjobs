@@ -1,70 +1,50 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TextInput, Alert } from 'react-native';
 import Button from 'react-native-button';
 // import { TextInput } from 'react-native-paper';
 import PhoneInput from 'react-native-phone-input';
 import { Actions } from 'react-native-router-flux'
 
-
-export default class EmployerHomepage extends React.Component {
+export default class EmployerCreateListing extends React.Component {
     render() {
-      let screenwidth = Dimensions.get('window').width;
-      let screenHeight = Dimensions.get('window').height;
-      //const { navigate } = this.props.navigation;
         return (
-          <ScrollView
-              horizontal = {true}
-              >
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>Welcome</Text>
-                    <Text style={styles.mainText}>Here are your updates</Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                <Button style={styles.buttonDesign} onPress={()=>this.homePressed()}>
-                Homepage
-                </Button>
+                    <Text style={styles.largeText}>Awesome!</Text>
+                    <Text style={styles.mainText}>Lets fill out some information.</Text>
                 </View>
                 <View style={styles.fillContainer}>
-                <Text style={styles.mainText}>Notifications Here</Text>
+                    {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
+                    {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
+                    <TextInput style={styles.inputText}
+                        selectTextOnFocus={true}
+                        placeholder='Username'
+                    />
+                    <TextInput style={styles.inputText}
+                        selectTextOnFocus={true}
+                        placeholder='Company Name'
+                    />
+                    <TextInput style={styles.inputText}
+                        selectTextOnFocus={true}
+                        placeholder='Company Location'
+                    />
+                    <Button style={styles.buttonDesign} onPress={()=>this.createPressed()}>
+                    Create Listing
+                    </Button>
                 </View>
-
             </View>
-
-
-
-            <View style={styles.mainContainer}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>Welcome</Text>
-                    <Text style={styles.mainText}>Here are your listings</Text>
-                </View>
-                <View style={styles.buttonContainer}>
-                <Button style={styles.buttonDesign} onPress={()=>this.homePressed()}>
-                Homepage
-                </Button>
-                </View>
-                <View style={styles.buttonContainer}>
-                <Button style={styles.buttonDesign} onPress={()=>this.newListingPressed()}>
-                New Listing
-                </Button>
-                </View>
-                <View style={styles.fillContainer}>
-                <Text style={styles.mainText}>Job Listings here</Text>
-                </View>
-
-            </View>
-
-
-            </ScrollView>);
+        );
     }
 
-    homePressed(){
-
-      Actions.StartPage();
-    }
-
-    newListingPressed(){
-      Actions.EmployerCreateListing();
+    createPressed(){
+      Alert.alert(
+        'Confirm',
+        'Confirm Listing?',
+        [
+          {text:'OK',onPress:()=>Actions.EmployerHomepage()},
+          {text:'Cancel',onPress:()=>console.log('cancel pressed')}
+        ]
+      )
     }
 }
 
@@ -80,7 +60,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         alignItems: 'center',
-        top: (Dimensions.get('window').height * 0.6)
+        top: (Dimensions.get('window').height * 0.3)
     },
     fillContainer:{
         top: Dimensions.get('window').height * 0.20,

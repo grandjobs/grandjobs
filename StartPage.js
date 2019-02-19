@@ -64,11 +64,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         top: 20,
         color: '#fff',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Arial'
     },
     buttonDesign:{
         fontSize: 25,
-        fontFamily: 'sans-serif-thin',
+        fontFamily: 'Arial',
         padding: 10,
         margin: 30,
         width: 300,

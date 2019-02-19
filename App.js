@@ -8,6 +8,7 @@ import StartPage from './StartPage';
 import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
+import EmployerCreateListing from './EmployerCreateListing';
 
 
 const App = () => {
@@ -28,6 +29,12 @@ const App = () => {
                     key = "AccountSetup"
                     component = {AccountSetup}
                     title="Account"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "EmployerCreateListing"
+                    component = {EmployerCreateListing}
+                    title="Create Listing"
                     hideNavBar={true}
                 />
                 <Scene
