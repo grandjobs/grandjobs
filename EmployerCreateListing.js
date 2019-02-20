@@ -28,6 +28,11 @@ export default class EmployerCreateListing extends React.Component {
                         selectTextOnFocus={true}
                         placeholder='Company Location'
                     />
+                    <TextInput style={styles.inputText2}
+                        selectTextOnFocus={true}
+                        placeholder='Additional Details'
+                        multiline = {true}
+                    />
                     <View style={styles.buttonContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.createPressed()}>
                     Create Listing
@@ -62,10 +67,10 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         alignItems: 'center',
-        top: Dimensions.get('window').height * 0.2
+        top: Dimensions.get('window').height * 0.0075
     },
     fillContainer:{
-        top: Dimensions.get('window').height * 0.20,
+        top: Dimensions.get('window').height * 0.10,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -106,14 +111,18 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         width: Dimensions.get('window').width * 0.8
     },
-    inputPhone:{
+    inputText2:{
         borderColor: '#fff',
         color: '#fff',
-        padding: 12,
-        margin: 20,
+        fontSize: 25,
+        textAlign: 'center',
+        color:'white',
+        fontFamily: 'Arial',
+        padding: 75,
+        margin: 5,
         borderWidth: 1,
         borderRadius: 30,
-        textAlign: 'center',
         width: Dimensions.get('window').width * 0.8,
+        height: Dimensions.get('window').height * 0.3
     },
 });

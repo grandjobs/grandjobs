@@ -36,9 +36,11 @@ export default class Employers extends React.Component {
                         selectTextOnFocus={true}
                         placeholder='Confirm Password'
                     />
+                    <View style={styles.buttonContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.createPressed()}>
                     Create Account
                     </Button>
+                    </View>
                 </View>
             </View>
         );
@@ -68,10 +70,10 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         alignItems: 'center',
-        top: (Dimensions.get('window').height * 0.3)
+        top: Dimensions.get('window').height * 0.03
     },
     fillContainer:{
-        top: Dimensions.get('window').height * 0.20,
+        top: Dimensions.get('window').height * 0.15,
         justifyContent: 'center',
         alignItems: 'center'
     },
