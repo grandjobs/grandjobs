@@ -5,57 +5,46 @@ import Button from 'react-native-button';
 import PhoneInput from 'react-native-phone-input';
 import { Actions } from 'react-native-router-flux'
 
-
 export default class EmployerHomepage extends React.Component {
     render() {
       let screenwidth = Dimensions.get('window').width;
       let screenHeight = Dimensions.get('window').height;
-      //const { navigate } = this.props.navigation;
         return (
           <ScrollView
-              horizontal = {true}
-              >
+            ref={(scrollView) => { this.scrollView = scrollView; }}
+            style={styles.container}
+            //pagingEnabled={true}
+            horizontal= {true}
+            decelerationRate={0}
+            snapToInterval={screenwidth}
+            snapToAlignment={"center"}>
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>Welcome</Text>
-                    <Text style={styles.mainText}>Here are your updates</Text>
+                    <Text style={styles.largeText}>Welcome!</Text>
+                    <Text style={styles.mainText}>here are your updates</Text>
                 </View>
-                <View style={styles.buttonContainer}>
-                <Button style={styles.buttonDesign} onPress={()=>this.homePressed()}>
-                Homepage
-                </Button>
+                <View style={styles.buttonContainer2}>
+                    <Button style={styles.buttonDesign} onPress={()=>this.homePressed()}>
+                    Home
+                    </Button>
                 </View>
-                <View style={styles.fillContainer}>
-                <Text style={styles.mainText}>Notifications Here</Text>
-                </View>
-
             </View>
-
-
 
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>Welcome</Text>
-                    <Text style={styles.mainText}>Here are your listings</Text>
+                    <Text style={styles.largeText}>Welcome!</Text>
+                    <Text style={styles.mainText}>here are your listings</Text>
                 </View>
-                <View style={styles.buttonContainer}>
-                <Button style={styles.buttonDesign} onPress={()=>this.homePressed()}>
-                Homepage
-                </Button>
-                </View>
-                <View style={styles.buttonContainer}>
-                <Button style={styles.buttonDesign} onPress={()=>this.newListingPressed()}>
-                New Listing
-                </Button>
-                </View>
-                <View style={styles.fillContainer}>
-                <Text style={styles.mainText}>Job Listings here</Text>
-                </View>
+                <View style={styles.buttonContainer2}>
 
+                    <Button style={styles.buttonDesign} onPress={()=>this.newListingPressed()}>
+                    New Listing
+                    </Button>
+                </View>
             </View>
 
-
-            </ScrollView>);
+            </ScrollView>
+        );
     }
 
     homePressed(){
@@ -68,11 +57,14 @@ export default class EmployerHomepage extends React.Component {
     }
 }
 
+
+
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: '#1E2027',
         padding: 10,
+        width: Dimensions.get('window').width
         // justifyContent: 'center'
     },
     textContainer:{
@@ -80,7 +72,11 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         alignItems: 'center',
-        top: (Dimensions.get('window').height * 0.6)
+        top: (Dimensions.get('window').height * 0.5)
+    },
+    buttonContainer2:{
+        alignItems: 'center',
+        top: (Dimensions.get('window').height * 0.65)
     },
     fillContainer:{
         top: Dimensions.get('window').height * 0.20,
@@ -123,15 +119,5 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 30,
         width: Dimensions.get('window').width * 0.8
-    },
-    inputPhone:{
-        borderColor: '#fff',
-        color: '#fff',
-        padding: 12,
-        margin: 20,
-        borderWidth: 1,
-        borderRadius: 30,
-        textAlign: 'center',
-        width: Dimensions.get('window').width * 0.8,
     },
 });
