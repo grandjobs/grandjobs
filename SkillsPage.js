@@ -1,135 +1,169 @@
-import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, Picker } from 'react-native';
-import Button from 'react-native-button';
-// import { TextInput } from 'react-native-paper';
-import PhoneInput from 'react-native-phone-input';
+import React, { Component } from 'react';
+import {
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View,
+    Dimensions
+} from 'react-native';
 
-export default class AccountSetup extends React.Component {
-    state={
-        textValue: 'Skill ',
-        count: 0,
-        prevDisabled: true,
-        prevOpacity: 0.5,
-        nextDisabled: false,
-        nextOpacity: 1.0,
+import Swiper from 'react-native-swiper';
+
+export default class TempSkillsPage extends Component {
+
+    constructor(){
+        super();
+        /**
+         * The items array is populated with the list of skills.
+         * The state of these skills is also populated in the array.
+         * Basic array construction:
+         *
+         * { [SkillLabel, selectedBoolean, opacity], ... }
+         */
+        this.items = [];
+        for (let i = 0; i < 25; i++){
+            this.items.push(new SkillElement("Skill " + i, false, 1));
+        }
+
+        /* This is for modifying the contents of the text elements on the screen.
+        Basically just feedback for the user when clicked. 
+         */
+        this.state={
+            skills: this.items,
+        }
     }
 
-    render() {
+    render(){
         return (
-            <View style={styles.mainContainer}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>Your Skills</Text>
+            <Swiper style={styles.wrapper} loop={false}>
+                <View style={styles.slide1}>
+                    <Text style={[styles.largeText, {top:0, marginBottom: 0}]}>Your Skills</Text>
                     <Text
                         style={styles.mainText}>
                         Our goal is to find your skills. Select a minimum
-                        of X total skills from our list. The more you select the easier
+                        of 4 total skills from our list. The more you select the easier
                         it will be for us to find you jobs!
                     </Text>
-                    <Button style={styles.mainButtonDesign}>
-                    {this.state.textValue} {this.state.count}
-                    </Button>
-
                 </View>
-                <View style={styles.buttonContainer}>
-                    <Button style={[styles.buttonDesign, {opacity: this.state.prevOpacity}]}
-                        onPress={()=>this.prevPressed()}
-                        disabled={this.state.prevDisabled}>
-                        Prev
-                    </Button>
-                    <Button style={[styles.buttonDesign, {opacity: this.state.nextOpacity}]}
-                        onPress={()=>this.nextPressed()}
-                        disabled={this.state.nextDisabled}>
-                        Next
-                    </Button>
+                <View style={styles.slide2}>
+                    <Text style={styles.largeText}>Skills</Text>
+                    <View style={styles.labelContainer}>
+                    {
+                        this.items.map(( item, key ) =>
+                        (
+                            <Text
+                            onPress={() => this.labelSelected(key)}
+                            key = {key}
+                            style = { [styles.label, { opacity: this.state.skills[key].opacity } ] }>
+                            { item.label }
+                            </Text>
+                        ))
+                    }
+                    </View>
                 </View>
-            </View>
+                <View style={styles.slide3}>
+                    <Text style={styles.largeText}>Certifications</Text>
+                </View>
+            </Swiper>
         );
     }
 
-    nextPressed(){
-        console.log('Category A.');
-        this.setState({
-            count: this.state.count + 1,
-            prevDisabled: false,
-            prevOpacity: 1.0
-        })
-        if (this.state.count >= 5-1){
-            this.setState({
-                nextDisabled: true,
-                nextOpacity: 0.5
-            })
+    labelSelected(k){
+        //Modify the state of the selected item based on if it is selected or not...
+        if (!this.items[k].isSelected){
+            this.items[k].opacity = 0.4;
+            this.items[k].isSelected = true;
         }
-    }
+        else{
+            this.items[k].opacity = 1;
+            this.items[k].isSelected = false;
+        }
 
-    prevPressed(){
-        console.log('Category A.');
+        /**
+         * Set the state to the newly updated list.
+         *
+         * (Apparently this is the proper way to do this. I guess you're not
+         * allowed to modify the index of the state, so you have to reset the entire
+         * variable)
+         *
+         * https://reactjs.org/docs/react-component.html#state
+         * https://stackoverflow.com/questions/42029477/how-to-update-array-state-in-react-native/42029551
+         */
         this.setState({
-            count: this.state.count - 1,
-            nextDisabled: false,
-            nextOpacity: 1.0
+            skillsState: this.items
         })
-        if (this.state.count <= 1){
-            this.setState({
-                prevDisabled: true,
-                prevOpacity: 0.5
-            })
-        }
     }
 }
 
 const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
-        backgroundColor: '#1E2027',
-        padding: 20
-    },
-    textContainer:{
-        top: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    buttonContainer:{
-        flex: 1,
+    labelContainer:{
         flexDirection: 'row',
         justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+    },
+    wrapper: {
+    },
+    slide1: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#1E2027',
+    },
+    slide2: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#1E2027',
+    },
+    slide3: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#1E2027',
+    },
+    label:{
+        fontSize: 20,
+        textAlign: 'center',
+        color: '#d6d6d6',
+        fontFamily: 'Roboto-Thin',
+        borderWidth: 1,
+        borderColor: '#a9fcd4',
+        borderRadius: 30,
+        marginTop: 25,
+        marginHorizontal: 5,
+        paddingHorizontal: 20,
     },
     largeText:{
         fontSize: 65,
         textAlign: 'center',
-        top: 20,
+        top: 30,
+        marginBottom: 60,
         color: '#d6d6d6',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Roboto-Thin'
     },
     mainText:{
         fontSize: 18,
         textAlign: 'center',
-        top: 20,
+        top: 0,
         color: '#d6d6d6',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Roboto-Thin'
     },
-    mainButtonDesign:{
-        fontSize: 35,
-        fontWeight: 'normal',
-        fontFamily: 'Roboto-Thin',
-        textAlignVertical: "center",
-        height: 200,
-        marginTop: 70,
-        marginBottom: 20,
-        width: 200,
-        color: '#fff',
-        borderRadius: 200,
-        borderColor: '#a9fcd4',
-        borderWidth: 1,
-    },
-    buttonDesign:{
-        fontSize: 20,
-        fontWeight: 'normal',
-        fontFamily: 'Roboto-Thin',
-        padding: 10,
-        width: 80,
-        color: '#fff',
-        borderRadius: 30,
-        borderColor: '#a9fcd4',
-        borderWidth: 1,
-    },
-});
+})
+
+AppRegistry.registerComponent('grandjobs', () => Swiper);
+
+/**
+ * Class for storing text element attributes.
+ */
+class SkillElement{
+    /**
+     * Constructor for the SkillElement class
+     * @param {[type]}  text        Text of the label
+     * @param {Boolean} isSelected  Is this label selected by the user?
+     * @param {[type]}  opacity     Opacity of this label (lowered when selected)
+     */
+  constructor(text, isSelected, opacity) {
+    this.label = text;
+    this.isSelected = isSelected;
+    this.opacity = opacity;
+  }
+}
