@@ -19,20 +19,26 @@ export default class Employers extends React.Component {
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholder='Username'
+                        placeholderTextColor="#fff"
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
+                        placeholderTextColor="#fff"
                         placeholder='Company Name'
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
+                        placeholderTextColor="#fff"
                         placeholder='Company Location'
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
+                        placeholderTextColor="#fff"
                         placeholder='Password'
+
                     />
                     <TextInput style={styles.inputText}
+                        placeholderTextColor="#fff"
                         selectTextOnFocus={true}
                         placeholder='Confirm Password'
                     />

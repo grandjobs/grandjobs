@@ -18,19 +18,23 @@ export default class EmployerCreateListing extends React.Component {
                     {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
+                        placeholderTextColor="#fff"
                         placeholder='Username'
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
+                        placeholderTextColor="#fff"
                         placeholder='Company Name'
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
+                        placeholderTextColor="#fff"
                         placeholder='Company Location'
                     />
                     <TextInput style={styles.inputText2}
                         selectTextOnFocus={true}
                         placeholder='Additional Details'
+                        placeholderTextColor="#fff"
                         multiline = {true}
                     />
                     <View style={styles.buttonContainer}>
