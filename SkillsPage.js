@@ -20,16 +20,22 @@ export default class TempSkillsPage extends Component {
          *
          * { [SkillLabel, selectedBoolean, opacity], ... }
          */
-        this.items = [];
+        this.skills = [];
         for (let i = 0; i < 25; i++){
-            this.items.push(new SkillElement("Skill " + i, false, 1));
+            this.skills.push(new SkillElement("Skill " + i, false, 1));
+        }
+
+        this.certs = [];
+        for (let i = 0; i < 13; i++){
+            this.certs.push(new SkillElement("Cert " + i, false, 1));
         }
 
         /* This is for modifying the contents of the text elements on the screen.
-        Basically just feedback for the user when clicked. 
+        Basically just feedback for the user when clicked.
          */
         this.state={
-            skills: this.items,
+            skills: this.skills,
+            certs: this.certs,
         }
     }
 
@@ -49,10 +55,10 @@ export default class TempSkillsPage extends Component {
                     <Text style={styles.largeText}>Skills</Text>
                     <View style={styles.labelContainer}>
                     {
-                        this.items.map(( item, key ) =>
+                        this.skills.map(( item, key ) =>
                         (
                             <Text
-                            onPress={() => this.labelSelected(key)}
+                            onPress={() => this.labelSelected(0, key)}
                             key = {key}
                             style = { [styles.label, { opacity: this.state.skills[key].opacity } ] }>
                             { item.label }
@@ -63,20 +69,57 @@ export default class TempSkillsPage extends Component {
                 </View>
                 <View style={styles.slide3}>
                     <Text style={styles.largeText}>Certifications</Text>
+                    <View style={styles.labelContainer}>
+                    {
+                        this.certs.map(( item, key ) =>
+                        (
+                            <Text
+                            onPress={() => this.labelSelected(1, key)}
+                            key = {key}
+                            style = { [styles.label, { opacity: this.state.certs[key].opacity } ] }>
+                            { item.label }
+                            </Text>
+                        ))
+                    }
+                    </View>
                 </View>
             </Swiper>
         );
     }
 
-    labelSelected(k){
-        //Modify the state of the selected item based on if it is selected or not...
-        if (!this.items[k].isSelected){
-            this.items[k].opacity = 0.4;
-            this.items[k].isSelected = true;
-        }
-        else{
-            this.items[k].opacity = 1;
-            this.items[k].isSelected = false;
+    /**
+     * [labelSelected description]
+     * @param  {[type]} type  Type of label selected
+     *                        0 --> Skill
+     *                        1 --> Cert
+     *                        2 --> ???
+     *
+     * @param  {[type]} i index of the selected label
+     */
+    labelSelected(type, i){
+        switch(type){
+            case 0:
+                //Modify the state of the selected item based on if it is selected or not...
+                if (!this.skills[i].isSelected){
+                    this.skills[i].opacity = 0.4;
+                    this.skills[i].isSelected = true;
+                }
+                else{
+                    this.skills[i].opacity = 1;
+                    this.skills[i].isSelected = false;
+                }
+                break;
+            case 1:
+                //Modify the state of the selected item based on if it is selected or not...
+                if (!this.certs[i].isSelected){
+                    this.certs[i].opacity = 0.4;
+                    this.certs[i].isSelected = true;
+                }
+                else{
+                    this.certs[i].opacity = 1;
+                    this.certs[i].isSelected = false;
+                }
+                break;
         }
 
         /**
@@ -90,7 +133,9 @@ export default class TempSkillsPage extends Component {
          * https://stackoverflow.com/questions/42029477/how-to-update-array-state-in-react-native/42029551
          */
         this.setState({
-            skillsState: this.items
+            skills: this.skills,
+            certs: this.certs
+
         })
     }
 }
