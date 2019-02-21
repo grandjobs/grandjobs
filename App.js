@@ -9,6 +9,7 @@ import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
 import EmployerCreateListing from './EmployerCreateListing';
+import SeekerHomepage from './SeekerHomepage';
 
 
 
@@ -49,6 +50,11 @@ const App = () => {
                     key = "SkillPage"
                     component = {SkillsPage}
                     title="Skills"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key="SeekerHomepage"
+                    component={SeekerHomepage}
                     hideNavBar={true}
                 />
             </Scene>

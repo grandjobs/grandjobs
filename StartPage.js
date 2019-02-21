@@ -13,6 +13,9 @@ export default class StartPage extends React.Component {
                         <Text style={styles.mainText}>I am looking for...</Text>
                     </View>
                     <View style={styles.buttonContainer}>
+                        <Button style={styles.buttonDesign} onPress={() => this.testPressed()}>
+                        Test
+                        </Button>
                         <Button style={styles.buttonDesign} onPress={()=>this.employerPressed()}>
                         Employees
                         </Button>
@@ -24,6 +27,9 @@ export default class StartPage extends React.Component {
             </ImageBackground>
         );
     }
+    testPressed() {
+        Actions.SeekerHomepage();
+    }
 
     jobsPressed(){
         Actions.AccountSetup();
@@ -32,6 +38,7 @@ export default class StartPage extends React.Component {
     employerPressed(){
         Actions.Employers();
     }
+
 }
 
 // const AppNavigator = createStackNavigator(
