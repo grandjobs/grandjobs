@@ -8,6 +8,7 @@ import StartPage from './StartPage';
 import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
+import MapsPage from './MapsPage';
 
 const App = () => {
     return (
@@ -35,10 +36,16 @@ const App = () => {
                     title="Account"
                     hideNavBar={true}
                 />
-                 <Scene
+                <Scene
                     key = "SkillPage"
                     component = {SkillsPage}
                     title="Skills"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "MapsPage"
+                    component = {MapsPage}
+                    title="Maps"
                     hideNavBar={true}
                 />
             </Scene>

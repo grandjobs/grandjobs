@@ -46,7 +46,6 @@ export default class AccountSetup extends React.Component {
     }
 
     nextPressed(){
-        console.log('Next pressed');
         Actions.SkillPage();
     }
 

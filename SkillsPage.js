@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import {
-    AppRegistry,
-    StyleSheet,
-    Text,
-    View,
-    Dimensions
-} from 'react-native';
-
+import { AppRegistry, StyleSheet, Text, View, Dimensions } from 'react-native';
+import Button from 'react-native-button';
 import Swiper from 'react-native-swiper';
+import { Actions } from 'react-native-router-flux';
 
-export default class TempSkillsPage extends Component {
+
+export default class SkillsPage extends Component {
 
     constructor(){
         super();
@@ -21,7 +17,7 @@ export default class TempSkillsPage extends Component {
          * { [SkillLabel, selectedBoolean, opacity], ... }
          */
         this.skills = [];
-        for (let i = 0; i < 25; i++){
+        for (let i = 0; i < 21; i++){
             this.skills.push(new SkillElement("Skill " + i, false, 1));
         }
 
@@ -30,12 +26,17 @@ export default class TempSkillsPage extends Component {
             this.certs.push(new SkillElement("Cert " + i, false, 1));
         }
 
+        //Skills that the user actually selects.
+        this.userSkills = [];
+
+
         /* This is for modifying the contents of the text elements on the screen.
         Basically just feedback for the user when clicked.
          */
         this.state={
             skills: this.skills,
             certs: this.certs,
+            userSkills: this.userSkills,
         }
     }
 
@@ -83,6 +84,30 @@ export default class TempSkillsPage extends Component {
                     }
                     </View>
                 </View>
+                <View style={styles.slide4}>
+                    <Text style={[styles.largeText, {marginBottom: 20}]}>You</Text>
+                    <Text
+                        style={styles.mainText}>
+                        These are your currently selected Skills and Certifications.
+                    </Text>
+                    <View style={styles.labelContainer}>
+                    {
+                        this.userSkills.map(( item, key ) =>
+                        (
+                            <Text
+                            key = {key}
+                            style = { [styles.label] }>
+                            { item.label }
+                            </Text>
+                        ))
+                    }
+                    </View>
+                    <View style={styles.bottomContainer}>
+                        <Button style={styles.buttonDesign} onPress={()=>this.nextPressed()}>
+                        Next
+                        </Button>
+                    </View>
+                </View>
             </Swiper>
         );
     }
@@ -103,10 +128,12 @@ export default class TempSkillsPage extends Component {
                 if (!this.skills[i].isSelected){
                     this.skills[i].opacity = 0.4;
                     this.skills[i].isSelected = true;
+                    this.userSkills.push(this.skills[i]);
                 }
                 else{
                     this.skills[i].opacity = 1;
                     this.skills[i].isSelected = false;
+                    this.removeUserLabel(this.skills[i].label);
                 }
                 break;
             case 1:
@@ -114,29 +141,49 @@ export default class TempSkillsPage extends Component {
                 if (!this.certs[i].isSelected){
                     this.certs[i].opacity = 0.4;
                     this.certs[i].isSelected = true;
+                    this.userSkills.push(this.certs[i]);
                 }
                 else{
                     this.certs[i].opacity = 1;
                     this.certs[i].isSelected = false;
+                    this.removeUserLabel(this.certs[i].label);
                 }
                 break;
         }
 
-        /**
-         * Set the state to the newly updated list.
-         *
-         * (Apparently this is the proper way to do this. I guess you're not
-         * allowed to modify the index of the state, so you have to reset the entire
-         * variable)
-         *
-         * https://reactjs.org/docs/react-component.html#state
-         * https://stackoverflow.com/questions/42029477/how-to-update-array-state-in-react-native/42029551
-         */
+        this.updateState();
+    }
+
+    /**
+     * Set the state to the newly updated list.
+     *
+     * (Apparently this is the proper way to do this. I guess you're not
+     * allowed to modify the index of the state, so you have to reset the entire
+     * variable)
+     *
+     * https://reactjs.org/docs/react-component.html#state
+     * https://stackoverflow.com/questions/42029477/how-to-update-array-state-in-react-native/42029551
+     */
+    updateState(){
         this.setState({
             skills: this.skills,
-            certs: this.certs
-
+            certs: this.certs,
+            userSkills: this.userSkills,
         })
+    }
+
+    removeUserLabel(l){
+        for (var i = 0; i < this.userSkills.length; i++){
+            if (this.userSkills[i].label.localeCompare(l) == 0){
+                this.userSkills.splice(i, 1);
+                break;
+            }
+        }
+        this.updateState();
+    }
+
+    nextPressed(){
+        Actions.MapsPage();
     }
 }
 
@@ -154,19 +201,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#1E2027',
+        padding: 10
     },
     slide2: {
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#1E2027',
+        padding: 10
+
     },
     slide3: {
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#1E2027',
+        padding: 10
+
+    },
+    slide4: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#1E2027',
+        padding: 10
     },
     label:{
-        fontSize: 20,
+        fontSize: 22,
         textAlign: 'center',
         color: '#d6d6d6',
         fontFamily: 'Roboto-Thin',
@@ -191,6 +249,23 @@ const styles = StyleSheet.create({
         top: 0,
         color: '#d6d6d6',
         fontFamily: 'Roboto-Thin'
+    },
+    bottomContainer:{
+        flex: 1,
+        justifyContent: 'flex-end',
+        marginBottom: 10
+    },
+    buttonDesign:{
+        fontSize: 20,
+        fontWeight: 'normal',
+        fontFamily: 'Roboto-Thin',
+        padding: 10,
+        margin: 30,
+        width: 150,
+        color: '#fff',
+        borderRadius: 30,
+        borderColor: '#a9fcd4',
+        borderWidth: 1,
     },
 })
 
