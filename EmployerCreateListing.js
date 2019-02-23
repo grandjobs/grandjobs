@@ -10,8 +10,8 @@ export default class EmployerCreateListing extends React.Component {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>Awesome!</Text>
-                    <Text style={styles.mainText}>Lets fill out some information.</Text>
+                    <Text style={styles.largeText}>Great!</Text>
+                    <Text style={styles.mainText}>Lets create a listing.</Text>
                 </View>
                 <View style={styles.fillContainer}>
                     {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
@@ -19,17 +19,17 @@ export default class EmployerCreateListing extends React.Component {
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
-                        placeholder='Username'
+                        placeholder='Job Title'
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
-                        placeholder='Company Name'
+                        placeholder='Job Details'
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
-                        placeholder='Company Location'
+                        placeholder='Job Location'
                     />
                     <TextInput style={styles.inputText2}
                         selectTextOnFocus={true}

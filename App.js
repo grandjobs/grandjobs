@@ -9,7 +9,8 @@ import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
 import EmployerCreateListing from './EmployerCreateListing';
-
+import Drawer from 'react-native-drawer';
+import SideMenu from './SideMenu';
 
 
 
@@ -51,7 +52,33 @@ const App = () => {
                     title="Skills"
                     hideNavBar={true}
                 />
+                <Drawer
+                hideNavBar
+                key="drawerMenu"
+                contentComponent={SideMenu}
+                drawerWidth={250}
+                drawerPosition="right"
+                >
+                <Scene
+                key = "EmployerCreateListing"
+                component = {EmployerCreateListing}
+                title="Create Listing"
+                hideNavBar={true}
+                />
+                <Scene
+                key = "EmployerHomepage"
+                component = {EmployerHomepage}
+                title="Account"
+                hideNavBar={true}
+                />
+
+                </Drawer>
+
+
+
+
             </Scene>
+
         </Router>
     )
 }

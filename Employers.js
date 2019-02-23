@@ -18,7 +18,7 @@ export default class Employers extends React.Component {
                     {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
-                        placeholder='Username'
+                        placeholder='Email Address'
                         placeholderTextColor="#fff"
                     />
                     <TextInput style={styles.inputText}
