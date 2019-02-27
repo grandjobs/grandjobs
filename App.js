@@ -8,7 +8,6 @@ import StartPage from './StartPage';
 import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
-import authTesting from './authTesting';
 import authSol from './authSol';
 
 
