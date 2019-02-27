@@ -81,15 +81,31 @@ export default class authSol extends React.Component {
     render() {
 		/* Already Logged in case */
         if (this.state.user) {
+			let rootRef = firebase.database().ref()
+			let userRef = rootRef.child('USERS')
+			let uid = this.state.user['uid']
+			
+			userRef.once('value')
+				.then(function(snapshot) {
+					console.log(snapshot.child(uid).exists());
+				});
+			
+			console.log(this.state.user['uid'])
+			
 			return (
-                <ScrollView style={{padding: 20, marginTop: 20}}>
-                    <Text>You are signed in</Text>
-					<Text>{console.log(this.state)}</Text>
-                    <Button
-                        onPress={this.onSignOut}
-                        title="Sign out"
-                    />
-                </ScrollView>
+               <View style={styles.mainContainer}>
+					<View style={styles.textContainer}>
+						<Text style={styles.largeText}>You are signed in!</Text>
+					</View>
+					<View style={styles.bottomContainer}>
+						<Button
+							style={styles.buttonDesign}
+							onPress={this.onSignOut}
+						>
+							Sign out
+						</Button>
+					</View>
+				</View>
             )
 		} 
 		/* Sign in case */
@@ -124,14 +140,6 @@ export default class authSol extends React.Component {
 		}
 		/* check if an user exists, if they do sign them in, if not direct to signup */
 		else {
-			let rootRef = firebase.database().ref()
-			let userRef = rootRef.child('USERS')
-			
-			userRef.once('value')
-				.then(function(snapshot) {
-					console.log(snapshot.child('734').exists());
-				});
-			
             return (
                 <View style={styles.mainContainer}>
 					<View style={styles.textContainer}>
