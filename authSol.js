@@ -15,14 +15,18 @@ export default class authSol extends React.Component {
             confirmationResult: undefined,
             code: ''
         }
+		//Firebase magic to check if someone is already logged in
         firebase.auth().onAuthStateChanged(user => {
             this.setState({user})
         })
     }
-
+	
+	//Handles input for phone number to translate to state value
     onPhoneChange = (phone) => {
         this.setState({phone})
     }
+	
+	//Sends phone number to the static captch page hosted on Firebase
     onPhoneComplete = async () => {
         let token = null
         const listener = ({url}) => {
@@ -50,9 +54,12 @@ export default class authSol extends React.Component {
 
         }
     }
+	
+	//Handles input for SMS confirmation code to translate to state value
     onCodeChange = (code) => {
         this.setState({code})
     }
+	
     onSignIn = async () => {
         const {confirmationResult, code} = this.state
         try {
@@ -79,7 +86,7 @@ export default class authSol extends React.Component {
     }
 
     render() {
-		/* Already Logged in case */
+		/* Signed in */
         if (this.state.user) {
 			let rootRef = firebase.database().ref()
 			let userRef = rootRef.child('USERS')
@@ -88,6 +95,10 @@ export default class authSol extends React.Component {
 			userRef.once('value')
 				.then(function(snapshot) {
 					console.log(snapshot.child(uid).exists());
+					
+					if (snapshot.child(uid).exists()) {
+						;
+					}
 				});
 			
 			console.log(this.state.user['uid'])
@@ -138,7 +149,7 @@ export default class authSol extends React.Component {
 				</View>
 			);
 		}
-		/* check if an user exists, if they do sign them in, if not direct to signup */
+		/* Screen to enter confirmation code from SMS */
 		else {
             return (
                 <View style={styles.mainContainer}>
