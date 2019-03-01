@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions, Text, View, ScrollView, TextInput} from 'react-
 import Button from 'react-native-button';
 import {Linking, WebBrowser} from 'expo'
 import { firebase } from './db'
+import { Actions } from 'react-native-router-flux';
 
 const captchaUrl = `https://job-push-fbb6a.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl('')}`
 
@@ -13,7 +14,8 @@ export default class authSol extends React.Component {
             user: undefined,
             phone: '',
             confirmationResult: undefined,
-            code: ''
+            code: '',
+			registered: 'false'
         }
 		//Firebase magic to check if someone is already logged in
         firebase.auth().onAuthStateChanged(user => {
@@ -76,6 +78,40 @@ export default class authSol extends React.Component {
             console.warn(e)
         }
     }
+	
+	firebaseCheckForUser = async () => {
+		console.log('step 1')
+		
+		let registered = false
+		let uid = this.state.user['uid']
+		let rootRef = firebase.database().ref()
+		let userRef = rootRef.child('USERS')
+		
+		try {
+            userRef.once('value')
+				.then(function(snapshot) {
+					registered = snapshot.child(uid).exists();
+					this.setState({ registered })
+				})
+        } catch (e) {
+            console.warn(e)
+        }
+	}
+	
+	userCheckDidMount = async () => {
+		console.log('here')
+		
+		try {
+            const registered = await this.firebaseCheckForUser()
+			this.setState({ registered })
+        } catch (e) {
+            console.warn(e)
+        }
+	}
+	
+	directToAccountSetup = async () => {
+        Actions.AccountSetup({uid: uid});
+    }
     reset = () => {
         this.setState({
             phone: '',
@@ -87,40 +123,58 @@ export default class authSol extends React.Component {
 
     render() {
 		/* Signed in */
-        if (this.state.user) {
-			let rootRef = firebase.database().ref()
-			let userRef = rootRef.child('USERS')
-			let uid = this.state.user['uid']
+		if (this.state.user) {
+			console.log('entering difficult stuff')
+			this.firebaseCheckForUser()
 			
-			userRef.once('value')
-				.then(function(snapshot) {
-					console.log(snapshot.child(uid).exists());
-					
-					if (snapshot.child(uid).exists()) {
-						;
-					}
-				});
-			
-			console.log(this.state.user['uid'])
-			
-			return (
-               <View style={styles.mainContainer}>
-					<View style={styles.textContainer}>
-						<Text style={styles.largeText}>You are signed in!</Text>
+			if (this.state.registered) {
+				if (this.state.registered == true) {
+					return (
+					   <View style={styles.mainContainer}>
+							<View style={styles.textContainer}>
+								<Text style={styles.largeText}>You are signed in!</Text>
+							</View>
+							<View style={styles.bottomContainer}>
+								<Button
+									style={styles.buttonDesign}
+									onPress={this.onSignOut}
+								>
+									Sign out
+								</Button>
+							</View>
+						</View>
+					)
+				} else {
+					return (
+					   <View style={styles.mainContainer}>
+							<View style={styles.textContainer}>
+								<Text style={styles.largeText}>HELLO!</Text>
+								<Text style={styles.mainText}>It looks like you don't have an account</Text>
+								<Text style={styles.mainText}>Click the button below to set on up!</Text>
+							</View>
+							<View style={styles.bottomContainer}>
+								<Button
+									style={styles.buttonDesign}
+									onPress={this.directToAccountSetup}
+								>
+									Create Account
+								</Button>
+							</View>
+						</View>
+					)
+				}
+			} else {
+				return (
+					<View>
+						<Text>we waiting on stuff yo</Text>
 					</View>
-					<View style={styles.bottomContainer}>
-						<Button
-							style={styles.buttonDesign}
-							onPress={this.onSignOut}
-						>
-							Sign out
-						</Button>
-					</View>
-				</View>
-            )
+				)
+			}
 		} 
 		/* Sign in case */
-		if (!this.state.confirmationResult) {
+		if (!this.state.confirmationResult && !this.state.user) {
+			console.log('whyyy')
+			console.log('whyyyyy')
 			return (
 				<View style={styles.mainContainer}>
 					<View style={styles.textContainer}>
@@ -151,8 +205,8 @@ export default class authSol extends React.Component {
 		}
 		/* Screen to enter confirmation code from SMS */
 		else {
-            return (
-                <View style={styles.mainContainer}>
+			return (
+				<View style={styles.mainContainer}>
 					<View style={styles.textContainer}>
 						<Text style={styles.largeText}>Enter Confirmation Code</Text>
 						<Text style={styles.mainText}>You should have recieved a text</Text>
@@ -169,15 +223,15 @@ export default class authSol extends React.Component {
 					</View>
 					<View style={styles.bottomContainer}>
 						<Button
-                        onPress={this.onSignIn}
-                        title="Sign in"
+						onPress={this.onSignIn}
+						title="Sign in"
 						style={styles.buttonDesign}
 						>
 						Submit
 						</Button>
 					</View>
 				</View>
-            )
+			)
 		}
     }
 }
