@@ -15,7 +15,7 @@ export default class authSol extends React.Component {
             phone: '',
             confirmationResult: undefined,
             code: '',
-			registered: 'false'
+			registered: undefined
         }
 		//Firebase magic to check if someone is already logged in
         firebase.auth().onAuthStateChanged(user => {
@@ -69,10 +69,13 @@ export default class authSol extends React.Component {
         } catch (e) {
             console.warn(e)
         }
+		//need to figure out why we reset here..I'm sure this will cause issues down the road especially
+		//with my heavy modifications to the file from its original implementation
         this.reset()
     }
     onSignOut = async () => {
         try {
+			this.setState({ registered: undefined })
             await firebase.auth().signOut()
         } catch (e) {
             console.warn(e)
@@ -80,30 +83,19 @@ export default class authSol extends React.Component {
     }
 	
 	firebaseCheckForUser = async () => {
-		console.log('step 1')
-		
 		let registered = false
 		let uid = this.state.user['uid']
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('USERS')
+		console.log('Checking Firebase for uid ' + uid)
 		
 		try {
             userRef.once('value')
-				.then(function(snapshot) {
+				.then(snapshot => {
 					registered = snapshot.child(uid).exists();
+					console.log('Registered set as ' + registered)
 					this.setState({ registered })
 				})
-        } catch (e) {
-            console.warn(e)
-        }
-	}
-	
-	userCheckDidMount = async () => {
-		console.log('here')
-		
-		try {
-            const registered = await this.firebaseCheckForUser()
-			this.setState({ registered })
         } catch (e) {
             console.warn(e)
         }
@@ -125,7 +117,11 @@ export default class authSol extends React.Component {
 		/* Signed in */
 		if (this.state.user) {
 			console.log('entering difficult stuff')
-			this.firebaseCheckForUser()
+			console.log('Registered: ' + this.state.registered)
+			
+			if (!this.state.registered && this.state.registered != false) {
+				this.firebaseCheckForUser()
+			}
 			
 			if (this.state.registered) {
 				if (this.state.registered == true) {
@@ -173,8 +169,6 @@ export default class authSol extends React.Component {
 		} 
 		/* Sign in case */
 		if (!this.state.confirmationResult && !this.state.user) {
-			console.log('whyyy')
-			console.log('whyyyyy')
 			return (
 				<View style={styles.mainContainer}>
 					<View style={styles.textContainer}>
