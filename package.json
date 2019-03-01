@@ -7,6 +7,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@ptomasroos/react-native-multi-slider": "^1.0.0",
     "expo": "^32.0.5",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
@@ -15,6 +16,7 @@
     "react-native-maps": "^0.23.0",
     "react-native-paper": "^2.9.1",
     "react-native-phone-input": "^0.2.1",
+    "react-native-range-slider": "^0.1.1",
     "react-native-router-flux": "^4.0.6",
     "react-native-swiper": "^1.5.14",
     "react-navigation": "^3.0.9"

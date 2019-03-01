@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, Dimensions } from 'react-native';
 import MapView, { Marker, CallOut } from 'react-native-maps';
 import Button from 'react-native-button';
-
-
+import { Actions } from 'react-native-router-flux';
 
 
 export default class TempSkillsPage extends Component {
@@ -29,7 +28,7 @@ export default class TempSkillsPage extends Component {
     }
 
     nextPressed(){
-        console.log("Next");
+        Actions.TransportType();
     }
 
     render(){

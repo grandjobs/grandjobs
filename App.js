@@ -9,6 +9,8 @@ import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
 import MapsPage from './MapsPage';
+import TransportType from './TransportType';
+import RangePage from './Range';
 
 const App = () => {
     return (
@@ -46,6 +48,18 @@ const App = () => {
                     key = "MapsPage"
                     component = {MapsPage}
                     title="Maps"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "TransportType"
+                    component = {TransportType}
+                    title="Transport"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "RangePage"
+                    component = {RangePage}
+                    title="Range"
                     hideNavBar={true}
                 />
             </Scene>
