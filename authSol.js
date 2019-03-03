@@ -5,6 +5,7 @@ import {Linking, WebBrowser} from 'expo'
 import { firebase } from './db'
 import { Actions } from 'react-native-router-flux';
 
+//Static webpage to hold a reCAPTCHA object
 const captchaUrl = `https://job-push-fbb6a.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl('')}`
 
 export default class authSol extends React.Component {
@@ -69,10 +70,12 @@ export default class authSol extends React.Component {
         } catch (e) {
             console.warn(e)
         }
+		
 		//need to figure out why we reset here..I'm sure this will cause issues down the road especially
 		//with my heavy modifications to the file from its original implementation
         this.reset()
     }
+	
     onSignOut = async () => {
         try {
 			this.setState({ registered: undefined })
@@ -82,9 +85,11 @@ export default class authSol extends React.Component {
         }
     }
 	
+	//Function to check whether a phone number has a registered account in our database
+	//and set the registered state variable appropriately
 	firebaseCheckForUser = async () => {
 		let registered = false
-		let uid = this.state.user['uid']
+		var uid = this.state.user['uid']
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('USERS')
 		console.log('Checking Firebase for uid ' + uid)
@@ -101,9 +106,11 @@ export default class authSol extends React.Component {
         }
 	}
 	
+	//If an user is unregistered this function will direct them to the account setup flow
 	directToAccountSetup = async () => {
-        Actions.AccountSetup({uid: uid});
+        Actions.AccountSetup({uid : this.state.user['uid']});
     }
+	
     reset = () => {
         this.setState({
             phone: '',
@@ -119,12 +126,16 @@ export default class authSol extends React.Component {
 			console.log('entering difficult stuff')
 			console.log('Registered: ' + this.state.registered)
 			
-			if (!this.state.registered && this.state.registered != false) {
+			if (this.state.registered == undefined) {
+				console.log('check')
 				this.firebaseCheckForUser()
 			}
 			
+			//Already has an account with us
 			if (this.state.registered) {
 				if (this.state.registered == true) {
+					console.log(this.state)
+					
 					return (
 					   <View style={styles.mainContainer}>
 							<View style={styles.textContainer}>
@@ -140,25 +151,30 @@ export default class authSol extends React.Component {
 							</View>
 						</View>
 					)
-				} else {
-					return (
-					   <View style={styles.mainContainer}>
-							<View style={styles.textContainer}>
-								<Text style={styles.largeText}>HELLO!</Text>
-								<Text style={styles.mainText}>It looks like you don't have an account</Text>
-								<Text style={styles.mainText}>Click the button below to set on up!</Text>
-							</View>
-							<View style={styles.bottomContainer}>
-								<Button
-									style={styles.buttonDesign}
-									onPress={this.directToAccountSetup}
-								>
-									Create Account
-								</Button>
-							</View>
-						</View>
-					)
 				}
+			} 
+			
+			//Does not already have an account with us
+			else if (this.state.registered == false) {
+				console.log(this.state)
+				
+				return (
+				   <View style={styles.mainContainer}>
+						<View style={styles.textContainer}>
+							<Text style={styles.largeText}>HELLO!</Text>
+							<Text style={styles.mainText}>It looks like you don't have an account</Text>
+							<Text style={styles.mainText}>Click the button below to set on up!</Text>
+						</View>
+						<View style={styles.bottomContainer}>
+							<Button
+								style={styles.buttonDesign}
+								onPress={this.directToAccountSetup}
+							>
+								Create Account
+							</Button>
+						</View>
+					</View>
+				)
 			} else {
 				return (
 					<View>
