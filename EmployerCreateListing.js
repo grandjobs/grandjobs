@@ -41,21 +41,27 @@ export default class EmployerCreateListing extends React.Component {
                     <Button style={styles.buttonDesign} onPress={()=>this.createPressed()}>
                     Create Listing
                     </Button>
+                    <Button style={styles.buttonDesign} onPress={()=>this.cancelPressed()}>
+                    Cancel
+                    </Button>
                     </View>
                 </View>
             </View>
         );
     }
 
-    createPressed(){
+    cancelPressed(){
       Alert.alert(
-        'Confirm',
-        'Confirm Listing?',
+        'Cancel',
+        'Cancel Listing?',
         [
           {text:'OK',onPress:()=>Actions.EmployerHomepage()},
           {text:'Cancel',onPress:()=>console.log('cancel pressed')}
         ]
       )
+    }
+    createPressed(){
+      Actions.EmployerHomepage();
     }
 }
 

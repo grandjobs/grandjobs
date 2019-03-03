@@ -1,153 +1,158 @@
-import React from 'react';
-import { StyleSheet, Text, View, Dimensions,TouchableHighlight, TextInput, ScrollView } from 'react-native';
-import Button from 'react-native-button';
-// import { TextInput } from 'react-native-paper';
-import PhoneInput from 'react-native-phone-input';
-import { Actions } from 'react-native-router-flux'
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text,
+    View, FlatList, TouchableOpacity,
+    Image, SafeAreaView } from 'react-native';
+import ic_menu from './assets/list.png'
 import Drawer from 'react-native-drawer'
+import { Actions } from 'react-native-router-flux'
+console.disableYellowBox = true;
 
-export default class EmployerHomepage extends React.Component {
+const menu = [
+    { 'title': 'Home' },
+    { 'title': 'Replies' },
+    { 'title': 'Create' }
+]
 
-  closeMenu = () => {
-  this._drawer.close()
-  };
-openMenu = () => {
-  this._drawer.open()
-  };
+export default class EmployerHomepage extends Component {
 
-  showDrawer  = () => {
-    Actions.drawerMenu({key: 'drawerMenu', open: true });
-          };
+    constructor(props) {
+        super(props)
+
+    }
+
+    renderDrawer() {
+        //SlideMenu
+        return (
+            <View style={styles.menuContainer}>
+                <FlatList
+                    style={{ flex: 1.0 }}
+                    data={menu}
+                    extraData={this.state}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <TouchableOpacity style={styles.menuTitleContainer}
+                            onPress={()=>this.onPress(item, index)}>
+                                <Text style={styles.menuTitle}
+                                    key={index}>
+                                    {item.title}
+                                </Text>
+                            </TouchableOpacity>
+
+
+                        )
+                    }} />
+            </View>
+        )
+    }
+
+    openDrawer() {
+        this.drawer.open()
+    }
+
+    closeDrawer() {
+        this.drawer.close()
+    }
 
     render() {
-      let screenwidth = Dimensions.get('window').width;
-      let screenHeight = Dimensions.get('window').height;
         return (
-
-
-                    <ScrollView
-                      ref={(scrollView) => { this.scrollView = scrollView; }}
-                      style={styles.container}
-                      //pagingEnabled={true}
-                      horizontal= {true}
-                      decelerationRate={0}
-                      snapToInterval={screenwidth}
-                      snapToAlignment={"center"}>
-                      <View style={styles.mainContainer}>
-                          <View style={styles.textContainer}>
-                              <Text style={styles.largeText}>Welcome!</Text>
-                              <Text style={styles.mainText}>here are your updates</Text>
-                          </View>
-                          <View style={styles.buttonContainer2}>
-                              <Button style={styles.buttonDesign} onPress={()=>this.showDrawerMenu()}>
-                              Home
-                              </Button>
-                          </View>
-                      </View>
-
-                      <View style={styles.mainContainer}>
-                          <View style={styles.textContainer}>
-                              <Text style={styles.largeText}>Welcome!</Text>
-                              <Text style={styles.mainText}>here are your listings</Text>
-                          </View>
-                          <View style={styles.buttonContainer2}>
-
-                              <Button style={styles.buttonDesign} onPress={()=>this.newListingPressed()}>
-                              New Listing
-                              </Button>
-                          </View>
-                      </View>
-
-                      </ScrollView>
-
-
+            <SafeAreaView style={styles.safeAreaStyle}>
+                <View style={styles.mainContainer}>
+                    <Drawer
+                        ref={(ref) => this.drawer = ref}
+                        content={this.renderDrawer()}
+                        type='static'
+                        tapToClose={true}
+                        openDrawerOffset={0.35}
+                        styles={drawerStyles}>
+                        {/* //Main View */}
+                        <View style={styles.headerContainer}>
+                            <View style={styles.menuButton}>
+                                <TouchableOpacity
+                                    onPress={this.openDrawer.bind(this)}>
+                                    <Image style={{ tintColor: 'white' }} source={ic_menu} />
+                                </TouchableOpacity>
+                            </View>
+                            <Text style={styles.headerTitle}>Homepage</Text>
+                            <View style={styles.menuButton} />
+                        </View>
+                    </Drawer>
+                </View>
+            </SafeAreaView>
         );
     }
 
-    showDrawerMenu(){
-      Actions.drawerMenu({key: 'drawerMenu', open: true });
+    onPress(item, index){
+      if(index == 0){
+        //home pressed
+        Actions.EmployerHomepage();
+      }
+      if(index == 1){
+        //replies pressed
+        Actions.EmployerHomepage();
+      }
+      if(index == 2){
+        Actions.EmployerCreateListing();
+      }
     }
-
-
-    homePressed(){
-
-      Actions.StartPage();
-    }
-
-    newListingPressed(){
-      Actions.EmployerCreateListing();
-    }
-
 
 }
+
+
 
 
 const drawerStyles = {
-  drawer: {shadowColor: '#000000', shadowOpacity: 0.8, shadowRadius: 3},
-  main: {paddingLeft: 3},
+    drawer: {
+        flex: 1.0,
+        backgroundColor: '#1E2027',
+    },
+    main: {
+        flex: 1.0,
+        backgroundColor: 'white'
+    }
 }
 
-
-
-const styles = StyleSheet.create({
+const styles = {
     mainContainer: {
-        flex: 1,
+        flex: 1.0,
+        backgroundColor: 'white'
+    },
+    safeAreaStyle: {
+        flex: 1.0,
         backgroundColor: '#1E2027',
-        padding: 10,
-        width: Dimensions.get('window').width
-        // justifyContent: 'center'
     },
-    textContainer:{
-        top: Dimensions.get('window').height * 0.05
+    headerContainer: {
+        height: 44,
+        flexDirection: 'row',
+        justifyContect: 'center',
+        backgroundColor: '#1E2027',
     },
-    buttonContainer:{
-        alignItems: 'center',
-        top: (Dimensions.get('window').height * 0.5)
-    },
-    buttonContainer2:{
-        alignItems: 'center',
-        top: (Dimensions.get('window').height * 0.65)
-    },
-    fillContainer:{
-        top: Dimensions.get('window').height * 0.20,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    largeText:{
-        fontSize: 65,
+    headerTitle: {
+        flex: 1.0,
         textAlign: 'center',
-        top: 20,
-        color: '#d6d6d6',
-        fontFamily: 'Arial'
+        alignSelf: 'center',
+        color: 'white'
     },
-    mainText:{
-        fontSize: 25,
+    menuButton: {
+        marginLeft: 8,
+        marginRight: 8,
+        alignSelf: 'center',
+        tintColor: 'white'
+    },
+    menuContainer: {
+        flex: 1.0,
+        backgroundColor: '#1E2027',
+    },
+    menuTitleContainer: {
+        alignItem:'center',
+        height: 60,
+        width:'100%',
+        flexDirection:'row',
+    },
+    menuTitle: {
+        width:'100%',
+        color: 'white',
         textAlign: 'center',
-        top: 20,
-        color: '#d6d6d6',
-        fontFamily: 'Arial'
-    },
-    buttonDesign:{
-        fontSize: 25,
-        fontFamily: 'Arial',
-        padding: 10,
-        margin: 30,
-        width: 300,
-        color: '#d6d6d6',
-        borderRadius: 30,
-        backgroundColor: '#121212',
-    },
-    inputText:{
-        borderColor: '#fff',
-        color: '#fff',
-        fontSize: 25,
-        textAlign: 'center',
-        color:'white',
-        fontFamily: 'Arial',
-        padding: 13,
-        margin: 5,
-        borderWidth: 1,
-        borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8
-    },
-});
+        fontSize: 17,
+        alignSelf:'center',
+    }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import Button from 'react-native-button'
-import {Router, Scene} from 'react-native-router-flux';
+import {Router, Scene,Actions, DefaultRenderer} from 'react-native-router-flux';
 import { TabNavigator } from "react-navigation";
 import AccountSetup from './AccountSetup';
 import StartPage from './StartPage';
@@ -10,19 +10,20 @@ import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
 import EmployerCreateListing from './EmployerCreateListing';
 import Drawer from 'react-native-drawer';
-import SideMenu from './SideMenu';
+
 
 
 
 const App = () => {
     return (
         <Router>
-            <Scene key = "root">
+        <Scene key="root">
                 <Scene
                     key = "StartPage"
                     component = {StartPage}
                     hideNavBar={true}
                 />
+
                 <Scene
                     key = "Employers"
                     component = {Employers}
@@ -52,34 +53,12 @@ const App = () => {
                     title="Skills"
                     hideNavBar={true}
                 />
-                <Drawer
-                hideNavBar
-                key="drawerMenu"
-                contentComponent={SideMenu}
-                drawerWidth={250}
-                drawerPosition="right"
-                >
-                <Scene
-                key = "EmployerCreateListing"
-                component = {EmployerCreateListing}
-                title="Create Listing"
-                hideNavBar={true}
-                />
-                <Scene
-                key = "EmployerHomepage"
-                component = {EmployerHomepage}
-                title="Account"
-                hideNavBar={true}
-                />
-
-                </Drawer>
-
-
 
 
             </Scene>
 
         </Router>
+
     )
 }
 
