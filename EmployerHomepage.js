@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text,
     View, FlatList, TouchableOpacity,
     Image, SafeAreaView } from 'react-native';
-import ic_menu from './assets/list.png'
+import ic_menu from './assets/Images/hamburger.png'
 import Drawer from 'react-native-drawer'
 import { Actions } from 'react-native-router-flux'
 console.disableYellowBox = true;
@@ -10,7 +10,32 @@ console.disableYellowBox = true;
 const menu = [
     { 'title': 'Home' },
     { 'title': 'Replies' },
-    { 'title': 'Create' }
+    { 'title': 'Create' },
+    { 'title': 'Log Out'}
+]
+
+
+const testData = [
+    { 'title': 'test1' },
+    { 'title': 'test2' },
+    { 'title': 'test3' },
+    { 'title': 'test4'},
+    { 'title': 'test5' },
+    { 'title': 'test6' },
+    { 'title': 'test7' },
+    { 'title': 'test8' },
+    { 'title': 'test9' },
+    { 'title': 'test10' },
+    { 'title': 'test1' },
+    { 'title': 'test2' },
+    { 'title': 'test3' },
+    { 'title': 'test4'},
+    { 'title': 'test5' },
+    { 'title': 'test6' },
+    { 'title': 'test7' },
+    { 'title': 'test8' },
+    { 'title': 'test9' },
+    { 'title': 'test10' }
 ]
 
 export default class EmployerHomepage extends Component {
@@ -57,6 +82,7 @@ export default class EmployerHomepage extends Component {
         return (
             <SafeAreaView style={styles.safeAreaStyle}>
                 <View style={styles.mainContainer}>
+
                     <Drawer
                         ref={(ref) => this.drawer = ref}
                         content={this.renderDrawer()}
@@ -72,9 +98,23 @@ export default class EmployerHomepage extends Component {
                                     <Image style={{ tintColor: 'white' }} source={ic_menu} />
                                 </TouchableOpacity>
                             </View>
-                            <Text style={styles.headerTitle}>Homepage</Text>
                             <View style={styles.menuButton} />
                         </View>
+                        <FlatList
+                            style={{ flex: 1.0 }}
+                            data={testData}
+                            extraData={this.state}
+                            renderItem={({ item, index2 }) => {
+                                return (
+                                    <TouchableOpacity style={styles.menuTitleContainer}
+                                    onPress={()=>this.onPress(item, index2)}>
+                                        <Text style={styles.mainList}
+                                            key={index2}>
+                                            {item.title}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )
+                            }} />
                     </Drawer>
                 </View>
             </SafeAreaView>
@@ -91,7 +131,12 @@ export default class EmployerHomepage extends Component {
         Actions.EmployerHomepage();
       }
       if(index == 2){
+        //create pressed
         Actions.EmployerCreateListing();
+      }
+      if(index == 3){
+        //logout pressed
+        Actions.EmployerHomepage();
       }
     }
 
@@ -136,7 +181,7 @@ const styles = {
         marginLeft: 8,
         marginRight: 8,
         alignSelf: 'center',
-        tintColor: 'white'
+        tintColor: 'white',
     },
     menuContainer: {
         flex: 1.0,
@@ -147,10 +192,20 @@ const styles = {
         height: 60,
         width:'100%',
         flexDirection:'row',
+        borderColor: '#a9fcd4',
+        borderWidth: 1,
     },
     menuTitle: {
         width:'100%',
+        textAlign: 'center',
         color: 'white',
+        fontSize: 17,
+        alignSelf: 'center'
+
+    },
+    mainList: {
+        width:'100%',
+        color: 'black',
         textAlign: 'center',
         fontSize: 17,
         alignSelf:'center',
