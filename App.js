@@ -10,8 +10,10 @@ import EmployerHomepage from './EmployerHomepage';
 import SkillsPage from './SkillsPage';
 import EmployerCreateListing from './EmployerCreateListing';
 import Drawer from 'react-native-drawer';
-
-
+import MapsPage from './MapsPage';
+import TransportType from './TransportType';
+import RangePage from './Range';
+import BusPage from './BusOptions';
 
 
 const App = () => {
@@ -47,14 +49,36 @@ const App = () => {
                     title="Account"
                     hideNavBar={true}
                 />
-                 <Scene
+                <Scene
                     key = "SkillPage"
                     component = {SkillsPage}
                     title="Skills"
                     hideNavBar={true}
                 />
-
-
+                <Scene
+                    key = "MapsPage"
+                    component = {MapsPage}
+                    title="Maps"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "TransportType"
+                    component = {TransportType}
+                    title="Transport"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "RangePage"
+                    component = {RangePage}
+                    title="Range"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "BusPage"
+                    component = {BusPage}
+                    title="Bus"
+                    hideNavBar={true}
+                />
             </Scene>
 
         </Router>
