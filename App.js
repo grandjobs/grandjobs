@@ -11,6 +11,8 @@ import SkillsPage from './SkillsPage';
 import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
+import BusPage from './BusOptions';
+
 
 const App = () => {
     return (
@@ -60,6 +62,12 @@ const App = () => {
                     key = "RangePage"
                     component = {RangePage}
                     title="Range"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "BusPage"
+                    component = {BusPage}
+                    title="Bus"
                     hideNavBar={true}
                 />
             </Scene>

@@ -48,7 +48,13 @@ export default class Range extends React.Component {
     }
 
     nextPressed(){
-        console.log("Car");
+        if (this.props.travelVal == 0){
+            console.log("User has a car.");
+        }
+        else if (this.props.travelVal == 1){
+            console.log("User is public.");
+            Actions.BusPage();
+        }
     }
 
 }
@@ -60,10 +66,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textContainer:{
-        top: Dimensions.get('window').height * 0.05
+        top: Dimensions.get('window').height * 0.05,
     },
     fillContainer:{
-        top: Dimensions.get('window').height * 0.20,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -78,7 +83,8 @@ const styles = StyleSheet.create({
         fontSize: 80,
         textAlign: 'center',
         color: '#d6d6d6',
-        fontFamily: 'Roboto-Thin'
+        fontFamily: 'Roboto-Thin',
+        marginBottom: 100,
     },
     milesContainer:{
         flexDirection: 'row'

@@ -29,11 +29,11 @@ export default class TransportType extends React.Component {
     }
 
     carPressed(){
-        Actions.RangePage();
+        Actions.RangePage({travelVal: 0});
     }
 
     publicPressed(){
-        console.log("Public");
+        Actions.RangePage({travelVal: 1});
     }
 
 }
