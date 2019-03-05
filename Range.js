@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput, Slider } from 'react-native';
 import Button from 'react-native-button';
-import PhoneInput from 'react-native-phone-input';
 import { Actions } from 'react-native-router-flux';
 
 

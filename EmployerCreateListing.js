@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput, Alert } from 'react-native';
 import Button from 'react-native-button';
-// import { TextInput } from 'react-native-paper';
-import PhoneInput from 'react-native-phone-input';
 import { Actions } from 'react-native-router-flux'
 
 export default class EmployerCreateListing extends React.Component {
