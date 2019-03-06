@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput, Alert } from 'react-native';
 import Button from 'react-native-button';
-// import { TextInput } from 'react-native-paper';
-import PhoneInput from 'react-native-phone-input';
 import { Actions } from 'react-native-router-flux'
 
 export default class EmployerCreateListing extends React.Component {
@@ -10,8 +8,8 @@ export default class EmployerCreateListing extends React.Component {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>Awesome!</Text>
-                    <Text style={styles.mainText}>Lets fill out some information.</Text>
+                    <Text style={styles.largeText}>Great!</Text>
+                    <Text style={styles.mainText}>Lets create a listing.</Text>
                 </View>
                 <View style={styles.fillContainer}>
                     {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
@@ -19,17 +17,17 @@ export default class EmployerCreateListing extends React.Component {
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
-                        placeholder='Username'
+                        placeholder='Job Title'
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
-                        placeholder='Company Name'
+                        placeholder='Job Details'
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
-                        placeholder='Company Location'
+                        placeholder='Job Location'
                     />
                     <TextInput style={styles.inputText2}
                         selectTextOnFocus={true}
@@ -41,21 +39,27 @@ export default class EmployerCreateListing extends React.Component {
                     <Button style={styles.buttonDesign} onPress={()=>this.createPressed()}>
                     Create Listing
                     </Button>
+                    <Button style={styles.buttonDesign} onPress={()=>this.cancelPressed()}>
+                    Cancel
+                    </Button>
                     </View>
                 </View>
             </View>
         );
     }
 
-    createPressed(){
+    cancelPressed(){
       Alert.alert(
-        'Confirm',
-        'Confirm Listing?',
+        'Cancel',
+        'Cancel Listing?',
         [
           {text:'OK',onPress:()=>Actions.EmployerHomepage()},
           {text:'Cancel',onPress:()=>console.log('cancel pressed')}
         ]
       )
+    }
+    createPressed(){
+      Actions.EmployerHomepage();
     }
 }
 

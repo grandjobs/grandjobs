@@ -1,123 +1,213 @@
-import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, ScrollView } from 'react-native';
-import Button from 'react-native-button';
-// import { TextInput } from 'react-native-paper';
-import PhoneInput from 'react-native-phone-input';
+import React, { Component } from 'react';
+import { Platform, StyleSheet, Text,
+    View, FlatList, TouchableOpacity,
+    Image, SafeAreaView } from 'react-native';
+import ic_menu from './assets/Images/hamburger.png'
+import Drawer from 'react-native-drawer'
 import { Actions } from 'react-native-router-flux'
+console.disableYellowBox = true;
 
-export default class EmployerHomepage extends React.Component {
-    render() {
-      let screenwidth = Dimensions.get('window').width;
-      let screenHeight = Dimensions.get('window').height;
+const menu = [
+    { 'title': 'Home' },
+    { 'title': 'Replies' },
+    { 'title': 'Create' },
+    { 'title': 'Log Out'}
+]
+
+
+const testData = [
+    { 'title': 'test1' },
+    { 'title': 'test2' },
+    { 'title': 'test3' },
+    { 'title': 'test4'},
+    { 'title': 'test5' },
+    { 'title': 'test6' },
+    { 'title': 'test7' },
+    { 'title': 'test8' },
+    { 'title': 'test9' },
+    { 'title': 'test10' },
+    { 'title': 'test1' },
+    { 'title': 'test2' },
+    { 'title': 'test3' },
+    { 'title': 'test4'},
+    { 'title': 'test5' },
+    { 'title': 'test6' },
+    { 'title': 'test7' },
+    { 'title': 'test8' },
+    { 'title': 'test9' },
+    { 'title': 'test10' }
+]
+
+export default class EmployerHomepage extends Component {
+
+    constructor(props) {
+        super(props)
+
+    }
+
+    renderDrawer() {
+        //SlideMenu
         return (
-          <ScrollView
-            ref={(scrollView) => { this.scrollView = scrollView; }}
-            style={styles.container}
-            //pagingEnabled={true}
-            horizontal= {true}
-            decelerationRate={0}
-            snapToInterval={screenwidth}
-            snapToAlignment={"center"}>
-            <View style={styles.mainContainer}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>Welcome!</Text>
-                    <Text style={styles.mainText}>here are your updates</Text>
-                </View>
-                <View style={styles.buttonContainer2}>
-                    <Button style={styles.buttonDesign} onPress={()=>this.homePressed()}>
-                    Home
-                    </Button>
-                </View>
+            <View style={styles.menuContainer}>
+                <FlatList
+                    style={{ flex: 1.0 }}
+                    data={menu}
+                    extraData={this.state}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <TouchableOpacity style={styles.menuTitleContainer}
+                            onPress={()=>this.onPress(item, index)}>
+                                <Text style={styles.menuTitle}
+                                    key={index}>
+                                    {item.title}
+                                </Text>
+                            </TouchableOpacity>
+
+
+                        )
+                    }} />
             </View>
+        )
+    }
 
-            <View style={styles.mainContainer}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>Welcome!</Text>
-                    <Text style={styles.mainText}>here are your listings</Text>
+    openDrawer() {
+        this.drawer.open()
+    }
+
+    closeDrawer() {
+        this.drawer.close()
+    }
+
+    render() {
+        return (
+            <SafeAreaView style={styles.safeAreaStyle}>
+                <View style={styles.mainContainer}>
+
+                    <Drawer
+                        ref={(ref) => this.drawer = ref}
+                        content={this.renderDrawer()}
+                        type='static'
+                        tapToClose={true}
+                        openDrawerOffset={0.35}
+                        styles={drawerStyles}>
+                        {/* //Main View */}
+                        <View style={styles.headerContainer}>
+                            <View style={styles.menuButton}>
+                                <TouchableOpacity
+                                    onPress={this.openDrawer.bind(this)}>
+                                    <Image style={{ tintColor: 'white' }} source={ic_menu} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.menuButton} />
+                        </View>
+                        <FlatList
+                            style={{ flex: 1.0 }}
+                            data={testData}
+                            extraData={this.state}
+                            renderItem={({ item, index2 }) => {
+                                return (
+                                    <TouchableOpacity style={styles.menuTitleContainer}
+                                    onPress={()=>this.onPress(item, index2)}>
+                                        <Text style={styles.mainList}
+                                            key={index2}>
+                                            {item.title}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )
+                            }} />
+                    </Drawer>
                 </View>
-                <View style={styles.buttonContainer2}>
-
-                    <Button style={styles.buttonDesign} onPress={()=>this.newListingPressed()}>
-                    New Listing
-                    </Button>
-                </View>
-            </View>
-
-            </ScrollView>
+            </SafeAreaView>
         );
     }
 
-    homePressed(){
-
-      Actions.StartPage();
+    onPress(item, index){
+      if(index == 0){
+        //home pressed
+        Actions.EmployerHomepage();
+      }
+      if(index == 1){
+        //replies pressed
+        Actions.EmployerHomepage();
+      }
+      if(index == 2){
+        //create pressed
+        Actions.EmployerCreateListing();
+      }
+      if(index == 3){
+        //logout pressed
+        Actions.EmployerHomepage();
+      }
     }
 
-    newListingPressed(){
-      Actions.EmployerCreateListing();
-    }
 }
 
 
 
-const styles = StyleSheet.create({
-    mainContainer: {
-        flex: 1,
+
+const drawerStyles = {
+    drawer: {
+        flex: 1.0,
         backgroundColor: '#1E2027',
-        padding: 10,
-        width: Dimensions.get('window').width
-        // justifyContent: 'center'
     },
-    textContainer:{
-        top: Dimensions.get('window').height * 0.05
+    main: {
+        flex: 1.0,
+        backgroundColor: 'white'
+    }
+}
+
+const styles = {
+    mainContainer: {
+        flex: 1.0,
+        backgroundColor: 'white'
     },
-    buttonContainer:{
-        alignItems: 'center',
-        top: (Dimensions.get('window').height * 0.5)
+    safeAreaStyle: {
+        flex: 1.0,
+        backgroundColor: '#1E2027',
     },
-    buttonContainer2:{
-        alignItems: 'center',
-        top: (Dimensions.get('window').height * 0.65)
+    headerContainer: {
+        height: 44,
+        flexDirection: 'row',
+        justifyContect: 'center',
+        backgroundColor: '#1E2027',
     },
-    fillContainer:{
-        top: Dimensions.get('window').height * 0.20,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    largeText:{
-        fontSize: 65,
+    headerTitle: {
+        flex: 1.0,
         textAlign: 'center',
-        top: 20,
-        color: '#d6d6d6',
-        fontFamily: 'Arial'
+        alignSelf: 'center',
+        color: 'white'
     },
-    mainText:{
-        fontSize: 25,
-        textAlign: 'center',
-        top: 20,
-        color: '#d6d6d6',
-        fontFamily: 'Arial'
+    menuButton: {
+        marginLeft: 8,
+        marginRight: 8,
+        alignSelf: 'center',
+        tintColor: 'white',
     },
-    buttonDesign:{
-        fontSize: 25,
-        fontFamily: 'Arial',
-        padding: 10,
-        margin: 30,
-        width: 300,
-        color: '#d6d6d6',
-        borderRadius: 30,
-        backgroundColor: '#121212',
+    menuContainer: {
+        flex: 1.0,
+        backgroundColor: '#1E2027',
     },
-    inputText:{
-        borderColor: '#fff',
-        color: '#fff',
-        fontSize: 25,
-        textAlign: 'center',
-        color:'white',
-        fontFamily: 'Arial',
-        padding: 13,
-        margin: 5,
+    menuTitleContainer: {
+        alignItem:'center',
+        height: 60,
+        width:'100%',
+        flexDirection:'row',
+        borderColor: '#a9fcd4',
         borderWidth: 1,
-        borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8
     },
-});
+    menuTitle: {
+        width:'100%',
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 17,
+        alignSelf: 'center'
+
+    },
+    mainList: {
+        width:'100%',
+        color: 'black',
+        textAlign: 'center',
+        fontSize: 17,
+        alignSelf:'center',
+    }
+}

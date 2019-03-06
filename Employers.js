@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput, Alert } from 'react-native';
 import Button from 'react-native-button';
-// import { TextInput } from 'react-native-paper';
-import PhoneInput from 'react-native-phone-input';
 import { Actions } from 'react-native-router-flux'
 
 export default class Employers extends React.Component {
@@ -18,7 +16,7 @@ export default class Employers extends React.Component {
                     {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
-                        placeholder='Username'
+                        placeholder='Email Address'
                         placeholderTextColor="#fff"
                     />
                     <TextInput style={styles.inputText}
