@@ -14,6 +14,7 @@ import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
+import UserInfoPage from './UserInfoPage'
 
 
 const App = () => {
@@ -77,6 +78,12 @@ const App = () => {
                     key = "BusPage"
                     component = {BusPage}
                     title="Bus"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "UserInfoPage"
+                    component = {UserInfoPage}
+                    title="UserInfo"
                     hideNavBar={true}
                 />
             </Scene>
