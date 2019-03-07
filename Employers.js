@@ -52,8 +52,8 @@ export default class Employers extends React.Component {
 
     createPressed(){
       Alert.alert(
-        'Confirm',
-        'Confirm Account?',
+        'Confirm Information',
+        'Create Account?',
         [
           {text:'OK',onPress:()=>Actions.EmployerHomepage()},
           {text:'Cancel',onPress:()=>console.log('cancel pressed')}
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         alignItems: 'center',
-        top: Dimensions.get('window').height * 0.03
+        top: Dimensions.get('window').height * 0.09
     },
     fillContainer:{
         top: Dimensions.get('window').height * 0.15,
@@ -86,24 +86,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'Arial'
+        fontFamily: 'Roboto-Thin'
     },
     mainText:{
         fontSize: 25,
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'Arial'
-    },
-    buttonDesign:{
-        fontSize: 25,
-        fontFamily: 'Arial',
-        padding: 10,
-        margin: 30,
-        width: 300,
-        color: '#d6d6d6',
-        borderRadius: 30,
-        backgroundColor: '#121212',
+        fontFamily: 'Roboto-Thin'
     },
     inputText:{
         borderColor: '#fff',
@@ -111,7 +101,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         textAlign: 'center',
         color:'white',
-        fontFamily: 'Arial',
+        fontFamily: 'Roboto-Thin',
         padding: 13,
         margin: 5,
         borderWidth: 1,
@@ -127,5 +117,17 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         textAlign: 'center',
         width: Dimensions.get('window').width * 0.8,
+    },
+    buttonDesign:{
+        fontSize: 20,
+        fontWeight: 'normal',
+        fontFamily: 'Roboto-Thin',
+        padding: 10,
+        margin: 30,
+        width: 200,
+        color: '#fff',
+        borderRadius: 30,
+        borderColor: '#a9fcd4',
+        borderWidth: 1,
     },
 });

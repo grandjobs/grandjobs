@@ -108,7 +108,7 @@ export default class EmployerHomepage extends Component {
                                 return (
                                     <TouchableOpacity style={styles.menuTitleContainer}
                                     onPress={()=>this.onPress(item, index2)}>
-                                        <Text style={styles.mainList}
+                                        <Text style={styles.mainListStatus}
                                             key={index2}>
                                             {item.title}
                                         </Text>
@@ -183,6 +183,18 @@ const styles = {
         alignSelf: 'center',
         tintColor: 'white',
     },
+    buttonDesign:{
+        fontSize: 20,
+        fontWeight: 'normal',
+        fontFamily: 'Roboto-Thin',
+        padding: 10,
+        margin: 30,
+        width: 200,
+        color: '#fff',
+        borderRadius: 30,
+        borderColor: '#a9fcd4',
+        borderWidth: 1,
+    },
     menuContainer: {
         flex: 1.0,
         backgroundColor: '#1E2027',
@@ -192,7 +204,7 @@ const styles = {
         height: 60,
         width:'100%',
         flexDirection:'row',
-        borderColor: '#a9fcd4',
+        borderColor: '#D3D3D3',
         borderWidth: 1,
     },
     menuTitle: {
@@ -200,6 +212,7 @@ const styles = {
         textAlign: 'center',
         color: 'white',
         fontSize: 17,
+        fontFamily: 'Roboto-Thin',
         alignSelf: 'center'
 
     },
@@ -209,5 +222,12 @@ const styles = {
         textAlign: 'center',
         fontSize: 17,
         alignSelf:'center',
+    },
+    mainListStatus: {
+        width:'100%',
+        color: 'black',
+        textAlign: 'left',
+        fontSize: 17,
+        alignSelf:'left',
     }
 }

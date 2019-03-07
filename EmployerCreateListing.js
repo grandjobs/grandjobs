@@ -22,12 +22,14 @@ export default class EmployerCreateListing extends React.Component {
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
-                        placeholder='Job Details'
+                        placeholder='Job Location'
                     />
-                    <TextInput style={styles.inputText}
+                    <TextInput style={styles.inputText2}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
-                        placeholder='Job Location'
+                        placeholder='Job Details'
+                        multiline = {true}
+
                     />
                     <TextInput style={styles.inputText2}
                         selectTextOnFocus={true}
@@ -87,24 +89,26 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'Arial'
+        fontFamily: 'Roboto-Thin'
     },
     mainText:{
         fontSize: 25,
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'Arial'
+        fontFamily: 'Roboto-Thin'
     },
     buttonDesign:{
-        fontSize: 25,
-        fontFamily: 'Arial',
+        fontSize: 20,
+        fontWeight: 'normal',
+        fontFamily: 'Roboto-Thin',
         padding: 10,
-        margin: 30,
-        width: 300,
-        color: '#d6d6d6',
+        margin: 10,
+        width: 200,
+        color: '#fff',
         borderRadius: 30,
-        backgroundColor: '#121212',
+        borderColor: '#a9fcd4',
+        borderWidth: 1,
     },
     inputText:{
         borderColor: '#fff',
@@ -112,7 +116,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         textAlign: 'center',
         color:'white',
-        fontFamily: 'Arial',
+        fontFamily: 'Roboto-Thin',
         padding: 13,
         margin: 5,
         borderWidth: 1,
@@ -125,12 +129,12 @@ const styles = StyleSheet.create({
         fontSize: 25,
         textAlign: 'center',
         color:'white',
-        fontFamily: 'Arial',
+        fontFamily: 'Roboto-Thin',
         padding: 75,
         margin: 5,
         borderWidth: 1,
         borderRadius: 30,
         width: Dimensions.get('window').width * 0.8,
-        height: Dimensions.get('window').height * 0.3
+        height: Dimensions.get('window').height * 0.2
     },
 });
