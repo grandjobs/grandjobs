@@ -139,7 +139,8 @@ export default class authSol extends React.Component {
 					return (
 					   <View style={styles.mainContainer}>
 							<View style={styles.textContainer}>
-								<Text style={styles.largeText}>You are signed in!</Text>
+								<Text style={styles.largeText}>You are signed in! </Text>
+								<Text style={styles.largeText}>TODO send to homepage </Text>
 							</View>
 							<View style={styles.bottomContainer}>
 								<Button
