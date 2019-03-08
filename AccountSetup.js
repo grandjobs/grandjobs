@@ -2,9 +2,16 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
+import UserInfo from './UserInfo';
 
 
 export default class AccountSetup extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            phoneText: ''
+        };
+    }
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -19,6 +26,7 @@ export default class AccountSetup extends React.Component {
                         keyboardType='numeric'
                         selectTextOnFocus={true}
                         placeholder='Phone #'
+                        onChangeText={(phoneText) => this.setState({phoneText})}
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
@@ -33,17 +41,19 @@ export default class AccountSetup extends React.Component {
                         placeholder='Email (Optional)'
                     />
                 </View>
+
                 <View style={styles.bottomContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.nextPressed()}>
                     Next
                     </Button>
                 </View>
-
             </View>
         );
     }
 
     nextPressed(){
+        userInfo = new UserInfo("9999");
+        console.log(this.stage.phoneText);
         Actions.SkillPage();
     }
 

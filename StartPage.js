@@ -42,7 +42,7 @@ export default class StartPage extends React.Component {
     }
 
     jobsPressed(){
-        Actions.UserInfoPage();
+        Actions.AccountSetup();
     }
 
     employerPressed(){

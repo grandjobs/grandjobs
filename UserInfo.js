@@ -10,4 +10,5 @@ class UserInfo{
         this.homeRange = 0;
         this.busRange = 0;
     }
+    
 }
