@@ -14,6 +14,7 @@ import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
+import authSol from './authSol';
 
 
 const App = () => {
@@ -31,6 +32,11 @@ const App = () => {
                     component = {Employers}
                     hideNavBar={true}
                 />
+				<Scene
+					key = "authTesting"
+					component = {authSol}
+					hideNavBar={true}
+				/>
                 <Scene
                     key = "AccountSetup"
                     component = {AccountSetup}

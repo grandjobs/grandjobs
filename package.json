@@ -15,6 +15,11 @@
     "react-native-drawer": "^2.5.1",
     "react-native-maps": "^0.23.0",
     "react-native-range-slider": "^0.1.1",
+    "dom-parser": "^0.1.5",
+    "firebase": "^5.8.3",
+    "react-native-firebase": "^5.2.2",
+    "react-native-paper": "^2.9.1",
+    "react-native-phone-input": "^0.2.1",
     "react-native-router-flux": "^4.0.6",
     "react-native-swiper": "^1.5.14",
     "react-navigation": "^3.0.9"
