@@ -47,13 +47,14 @@ export default class Range extends React.Component {
     }
 
     nextPressed(){
+        this.props.userInfo.homeRange = this.state.range;
         if (this.props.travelVal == 0){
             console.log("User has a car.");
-            Actions.UserInfoPage();
+            Actions.UserInfoPage({userInfo: this.props.userInfo});
         }
         else if (this.props.travelVal == 1){
             console.log("User is public.");
-            Actions.BusPage();
+            Actions.BusPage({userInfo: this.props.userInfo});
         }
     }
 

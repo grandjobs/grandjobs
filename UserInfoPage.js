@@ -9,6 +9,11 @@ import Drawer from 'react-native-drawer'
 
 export default class UserInfoPage extends React.Component {
 
+    constructor(props){
+        super(props);
+        console.log(props.userInfo);
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}>

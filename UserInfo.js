@@ -1,14 +1,16 @@
-class UserInfo{
+export default class UserInfo{
 
-    constructor(phoneNum){
-        this.phoneNum = phoneNum;
+    constructor(){
+        this.phoneNum = "";
         this.firstName = "";
         this.lastName = "";
         this.email = "";
         this.skills = [];
         this.busAccess = [];
         this.homeRange = 0;
-        this.busRange = 0;
+        this.busRange = 2;
+        this.homeLat = 0.0;
+        this.homeLong = 0.0;
     }
-    
+
 }

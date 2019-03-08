@@ -7,12 +7,10 @@ import { Actions } from 'react-native-router-flux';
 
 export default class BusOptions extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         /**
-         * The items array is populated with the list of skills.
-         * The state of these skills is also populated in the array.
-         * Basic array construction:
+         * Populate the bus routes array with appropriate routes.
          *
          * { [SkillLabel, selectedBoolean, opacity], ... }
          */
@@ -29,13 +27,9 @@ export default class BusOptions extends Component {
         this.busList.push(new BusElement("60", false, 1));
 
 
-        //Skills that the user actually selects.
+        //Routes that the user actually selects.
         this.userList= [];
 
-
-        /* This is for modifying the contents of the text elements on the screen.
-        Basically just feedback for the user when clicked.
-         */
         this.state={
             busList: this.busList,
             userList: this.userList,
@@ -125,7 +119,14 @@ export default class BusOptions extends Component {
     }
 
     nextPressed(){
-        console.log(this.userList);
+        this.setInfoObj();
+        Actions.UserInfoPage({userInfo: this.props.userInfo});
+    }
+
+    setInfoObj(){
+        for (var i = 0; i < this.userList.length; i++){
+            this.props.userInfo.busAccess.push(this.userList[i].label);
+        }
     }
 }
 

@@ -5,6 +5,10 @@ import { Actions } from 'react-native-router-flux';
 
 
 export default class TransportType extends React.Component {
+    constructor(props){
+        super(props);
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -28,11 +32,17 @@ export default class TransportType extends React.Component {
     }
 
     carPressed(){
-        Actions.RangePage({travelVal: 0});
+        Actions.RangePage({
+            travelVal: 0,
+            userInfo: this.props.userInfo,
+        });
     }
 
     publicPressed(){
-        Actions.RangePage({travelVal: 1});
+        Actions.RangePage({
+            travelVal: 1,
+            userInfo: this.props.userInfo,
+        });
     }
 
 }

@@ -2,14 +2,17 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
-import UserInfo from './UserInfo';
+import UserInfo from './UserInfo.js';
 
 
 export default class AccountSetup extends React.Component {
     constructor() {
         super();
         this.state = {
-            phoneText: ''
+            phoneText: '',
+            firstNameText: '',
+            lastNameText: '',
+            emailText: ''
         };
     }
     render() {
@@ -31,14 +34,18 @@ export default class AccountSetup extends React.Component {
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholder='First Name (Optional)'
+                        onChangeText={(firstNameText) => this.setState({firstNameText})}
+
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholder='Last Name (Optional)'
+                        onChangeText={(lastNameText) => this.setState({lastNameText})}
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholder='Email (Optional)'
+                        onChangeText={(emailText) => this.setState({emailText})}
                     />
                 </View>
 
@@ -52,11 +59,14 @@ export default class AccountSetup extends React.Component {
     }
 
     nextPressed(){
-        userInfo = new UserInfo("9999");
-        console.log(this.stage.phoneText);
-        Actions.SkillPage();
-    }
+        var userInfo = new UserInfo();
+        userInfo.phoneNum = this.state.phoneText;
+        userInfo.firstName = this.state.firstNameText;
+        userInfo.lastName = this.state.lastNameText;
+        userInfo.email = this.state.emailText;
 
+        Actions.SkillPage({userInfo: userInfo});
+    }
 }
 
 const styles = StyleSheet.create({
