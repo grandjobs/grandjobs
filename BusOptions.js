@@ -67,12 +67,8 @@ export default class BusOptions extends Component {
     }
 
     /**
-     * [labelSelected description]
-     * @param  {[type]} type  Type of label selected
-     *                        0 --> Skill
-     *                        1 --> Cert
-     *                        2 --> ???
-     *
+     * Modify the visuals of the label that is selected at index i.
+     * 
      * @param  {[type]} i index of the selected label
      */
     labelSelected(i){

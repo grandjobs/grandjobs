@@ -4,6 +4,7 @@ import Button from 'react-native-button'
 import {createStackNavigator, createAppNavigator} from 'react-navigation';
 import { Actions } from 'react-native-router-flux';
 import { Font } from 'expo';
+import UserInfo from './UserInfo.js';
 
 
 export default class StartPage extends React.Component {
@@ -42,25 +43,24 @@ export default class StartPage extends React.Component {
     }
 
     jobsPressed(){
+        var tempInfo = new UserInfo();
+        tempInfo.phoneNum = "+17086634507";
+        tempInfo.email = "waltr@mail.gvsu.edu";
+        tempInfo.firstName = "Ryan";
+        tempInfo.lastName = "Walt";
+        tempInfo.skills = ["Skill 1", "Skill 2", "Skill 3", "Cert 1"];
+        tempInfo.homeRange = 30;
+        tempInfo.busAccess = ["50", "12", "48"];
+
+        // Actions.UserInfoPage({userInfo: tempInfo});
         Actions.AccountSetup();
+
     }
 
     employerPressed(){
         Actions.Employers();
     }
 }
-
-// const AppNavigator = createStackNavigator(
-//   {
-//     Home: HomeScreen,
-//     Details: DetailsScreen
-//   },
-//   {
-//     initialRouteName: "Home"
-//   }
-// );
-
-// export default createAppContainer(AppNavigator);
 
 const styles = StyleSheet.create({
     mainContainer: {

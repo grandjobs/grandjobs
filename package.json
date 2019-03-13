@@ -12,6 +12,7 @@
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-button": "^2.3.0",
+    "react-native-cards": "^1.1.4",
     "react-native-drawer": "^2.5.1",
     "react-native-maps": "^0.23.0",
     "react-native-range-slider": "^0.1.1",

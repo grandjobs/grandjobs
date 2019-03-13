@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import { DrawerNavigator } from 'react-navigation';
-
-import Drawer from 'react-native-drawer'
+import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
+import Drawer from 'react-native-drawer';
+import SideMenu from 'react-native-side-menu';
 
 
 export default class UserInfoPage extends React.Component {
@@ -12,21 +13,129 @@ export default class UserInfoPage extends React.Component {
     constructor(props){
         super(props);
         console.log(props.userInfo);
+        phoneText = "Phone: " + props.userInfo.phoneNum + "\n";
+        firstText = "First: " + props.userInfo.firstName + "\n";
+        lastText = "Last: " + props.userInfo.lastName + "\n";
+        emailText = "Email: " + props.userInfo.email;
+
+        this.basicInfoText = phoneText + firstText + lastText + emailText;
+
+        this.busInfoText = "";
+        for (var i = 0; i < props.userInfo.busAccess.length; i++){
+            if (i < props.userInfo.busAccess.length - 1){
+                this.busInfoText += props.userInfo.busAccess[i] + ", ";
+            }
+            else{
+                this.busInfoText += props.userInfo.busAccess[i];
+            }
+        }
+
+        this.skillInfoText = "";
+        for (var i = 0; i < props.userInfo.skills.length; i++){
+            if (i < props.userInfo.skills.length - 1){
+                this.skillInfoText += props.userInfo.skills[i] + ", ";
+            }
+            else{
+                this.skillInfoText += props.userInfo.skills[i];
+            }
+        }
     }
 
     render() {
         return (
-            <View style={styles.mainContainer}>
-                <View style={styles.textContainer}>
-                    <Text style={styles.largeText}>You</Text>
-                    <Text style={styles.mainText}>This is your account information</Text>
-                </View>
-            </View>
-        );
-    }
+            <SideMenu>
+                <View style={styles.mainContainer}>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.largeText}>You</Text>
+                        <Text style={styles.mainText}>This is your account information</Text>
+                    </View>
 
-    nextPressed(){
-        Actions.SkillPage();
+                    <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "Basic Info"
+                            />
+                            <CardContent text={this.basicInfoText}/>
+                            <CardAction
+                            separator={true}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="Edit "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "Bus Routes"
+                            />
+                            <CardContent text={this.busInfoText}/>
+                            <CardAction
+                            separator={false}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="Edit "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "Your Skills"
+                            />
+                            <CardContent text={this.skillInfoText}/>
+                            <CardAction
+                            separator={false}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="Edit "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "Your Skills"
+                            />
+                            <CardContent text={this.skillInfoText}/>
+                            <CardAction
+                            separator={false}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="Edit "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "Your Skills"
+                            />
+                            <CardContent text={this.skillInfoText}/>
+                            <CardAction
+                            separator={false}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="Edit "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
+
+                    </ScrollView>
+                </View>
+            </SideMenu>
+        );
     }
 
 }
@@ -44,65 +153,22 @@ const styles = StyleSheet.create({
         // padding: 10,
         alignItems: 'center'
     },
-    textContainer:{
-    },
-    fillContainer:{
-        top: Dimensions.get('window').height * 0.20,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
     largeText:{
         fontSize: 65,
         textAlign: 'center',
-        top: 20,
+        marginTop: 20,
         color: '#d6d6d6',
         fontFamily: 'Roboto-Thin'
     },
     mainText:{
         fontSize: 25,
         textAlign: 'center',
-        top: 20,
         color: '#d6d6d6',
-        fontFamily: 'Roboto-Thin'
-    },
-    inputText:{
-        borderColor: '#fff',
-        color: '#fff',
-        fontSize: 25,
-        textAlign: 'center',
-        color:'white',
         fontFamily: 'Roboto-Thin',
-        padding: 10,
-        margin: 20,
-        borderWidth: 1,
-        borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8
+        marginBottom: 20,
     },
-    inputPhone:{
-        borderColor: '#fff',
-        color: '#fff',
-        padding: 12,
-        margin: 20,
-        borderWidth: 1,
-        borderRadius: 30,
-        textAlign: 'center',
-        width: Dimensions.get('window').width * 0.8,
-    },
-    bottomContainer:{
-        flex: 1,
-        justifyContent: 'flex-end',
-        marginBottom: 0
-    },
-    buttonDesign:{
-        fontSize: 20,
-        fontWeight: 'normal',
-        fontFamily: 'Roboto-Thin',
-        padding: 10,
-        margin: 30,
-        width: 150,
-        color: '#fff',
-        borderRadius: 30,
-        borderColor: '#a9fcd4',
-        borderWidth: 1,
+    cardStyle:{
+        backgroundColor: '#34363c',
+        borderRadius: 10,
     },
 });
