@@ -52,8 +52,8 @@ export default class StartPage extends React.Component {
         tempInfo.homeRange = 30;
         tempInfo.busAccess = ["50", "12", "48"];
 
-        // Actions.UserInfoPage({userInfo: tempInfo});
-        Actions.AccountSetup();
+        Actions.UserInfoPage({userInfo: tempInfo});
+        // Actions.AccountSetup();
 
     }
 

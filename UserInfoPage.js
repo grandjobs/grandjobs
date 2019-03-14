@@ -4,8 +4,9 @@ import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import { DrawerNavigator } from 'react-navigation';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
-import Drawer from 'react-native-drawer';
 import SideMenu from 'react-native-side-menu';
+import Dialog from "react-native-dialog";
+
 
 
 export default class UserInfoPage extends React.Component {
@@ -39,35 +40,110 @@ export default class UserInfoPage extends React.Component {
                 this.skillInfoText += props.userInfo.skills[i];
             }
         }
+
+        this.state = {
+            showFirstDialog: false,
+            showLastDialog: false,
+            showEmailDialog: false,
+        }
     }
 
     render() {
         return (
             <SideMenu>
+                {/*Dialog box for the user editing the first name*/}
+                <Dialog.Container visible={this.state.showFirstDialog}>
+                    <Dialog.Title>First Name</Dialog.Title>
+                    <Dialog.Description>
+                    Please enter your FIRST name.
+                    </Dialog.Description>
+                    <Dialog.Input placeholder='First Name' wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}/>
+                    {/*OnPress will auto enable the last name edit*/}
+                    <Dialog.Button label="Confirm " onPress={() => this.editLastName()}/>
+                    <Dialog.Button label="Cancel " onPress={() => this.closeLastName()}/>
+                </Dialog.Container>
+
+                {/*Dialog box for the user editing the last name*/}
+                <Dialog.Container visible={this.state.showLastDialog}>
+                    <Dialog.Title>First Name</Dialog.Title>
+                    <Dialog.Description>
+                    Please enter your LAST name.
+                    </Dialog.Description>
+                    <Dialog.Input placeholder='Last Name' wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}/>
+                    <Dialog.Button label="Confirm " onPress={() => this.closeLastName()}/>
+                    <Dialog.Button label="Cancel " onPress={() => this.closeLastName()}/>
+                </Dialog.Container>
+
+                {/*Dialog box for the user editing their email*/}
+                <Dialog.Container visible={this.state.showEmailDialog}>
+                    <Dialog.Title>Email</Dialog.Title>
+                    <Dialog.Description>
+                    Please enter your email.
+                    </Dialog.Description>
+                    <Dialog.Input placeholder='example@mail.com' wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}/>
+                    <Dialog.Button label="Confirm " onPress={() => this.closeEmail()}/>
+                    <Dialog.Button label="Cancel " onPress={() => this.closeEmail()}/>
+                </Dialog.Container>
+
+                {/*Main container for this page*/}
                 <View style={styles.mainContainer}>
                     <View style={styles.textContainer}>
                         <Text style={styles.largeText}>You</Text>
                         <Text style={styles.mainText}>This is your account information</Text>
                     </View>
 
+                    {/*Make the cards view scrollable so we can reach the cards that will be rendered
+                    off screen*/}
                     <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
 
+                        {/*Card for the Phone number (Should not be able to edit)*/}
                         <Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
-                            title= "Basic Info"
+                            style={{fontSize:50}}
+                            title= "Phone Number"
                             />
-                            <CardContent text={this.basicInfoText}/>
+                            <CardContent style={{fontSize:50}} text={this.props.userInfo.phoneNum}/>
                             <CardAction
                             separator={true}
                             inColumn={false}>
+                            </CardAction>
+                        </Card>
+
+                        {/*Card for the First and Last name of the user*/}
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "Name"
+                            />
+                            <CardContent text={this.props.userInfo.firstName + " " + this.props.userInfo.lastName}/>
+                            <CardAction
+                            separator={false}
+                            inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.editFirstName()}
                             title="Edit "
                             color="#a9fcd4"
                             />
                             </CardAction>
                         </Card>
 
+                        {/*Card for the user's email*/}
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "Email"
+                            />
+                            <CardContent text={this.props.userInfo.email}/>
+                            <CardAction
+                            separator={false}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => this.editEmail()}
+                            title="Edit "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
+
+                        {/*Card for the bus routes for this user*/}
                         <Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
                             title= "Bus Routes"
@@ -84,9 +160,10 @@ export default class UserInfoPage extends React.Component {
                             </CardAction>
                         </Card>
 
+                        {/*Card for the skills of this user*/}
                         <Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
-                            title= "Your Skills"
+                            title= "Skills"
                             />
                             <CardContent text={this.skillInfoText}/>
                             <CardAction
@@ -99,43 +176,43 @@ export default class UserInfoPage extends React.Component {
                             />
                             </CardAction>
                         </Card>
-
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "Your Skills"
-                            />
-                            <CardContent text={this.skillInfoText}/>
-                            <CardAction
-                            separator={false}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => {}}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
-
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "Your Skills"
-                            />
-                            <CardContent text={this.skillInfoText}/>
-                            <CardAction
-                            separator={false}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => {}}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
-
                     </ScrollView>
                 </View>
             </SideMenu>
         );
+    }
+
+    editFirstName(){
+        this.setState({
+            showFirstDialog: true,
+            showLastDialog: false,
+        })
+    }
+
+    editEmail(){
+        this.setState({
+            showEmailDialog: true,
+        })
+    }
+
+    closeEmail(){
+        this.setState({
+            showEmailDialog: false,
+        })
+    }
+
+    editLastName(){
+        this.setState({
+            showFirstDialog: false,
+            showLastDialog: true,
+        })
+    }
+
+    closeLastName(){
+        this.setState({
+            showFirstDialog: false,
+            showLastDialog: false,
+        })
     }
 
 }
