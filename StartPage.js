@@ -3,11 +3,22 @@ import { StyleSheet, Text, View, Dimensions, ImageBackground } from 'react-nativ
 import Button from 'react-native-button'
 import {createStackNavigator, createAppNavigator} from 'react-navigation';
 import { Actions } from 'react-native-router-flux';
+import { firebase } from './db'
 import { Font } from 'expo';
 
 
 export default class StartPage extends React.Component {
-    state = {
+    constructor(props) {
+        super(props)
+        
+		//Firebase magic to check if someone is already logged in
+        firebase.auth().onAuthStateChanged(user => {
+            this.setState({user})
+        })
+    }
+	
+	
+	state = {
         fontLoaded: false,
     };
 
@@ -18,43 +29,74 @@ export default class StartPage extends React.Component {
         this.setState({fontLoaded: true});
     }
 
+	
+	
     render() {
-        return (
-            this.state.fontLoaded ? (
-                <ImageBackground source={require('./assets/Images/city-blur.png')}  style={{width: '100%', height: '100%'}}>
-                    <View style={styles.mainContainer}>
-                        <View style={styles.textContainer}>
-                            <Text style={styles.mainText}>I am looking for...</Text>
-                        </View>
-                        <View style={styles.buttonContainer}>
-                            <Button style={styles.buttonDesign} onPress={()=>this.employerPressed()}>
-                            Employees
-                            </Button>
-                            <Button style={styles.buttonDesign} onPress={()=>this.jobsPressed()}>
-                            Jobs
-                            </Button>
-							<Button style={styles.buttonDesign} onPress={()=>this.authPressed()}>
-						authTesting
-							</Button>
-                        </View>
-                    </View>
-                </ImageBackground>
-            ) : null
-
-        );
+        console.log(this.state.user)
+		if (this.state.user) {
+			return (
+				this.state.fontLoaded ? (
+					<ImageBackground source={require('./assets/Images/city-blur.png')}  style={{width: '100%', height: '100%'}}>
+						<View style={styles.mainContainer}>
+							<View style={styles.textContainer}>
+								<Text style={styles.mainText}>I am looking for...</Text>
+							</View>
+							<View style={styles.buttonContainer}>
+								<Button style={styles.buttonDesign} onPress={()=>this.onSignOut()}>
+								SignOut
+								</Button>
+							</View>
+						</View>
+					</ImageBackground>
+				) : null
+			);
+			
+		} else {
+			return (
+				this.state.fontLoaded ? (
+					<ImageBackground source={require('./assets/Images/city-blur.png')}  style={{width: '100%', height: '100%'}}>
+						<View style={styles.mainContainer}>
+							<View style={styles.textContainer}>
+								<Text style={styles.mainText}>I am looking for...</Text>
+							</View>
+							<View style={styles.buttonContainer}>
+								<Button style={styles.buttonDesign} onPress={()=>this.employerAuthentication()}>
+								Employees
+								</Button>
+								<Button style={styles.buttonDesign} onPress={()=>this.seekerAuthentication()}>
+								Jobs
+								</Button>
+							</View>
+						</View>
+					</ImageBackground>
+				) : null
+			);
+		}
     }
 
-    jobsPressed(){
-        Actions.AccountSetup();
+    seekerAuthentication(){
+        Actions.seekerAuthentication();
     }
 
-    employerPressed(){
-        Actions.Employers();
+    employerAuthentication(){
+        Actions.employerAuthentication();
     }
 	
-	authPressed(){
-		Actions.authTesting();
-	}
+	onSignOut = async () => {
+        try {
+			this.setState({ registered: undefined })
+            await firebase.auth().signOut()
+			this.reset()
+        } catch (e) {
+            console.warn(e)
+        }
+    }
+	
+	reset = () => {
+        this.setState({
+            user: undefined
+        })
+    }
 }
 
 // const AppNavigator = createStackNavigator(

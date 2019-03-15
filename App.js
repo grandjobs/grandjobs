@@ -14,7 +14,8 @@ import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
-import authSol from './authSol';
+import seekerAuthentication from './seekerAuthentication';
+import employerAuthentication from './employerAuthentication';
 
 
 const App = () => {
@@ -33,8 +34,13 @@ const App = () => {
                     hideNavBar={true}
                 />
 				<Scene
-					key = "authTesting"
-					component = {authSol}
+					key = "seekerAuthentication"
+					component = {seekerAuthentication}
+					hideNavBar={true}
+				/>
+				<Scene
+					key = "employerAuthentication"
+					component = {employerAuthentication}
 					hideNavBar={true}
 				/>
                 <Scene
