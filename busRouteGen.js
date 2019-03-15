@@ -31,14 +31,14 @@ function getGTFSRoutes() {
 		.then(textBody => {
 			//Split the file up using a newline regex
 			var lines = textBody.split(/\n/);
-			
+
 			for (let i = 1; i < lines.length - 1; i++) {
 				let line = lines[i].split(",");
-				
+
 				let trimmedToken = line[2].substring(1, line[2].length - 1);
-				
+
 				busRef.child(parseInt(trimmedToken)).set({ Description: line[3].substring(1,(line[3].length - 1)), Stops: "NULL" });
-				
+
 				gtfsRouteList.push(parseInt(trimmedToken));
 			}
 	});
@@ -53,43 +53,43 @@ function getInfoPointRoutes() {
 		.then(textBody => {
 			let routeListDom = parser.parseFromString(textBody);
 			let routeEntries = routeListDom.getElementsByClassName('routeNameListEntry');
-			
+
 			for (let i = 0; i < routeEntries.length; i++) {
 				let routeName = routeEntries[i].getAttribute("routeID");
-				
+
 				infoPointRouteList.push(parseInt(routeName));
-			}	
+			}
 	});
 }
 
 /* This function parses through the stops.txt file from GTFS matching each entry
-to a route based on stopid then pushes it to the appropriate route in Firebase */		
+to a route based on stopid then pushes it to the appropriate route in Firebase */
 function parseStopsTxt() {
 	return fetch('https://openmobilitydata-data.s3-us-west-1.amazonaws.com/public/feeds/the-rapid/380/20190104/original/stops.txt')
 		.then(results => results.text())
 		.then(textBody => {
 			var lines = textBody.split(/\n/);
 			var matches = 0;
-	
+
 			for (let i = 0; i < infoPointRouteList.length; i++) {
 				fetch('https://connect.ridetherapid.org/InfoPoint/Minimal/Stops/ForRoute?routeId=' + infoPointRouteList[i])
 					.then(results => results.text())
 					.then(textBody => {
 						let stopListDom = parser.parseFromString(textBody);
 						let stopEntries = stopListDom.getElementsByClassName('stopNameListEntry');
-						
+
 						var routeRef = busRef.child(infoPointRouteList[i])
 						var stopsRef = routeRef.child('Stops');
-						
+
 						for (let k = 0; k < stopEntries.length; k = k + 2) {
 							var stop_id = stopEntries[k].getAttribute("stopid");
-							
+
 							for (let j = 1; j < lines.length - 1; j++) {
 								let line = lines[j].split(",");
-							
+
 								if (line[1] == stop_id) {
 									stopsRef.child(stop_id).set({ Latitude: line[4], Longitude: line[5], Description: line[2]});
-									
+
 									matches++;
 									j = lines.length - 1;
 								}
@@ -120,7 +120,7 @@ function errorCheck() {
 		if (infoPointRouteList.length != gtfsRouteList.length) {
 			console.log("Route lists differ in length ERROR");
 		}
-		
+
 		for (let i = 0; i < infoPointRouteList.length; i++) {
 			if (gtfsRouteList.indexOf(infoPointRouteList[i]) < 0) {
 				console.log('Route ' + infoPointRouteList[i] + ' found in infoPoint but not in GTFS');
@@ -130,4 +130,3 @@ function errorCheck() {
 
 //Calls the function loadDb which can be considered 'main' for this file
 loadDB();
-

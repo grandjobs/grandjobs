@@ -3,8 +3,13 @@ import { Platform, StyleSheet, Text,
     View, FlatList, TouchableOpacity,
     Image, SafeAreaView } from 'react-native';
 import ic_menu from './assets/Images/hamburger.png'
-import Drawer from 'react-native-drawer'
+import { DrawerNavigator } from 'react-navigation';
+import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
+import Drawer from 'react-native-drawer';
+import SideMenu from 'react-native-side-menu';
 import { Actions } from 'react-native-router-flux'
+
+
 console.disableYellowBox = true;
 
 const menu = [
@@ -128,7 +133,7 @@ export default class EmployerHomepage extends Component {
       }
       if(index == 1){
         //replies pressed
-        Actions.EmployerHomepage();
+        Actions.testHomepage();
       }
       if(index == 2){
         //create pressed

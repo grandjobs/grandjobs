@@ -4,6 +4,18 @@ import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
 
 export default class Employers extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      Email: '',
+      companyName: '',
+      companyLocation: '',
+      Password: '',
+      confirmPassword: ''
+    };
+  }
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -15,27 +27,32 @@ export default class Employers extends React.Component {
                     {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
                     {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
                     <TextInput style={styles.inputText}
+                        onChangeText={(Email) => this.setState({Email})}
                         selectTextOnFocus={true}
                         placeholder='Email Address'
                         placeholderTextColor="#fff"
                     />
                     <TextInput style={styles.inputText}
+                        onChangeText={(companyName) => this.setState({companyName})}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
                         placeholder='Company Name'
                     />
                     <TextInput style={styles.inputText}
+                        onChangeText={(companyLocation) => this.setState({companyLocation})}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
                         placeholder='Company Location'
                     />
                     <TextInput style={styles.inputText}
+                        onChangeText={(Password) => this.setState({Password})}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
                         placeholder='Password'
 
                     />
                     <TextInput style={styles.inputText}
+                        onChangeText={(confirmPassword) => this.setState({confirmPassword})}
                         placeholderTextColor="#fff"
                         selectTextOnFocus={true}
                         placeholder='Confirm Password'
@@ -51,14 +68,29 @@ export default class Employers extends React.Component {
     }
 
     createPressed(){
+      console.log(this.state.Password);
       Alert.alert(
         'Confirm Information',
         'Create Account?',
         [
-          {text:'OK',onPress:()=>Actions.EmployerHomepage()},
+          {text:'OK',onPress:()=>this.checkForm()},
           {text:'Cancel',onPress:()=>console.log('cancel pressed')}
         ]
       )
+    }
+
+    checkForm(){
+      if(this.state.Email != "" && this.state.companyName != "" &&
+    this.state.companyLocation != "" && this.state.Password != "" &&
+  this.state.confirmPassword != "" && this.state.confirmPassword == this.state.Password){
+    Actions.EmployerHomepage();
+  }
+  else{
+    Alert.alert(
+      'Please fill all forms and make sure both passwords match.'
+    )
+    console.log("error");
+  }
     }
 }
 

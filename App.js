@@ -14,7 +14,7 @@ import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
-
+import testHomepage from './testHomepage';
 
 const App = () => {
     return (
@@ -29,6 +29,11 @@ const App = () => {
                 <Scene
                     key = "Employers"
                     component = {Employers}
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "testHomepage"
+                    component = {testHomepage}
                     hideNavBar={true}
                 />
                 <Scene

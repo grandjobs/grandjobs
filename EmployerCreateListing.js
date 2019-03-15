@@ -4,6 +4,17 @@ import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
 
 export default class EmployerCreateListing extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      jobTitle: '',
+      jobLocation: '',
+      jobDetails: '',
+      addtionalDetails: ''
+    };
+  }
+
     render() {
         return (
             <View style={styles.mainContainer}>
@@ -15,16 +26,19 @@ export default class EmployerCreateListing extends React.Component {
                     {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
                     {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
                     <TextInput style={styles.inputText}
+                        onChangeText={(jobTitle) => this.setState({jobTitle})}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
                         placeholder='Job Title'
                     />
                     <TextInput style={styles.inputText}
+                        onChangeText={(jobLocation) => this.setState({jobLocation})}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
                         placeholder='Job Location'
                     />
                     <TextInput style={styles.inputText2}
+                        onChangeText={(jobDetails) => this.setState({jobDetails})}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
                         placeholder='Job Details'
@@ -32,6 +46,7 @@ export default class EmployerCreateListing extends React.Component {
 
                     />
                     <TextInput style={styles.inputText2}
+                        onChangeText={(additionalDetails) => this.setState({additionalDetails})}
                         selectTextOnFocus={true}
                         placeholder='Additional Details'
                         placeholderTextColor="#fff"
