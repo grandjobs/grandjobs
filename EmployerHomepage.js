@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text,
     View, FlatList, TouchableOpacity,
-    Image, SafeAreaView } from 'react-native';
+    Image, SafeAreaView, ScrollView, Dimensions } from 'react-native';
 import ic_menu from './assets/Images/hamburger.png'
 import { DrawerNavigator } from 'react-navigation';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
@@ -19,29 +19,6 @@ const menu = [
     { 'title': 'Log Out'}
 ]
 
-
-const testData = [
-    { 'title': 'test1' },
-    { 'title': 'test2' },
-    { 'title': 'test3' },
-    { 'title': 'test4'},
-    { 'title': 'test5' },
-    { 'title': 'test6' },
-    { 'title': 'test7' },
-    { 'title': 'test8' },
-    { 'title': 'test9' },
-    { 'title': 'test10' },
-    { 'title': 'test1' },
-    { 'title': 'test2' },
-    { 'title': 'test3' },
-    { 'title': 'test4'},
-    { 'title': 'test5' },
-    { 'title': 'test6' },
-    { 'title': 'test7' },
-    { 'title': 'test8' },
-    { 'title': 'test9' },
-    { 'title': 'test10' }
-]
 
 export default class EmployerHomepage extends Component {
 
@@ -105,22 +82,9 @@ export default class EmployerHomepage extends Component {
                             </View>
                             <View style={styles.menuButton} />
                         </View>
-                        <FlatList
-                            style={{ flex: 1.0 }}
-                            data={testData}
-                            extraData={this.state}
-                            renderItem={({ item, index2 }) => {
-                                return (
-                                    <TouchableOpacity style={styles.menuTitleContainer}
-                                    onPress={()=>this.onPress(item, index2)}>
-                                        <Text style={styles.mainListStatus}
-                                            key={index2}>
-                                            {item.title}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )
-                            }} />
                     </Drawer>
+
+
                 </View>
             </SafeAreaView>
         );
@@ -164,7 +128,7 @@ const drawerStyles = {
 const styles = {
     mainContainer: {
         flex: 1.0,
-        backgroundColor: 'white'
+        backgroundColor: 'black'
     },
     safeAreaStyle: {
         flex: 1.0,
@@ -234,5 +198,9 @@ const styles = {
         textAlign: 'left',
         fontSize: 17,
         alignSelf:'left',
-    }
+    },
+    cardStyle:{
+        backgroundColor: '#34363c',
+        borderRadius: 10,
+    },
 }

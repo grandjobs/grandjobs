@@ -19,7 +19,7 @@ export default class testHomepage extends React.Component {
             <SideMenu>
                 <View style={styles.mainContainer}>
                     <View style={styles.textContainer}>
-                        <Text style={styles.largeText}>*Company Name*</Text>
+                        <Text style={styles.largeText}>Grand Jobs</Text>
                         <Text style={styles.mainText}>Homepage</Text>
                     </View>
 
@@ -27,15 +27,15 @@ export default class testHomepage extends React.Component {
 
                         <Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
-                            title= "Basic Info"
+                            title= "Grand Jobs"
                             />
-                            <CardContent text={"test"}/>
+                            <CardContent text={"info here"}/>
                             <CardAction
                             separator={true}
                             inColumn={false}>
                             <CardButton
                             onPress={() => {}}
-                            title="Edit "
+                            title="Dismiss "
                             color="#a9fcd4"
                             />
                             </CardAction>
@@ -43,67 +43,20 @@ export default class testHomepage extends React.Component {
 
                         <Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
-                            title= "Bus Routes"
+                            title= "Welcome!"
                             />
-                            <CardContent text={"test"}/>
+                            <CardContent text={"All notifications will show up here. Swipe right for more options."}/>
                             <CardAction
                             separator={false}
                             inColumn={false}>
                             <CardButton
                             onPress={() => {}}
-                            title="Edit "
+                            title="Dismiss "
                             color="#a9fcd4"
                             />
                             </CardAction>
                         </Card>
 
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "Your Skills"
-                            />
-                            <CardContent text={"test"}/>
-                            <CardAction
-                            separator={false}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => {}}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
-
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "Your Skills"
-                            />
-                            <CardContent text={"test"}/>
-                            <CardAction
-                            separator={false}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => {}}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
-
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "Your Skills"
-                            />
-                            <CardContent text={"test"}/>
-                            <CardAction
-                            separator={false}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => {}}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
 
                     </ScrollView>
                 </View>
@@ -112,6 +65,19 @@ export default class testHomepage extends React.Component {
     }
 
 }
+
+// class Application extends React.Component{
+//   render(){
+//     const menu = <Menu navigator = {navigator}/>;
+//
+//     return(
+//       <SideMenu menu = {menu}>
+//       <testHomepage/>
+//       </SideMenu>
+//
+//     );
+//   }
+// }
 
 const styles = StyleSheet.create({
     mainContainer: {

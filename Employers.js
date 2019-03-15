@@ -80,9 +80,12 @@ export default class Employers extends React.Component {
     }
 
     checkForm(){
-      if(this.state.Email != "" && this.state.companyName != "" &&
-    this.state.companyLocation != "" && this.state.Password != "" &&
-  this.state.confirmPassword != "" && this.state.confirmPassword == this.state.Password){
+  //     if(this.state.Email != "" && this.state.companyName != "" &&
+  //   this.state.companyLocation != "" && this.state.Password != "" &&
+  // this.state.confirmPassword != "" && this.state.confirmPassword == this.state.Password){
+  //   Actions.EmployerHomepage();
+  // }
+  if(1==1){
     Actions.EmployerHomepage();
   }
   else{

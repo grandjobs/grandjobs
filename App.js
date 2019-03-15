@@ -14,12 +14,14 @@ import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
-<<<<<<< HEAD
+
+
 import testHomepage from './testHomepage';
-=======
+
 import authSol from './authSol';
 
->>>>>>> 2835cdf48310a50b501887a7950b026e1dfa514d
+
+
 
 const App = () => {
     return (
@@ -29,12 +31,14 @@ const App = () => {
                     key = "StartPage"
                     component = {StartPage}
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
 
                 <Scene
                     key = "Employers"
                     component = {Employers}
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
 				<Scene
 					key = "authTesting"
@@ -45,54 +49,63 @@ const App = () => {
                     key = "testHomepage"
                     component = {testHomepage}
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "AccountSetup"
                     component = {AccountSetup}
                     title="Account"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "EmployerCreateListing"
                     component = {EmployerCreateListing}
                     title="Create Listing"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "EmployerHomepage"
                     component = {EmployerHomepage}
                     title="Account"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "SkillPage"
                     component = {SkillsPage}
                     title="Skills"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "MapsPage"
                     component = {MapsPage}
                     title="Maps"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "TransportType"
                     component = {TransportType}
                     title="Transport"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "RangePage"
                     component = {RangePage}
                     title="Range"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "BusPage"
                     component = {BusPage}
                     title="Bus"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
             </Scene>
 
