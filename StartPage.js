@@ -33,6 +33,9 @@ export default class StartPage extends React.Component {
                             <Button style={styles.buttonDesign} onPress={()=>this.jobsPressed()}>
                             Jobs
                             </Button>
+							<Button style={styles.buttonDesign} onPress={()=>this.authPressed()}>
+						authTesting
+							</Button>
                         </View>
                     </View>
                 </ImageBackground>
@@ -48,6 +51,10 @@ export default class StartPage extends React.Component {
     employerPressed(){
         Actions.Employers();
     }
+	
+	authPressed(){
+		Actions.authTesting();
+	}
 }
 
 // const AppNavigator = createStackNavigator(
