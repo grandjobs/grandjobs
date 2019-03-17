@@ -6,6 +6,7 @@ import { DrawerNavigator } from 'react-navigation';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import SideMenu from 'react-native-side-menu';
 import Dialog from "react-native-dialog";
+import UserMenu from "./UserMenu";
 
 
 
@@ -49,8 +50,9 @@ export default class UserInfoPage extends React.Component {
     }
 
     render() {
+        const menu = <UserMenu/>;
         return (
-            <SideMenu>
+            <SideMenu menu = {menu}>
                 {/*Dialog box for the user editing the first name*/}
                 <Dialog.Container visible={this.state.showFirstDialog}>
                     <Dialog.Title>First Name</Dialog.Title>
