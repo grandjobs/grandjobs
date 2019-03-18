@@ -35,10 +35,11 @@ export default class employerAuthentication extends React.Component {
         this.setState({repasswd})
     }
 	
-    submit = async () => {
+    submitNewUser = async () => {
 		if (this.state.passwd == this.state.repasswd) {
 			try {
 				await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.passwd)
+				Actions.Employers({uid : this.state.user['uid']});
 			} catch (e) {
 				Alert.alert(
 					'Input Error',
@@ -61,6 +62,22 @@ export default class employerAuthentication extends React.Component {
 		}
     }
 	
+	submitReturningUser = async () => {
+		try {
+			await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.passwd)
+			Actions.EmployerHomepage({uid : this.state.user['uid']});
+		} catch (e) {
+			Alert.alert(
+				'Input Error',
+				e.message,
+				[
+					{text: 'OK', onPress: () => console.log('OK Pressed')},
+				],
+				{cancelable: false},
+			);
+		}
+    }
+	
 	returningUser = () => {
 		this.setState({ userType: 'returning'})
 	}
@@ -69,38 +86,36 @@ export default class employerAuthentication extends React.Component {
 		this.setState({ userType: 'new'})
 	}
 
-    onSignOut = async () => {
-        try {
-			this.setState({ registered: undefined })
-            await firebase.auth().signOut()
-        } catch (e) {
-            console.warn(e)
-        }
-    }
-	
-    reset = () => {
-        this.setState({
-            email: '',
-            emailCompleted: false,
-            confirmationResult: undefined,
-            code: ''
-        })
-    }
-
     render() {
-		if (this.state.userType == 'returning') {
+		if (this.state.userType == 'returning' && this.state.user == undefined) {
 			return (
 			   <View style={styles.mainContainer}>
 					<View style={styles.textContainer}>
-						<Text style={styles.mainText}>You are signed in! </Text>
-						<Text style={styles.mainText}>TODO send to homepage </Text>
+						<Text style={styles.mainText}>Please enter your email address </Text>
+						<Text style={styles.mainText}>and password</Text>
+					</View>
+					<View style={styles.fillContainer}>
+						<TextInput 
+							style={styles.inputText}
+							placeholder='Email Address'
+							onChangeText={this.onEmailChange}
+							value={this.state.email}
+							selectTextOnFocus={true}
+						/>
+						<TextInput 
+							style={styles.inputText}
+							placeholder='Password'
+							onChangeText={this.onPasswordChange}
+							value={this.state.passwd}
+							selectTextOnFocus={true}
+						/>
 					</View>
 					<View style={styles.bottomContainer}>
 						<Button
 							style={styles.buttonDesign}
-							onPress={this.onSignOut}
+							onPress={this.submitReturningUser}
 						>
-							Sign out
+							Login
 						</Button>
 					</View>
 				</View>
