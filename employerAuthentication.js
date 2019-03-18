@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StyleSheet, Dimensions, Text, View, ScrollView, TextInput} from 'react-native'
+import { StyleSheet, Dimensions, Text, View, ScrollView, TextInput, Alert} from 'react-native'
 import Button from 'react-native-button';
 import { firebase } from './db'
 import { Actions } from 'react-native-router-flux';
@@ -8,8 +8,11 @@ export default class employerAuthentication extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+			userType: undefined,
             user: undefined,
             email: '',
+			passwd: '',
+			repasswd: '',
             confirmationResult: undefined,
             code: '',
 			registered: undefined
@@ -20,34 +23,52 @@ export default class employerAuthentication extends React.Component {
         })
     }
 	
-	//Handles input for email address to translate to state value
     onEmailChange = (email) => {
         this.setState({email})
     }
 	
-	//Sends phone number to the static captch page hosted on Firebase
-    onEmailComplete = async () => {
-		try {
-			const confirmationResult = await firebase.auth().signInWithPhoneNumber(phone, captchaVerifier)
-			this.setState({confirmationResult})
-		} catch (e) {
-			console.warn(e)
+	onPasswordChange = (passwd) => {
+        this.setState({passwd})
+    }
+	
+	onRePasswordChange = (repasswd) => {
+        this.setState({repasswd})
+    }
+	
+    submit = async () => {
+		if (this.state.passwd == this.state.repasswd) {
+			try {
+				await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.passwd)
+			} catch (e) {
+				Alert.alert(
+					'Input Error',
+					e.message,
+					[
+						{text: 'OK', onPress: () => console.log('OK Pressed')},
+					],
+					{cancelable: false},
+				);
+			}
+		} else {
+			Alert.alert(
+				'Input Error',
+				'Passwords must match',
+				[
+					{text: 'OK', onPress: () => console.log('OK Pressed')},
+				],
+				{cancelable: false},
+			);
 		}
     }
 	
-    onSignIn = async () => {
-        const {confirmationResult, code} = this.state
-        try {
-            await confirmationResult.confirm(code)
-        } catch (e) {
-            console.warn(e)
-        }
-		
-		//need to figure out why we reset here..I'm sure this will cause issues down the road especially
-		//with my heavy modifications to the file from its original implementation
-        this.reset()
-    }
+	returningUser = () => {
+		this.setState({ userType: 'returning'})
+	}
 	
+	newUser = () => {
+		this.setState({ userType: 'new'})
+	}
+
     onSignOut = async () => {
         try {
 			this.setState({ registered: undefined })
@@ -55,32 +76,6 @@ export default class employerAuthentication extends React.Component {
         } catch (e) {
             console.warn(e)
         }
-    }
-	
-	//Function to check whether a phone number has a registered account in our database
-	//and set the registered state variable appropriately
-	firebaseCheckForUser = async () => {
-		let registered = false
-		var uid = this.state.user['uid']
-		let rootRef = firebase.database().ref()
-		let userRef = rootRef.child('USERS')
-		console.log('Checking Firebase for uid ' + uid)
-		
-		try {
-            userRef.once('value')
-				.then(snapshot => {
-					registered = snapshot.child(uid).exists();
-					console.log('Registered set as ' + registered)
-					this.setState({ registered })
-				})
-        } catch (e) {
-            console.warn(e)
-        }
-	}
-	
-	//If an user is unregistered this function will direct them to the account setup flow
-	directToAccountSetup = async () => {
-        Actions.AccountSetup({uid : this.state.user['uid']});
     }
 	
     reset = () => {
@@ -93,76 +88,29 @@ export default class employerAuthentication extends React.Component {
     }
 
     render() {
-		/* Signed in */
-		if (this.state.user) {
-			console.log('entering difficult stuff')
-			console.log('Registered: ' + this.state.registered)
-			
-			if (this.state.registered == undefined) {
-				console.log('check')
-				this.firebaseCheckForUser()
-			}
-			
-			//Already has an account with us
-			if (this.state.registered) {
-				if (this.state.registered == true) {
-					console.log(this.state)
-					
-					return (
-					   <View style={styles.mainContainer}>
-							<View style={styles.textContainer}>
-								<Text style={styles.largeText}>You are signed in! </Text>
-								<Text style={styles.largeText}>TODO send to homepage </Text>
-							</View>
-							<View style={styles.bottomContainer}>
-								<Button
-									style={styles.buttonDesign}
-									onPress={this.onSignOut}
-								>
-									Sign out
-								</Button>
-							</View>
-						</View>
-					)
-				}
-			} 
-			
-			//Does not already have an account with us
-			else if (this.state.registered == false) {
-				console.log(this.state)
-				
-				return (
-				   <View style={styles.mainContainer}>
-						<View style={styles.textContainer}>
-							<Text style={styles.largeText}>HELLO!</Text>
-							<Text style={styles.mainText}>It looks like you don't have an account</Text>
-							<Text style={styles.mainText}>Click the button below to set on up!</Text>
-						</View>
-						<View style={styles.bottomContainer}>
-							<Button
-								style={styles.buttonDesign}
-								onPress={this.directToAccountSetup}
-							>
-								Create Account
-							</Button>
-						</View>
-					</View>
-				)
-			} else {
-				return (
-					<View>
-						<Text>we waiting on stuff yo</Text>
-					</View>
-				)
-			}
-		} 
-		/* Sign in case */
-		if (!this.state.confirmationResult && !this.state.user) {
+		if (this.state.userType == 'returning') {
 			return (
-				<View style={styles.mainContainer}>
+			   <View style={styles.mainContainer}>
 					<View style={styles.textContainer}>
-						<Text style={styles.largeText}>Sign In</Text>
-						<Text style={styles.mainText}>All you need is a email address:)</Text>
+						<Text style={styles.mainText}>You are signed in! </Text>
+						<Text style={styles.mainText}>TODO send to homepage </Text>
+					</View>
+					<View style={styles.bottomContainer}>
+						<Button
+							style={styles.buttonDesign}
+							onPress={this.onSignOut}
+						>
+							Sign out
+						</Button>
+					</View>
+				</View>
+			)
+		} else if (this.state.userType == 'new' && this.state.user == undefined) {
+			return (
+			   <View style={styles.mainContainer}>
+					<View style={styles.textContainer}>
+						<Text style={styles.mainText}>Please enter an email address </Text>
+						<Text style={styles.mainText}>and password</Text>
 					</View>
 					<View style={styles.fillContainer}>
 						<TextInput 
@@ -172,50 +120,63 @@ export default class employerAuthentication extends React.Component {
 							value={this.state.email}
 							selectTextOnFocus={true}
 						/>
-					</View>
-					<View style={styles.bottomContainer}>
-						<Button
-							style={styles.buttonDesign}
-							onPress={this.onemailComplete}
-							/* title="Next" */
-						>
-							Next
-						</Button>
-					</View>
-				</View>
-			);
-		}
-		/* Screen to enter confirmation code from SMS */
-		else {
-			return (
-				<View style={styles.mainContainer}>
-					<View style={styles.textContainer}>
-						<Text style={styles.largeText}>Enter Confirmation Code</Text>
-						<Text style={styles.mainText}>You should have recieved a text</Text>
-					</View>
-					<View style={styles.fillContainer}>
 						<TextInput 
 							style={styles.inputText}
-							placeholder='SMS Code'
-							onChangeText={this.onCodeChange}
-							value={this.state.code}
-							keyboardType="numeric"
+							placeholder='Password'
+							onChangeText={this.onPasswordChange}
+							value={this.state.passwd}
+							selectTextOnFocus={true}
+						/>
+						<TextInput 
+							style={styles.inputText}
+							placeholder='Re-enter Password'
+							onChangeText={this.onRePasswordChange}
+							value={this.state.repasswd}
 							selectTextOnFocus={true}
 						/>
 					</View>
 					<View style={styles.bottomContainer}>
 						<Button
-						onPress={this.onSignIn}
-						title="Sign in"
-						style={styles.buttonDesign}
+							style={styles.buttonDesign}
+							onPress={this.submit}
 						>
-						Submit
+							Submit
+						</Button>
+					</View>
+				</View>
+			)
+		} else if (this.state.user){
+			return (
+			   <View style={styles.mainContainer}>
+					<View style={styles.textContainer}>
+						<Text style={styles.mainText}>Goto employer account setup</Text>
+					</View>
+				</View>
+			)
+		} else {
+			return (
+			   <View style={styles.mainContainer}>
+					<View style={styles.textContainer}>
+						<Text style={styles.largeText}>I am a...</Text>
+					</View>
+					<View style={styles.bottomContainer}>
+						<Button
+							style={styles.buttonDesign}
+							onPress={this.returningUser}
+						>
+							Returning User
+						</Button>
+						<Button
+							style={styles.buttonDesign}
+							onPress={this.newUser}
+						>
+							New User
 						</Button>
 					</View>
 				</View>
 			)
 		}
-    }
+	}
 }
 
 const styles = StyleSheet.create({
@@ -263,14 +224,14 @@ const styles = StyleSheet.create({
     bottomContainer:{
         flex: 1,
         justifyContent: 'flex-end',
-        marginBottom: 0
+        marginBottom: 100
     },
     buttonDesign:{
         fontSize: 20,
         fontFamily: 'sans-serif-thin',
         padding: 10,
         margin: 30,
-        width: 150,
+        width: 250,
         color: '#fff',
         borderRadius: 30,
         borderColor: '#a9fcd4',
