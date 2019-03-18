@@ -52,7 +52,7 @@ export default class UserInfoPage extends React.Component {
     render() {
         const menu = <UserMenu/>;
         return (
-            <SideMenu menu = {menu}>
+            <SideMenu menu={menu} bounceBackOnOverdraw={false}>
                 {/*Dialog box for the user editing the first name*/}
                 <Dialog.Container visible={this.state.showFirstDialog}>
                     <Dialog.Title>First Name</Dialog.Title>
@@ -155,7 +155,7 @@ export default class UserInfoPage extends React.Component {
                             separator={false}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.editBusRoutes()}
                             title="Edit "
                             color="#a9fcd4"
                             />
@@ -215,6 +215,10 @@ export default class UserInfoPage extends React.Component {
             showFirstDialog: false,
             showLastDialog: false,
         })
+    }
+
+    editBusRoutes(){
+        Actions.BusPage({userInfo: this.props.userInfo, editing: true});
     }
 
 }

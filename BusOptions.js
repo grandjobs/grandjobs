@@ -36,6 +36,12 @@ export default class BusOptions extends Component {
         }
     }
 
+    async componentDidMount() {
+        this.busAccessCopy = this.props.userInfo.busAccess;
+        this.props.userInfo.busAccess = [];
+        this.selectUserLabels();
+    }
+
     render(){
         return (
             <View style={styles.mainContainer}>
@@ -68,7 +74,7 @@ export default class BusOptions extends Component {
 
     /**
      * Modify the visuals of the label that is selected at index i.
-     * 
+     *
      * @param  {[type]} i index of the selected label
      */
     labelSelected(i){
@@ -112,6 +118,21 @@ export default class BusOptions extends Component {
             }
         }
         this.updateState();
+    }
+
+    selectUserLabels(){
+        for (var i = 0; i < this.busAccessCopy.length; i++){
+            this.labelSelected(this.getLabelIndex(this.busAccessCopy[i]));
+        }
+    }
+
+    getLabelIndex(l){
+        for (var i = 0; i < this.busList.length; i++){
+            if (this.busList[i].label.localeCompare(l) == 0){
+                console.log(i);
+                return i;
+            }
+        }
     }
 
     nextPressed(){

@@ -10,19 +10,43 @@ export default class AccountSetup extends React.Component {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <Text style={styles.largeText}>Home Page</Text>
-                <Text style={styles.largeText}>Contacted Companies</Text>
-                <Text style={styles.largeText}>My Info</Text>
+                <Text style={styles.largeText} onPress={()=>this.homePressed()}>Home Page</Text>
+                <View
+                    style={{
+                        borderBottomColor: '#d6d6d6',
+                        borderBottomWidth: 1,
+                    }}
+                />
+                <Text style={styles.largeText} onPress={()=>this.contactedPressed()}>Contacted Companies</Text>
+                <View
+                    style={{
+                        borderBottomColor: '#d6d6d6',
+                        borderBottomWidth: 1,
+                    }}
+                />
+                <Text style={styles.largeText} onPress={()=>this.infoPressed()}>My Info</Text>
             </View>
         );
+    }
+
+    homePressed(){
+        console.log("Home");
+    }
+
+    infoPressed(){
+        console.log("Info");
+    }
+
+    contactedPressed(){
+        console.log("Contacted");
     }
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
-        backgroundColor: '#1E2027',
-        // padding: 10,
+        backgroundColor: '#0D1120',
+        paddingTop: 40,
     },
     textContainer:{
         top: Dimensions.get('window').height * 0.05
@@ -33,57 +57,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     largeText:{
-        fontSize: 30,
+        fontSize: 25,
         textAlign: 'center',
         color: '#d6d6d6',
         fontFamily: 'Roboto-Thin',
-        padding: 20
-    },
-    mainText:{
-        fontSize: 25,
-        textAlign: 'center',
-        top: 20,
-        color: '#d6d6d6',
-        fontFamily: 'Roboto-Thin'
-    },
-    inputText:{
-        borderColor: '#fff',
-        color: '#fff',
-        fontSize: 25,
-        textAlign: 'center',
-        color:'white',
-        fontFamily: 'Roboto-Thin',
-        padding: 10,
-        margin: 20,
-        borderWidth: 1,
-        borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8
-    },
-    inputPhone:{
-        borderColor: '#fff',
-        color: '#fff',
-        padding: 12,
-        margin: 20,
-        borderWidth: 1,
-        borderRadius: 30,
-        textAlign: 'center',
-        width: Dimensions.get('window').width * 0.8,
-    },
-    bottomContainer:{
-        flex: 1,
-        justifyContent: 'flex-end',
-        marginBottom: 0
-    },
-    buttonDesign:{
-        fontSize: 20,
-        fontWeight: 'normal',
-        fontFamily: 'Roboto-Thin',
-        padding: 10,
-        margin: 30,
-        width: 150,
-        color: '#fff',
-        borderRadius: 30,
-        borderColor: '#a9fcd4',
-        borderWidth: 1,
+        padding: 20,
     },
 });
