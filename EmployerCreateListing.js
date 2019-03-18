@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TextInput, Alert, TouchableOpacity, SafeAreaView } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
 
@@ -17,6 +17,7 @@ export default class EmployerCreateListing extends React.Component {
 
     render() {
         return (
+          <SafeAreaView style = {styles.mainContainer}>
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
                     <Text style={styles.largeText}>Great!</Text>
@@ -62,6 +63,7 @@ export default class EmployerCreateListing extends React.Component {
                     </View>
                 </View>
             </View>
+            </SafeAreaView>
         );
     }
 

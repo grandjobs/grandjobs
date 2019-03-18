@@ -1,206 +1,207 @@
-import React, { Component } from 'react';
-import { Platform, StyleSheet, Text,
-    View, FlatList, TouchableOpacity,
-    Image, SafeAreaView, ScrollView, Dimensions } from 'react-native';
-import ic_menu from './assets/Images/hamburger.png'
+import React from 'react';
+import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import Button from 'react-native-button';
+import { Actions } from 'react-native-router-flux';
 import { DrawerNavigator } from 'react-navigation';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import Drawer from 'react-native-drawer';
 import SideMenu from 'react-native-side-menu';
-import { Actions } from 'react-native-router-flux'
-
-
-console.disableYellowBox = true;
 
 const menu = [
-    { 'title': 'Home' },
-    { 'title': 'Replies' },
-    { 'title': 'Create' },
-    { 'title': 'Log Out'}
+    { 'title': 'Home',
+    id: 'one'},
+    { 'title': 'Replies',
+    id: 'two'},
+    { 'title': 'Create',
+    id: 'three'},
+    { 'title': 'Log Out',
+    id: 'four'}
 ]
 
 
-export default class EmployerHomepage extends Component {
-
-    constructor(props) {
-        super(props)
-
-    }
-
-    renderDrawer() {
-        //SlideMenu
-        return (
-            <View style={styles.menuContainer}>
-                <FlatList
-                    style={{ flex: 1.0 }}
-                    data={menu}
-                    extraData={this.state}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <TouchableOpacity style={styles.menuTitleContainer}
-                            onPress={()=>this.onPress(item, index)}>
-                                <Text style={styles.menuTitle}
-                                    key={index}>
-                                    {item.title}
-                                </Text>
-                            </TouchableOpacity>
 
 
-                        )
-                    }} />
-            </View>
-        )
-    }
 
-    openDrawer() {
-        this.drawer.open()
-    }
+export default class EmployerHomepage extends React.Component {
 
-    closeDrawer() {
-        this.drawer.close()
+    constructor(props){
+        super(props);
     }
 
     render() {
-        return (
-            <SafeAreaView style={styles.safeAreaStyle}>
+      const myMenu = <UserMenu/>;
+              return (
+            <SideMenu menu = {myMenu}>
                 <View style={styles.mainContainer}>
+                    <View style={styles.textContainer}>
+                        <Text style={styles.largeText}>Grand Jobs</Text>
+                        <Text style={styles.mainText}>Homepage</Text>
+                    </View>
 
-                    <Drawer
-                        ref={(ref) => this.drawer = ref}
-                        content={this.renderDrawer()}
-                        type='static'
-                        tapToClose={true}
-                        openDrawerOffset={0.35}
-                        styles={drawerStyles}>
-                        {/* //Main View */}
-                        <View style={styles.headerContainer}>
-                            <View style={styles.menuButton}>
-                                <TouchableOpacity
-                                    onPress={this.openDrawer.bind(this)}>
-                                    <Image style={{ tintColor: 'white' }} source={ic_menu} />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={styles.menuButton} />
-                        </View>
-                    </Drawer>
+                    <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "Company Name Here"
+                            />
+                            <CardContent text={"Company Location:"}/>
+                            <CardContent text={"Email:"}/>
+                            <CardAction
+                            separator={true}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="Edit "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "Welcome!"
+                            />
+                            <CardContent text={"All notifications will show up here. Swipe right for more options."}/>
+                            <CardAction
+                            separator={false}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="Dismiss "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
 
 
+                    </ScrollView>
                 </View>
-            </SafeAreaView>
+            </SideMenu>
         );
     }
 
-    onPress(item, index){
-      if(index == 0){
-        //home pressed
-        Actions.EmployerHomepage();
-      }
-      if(index == 1){
-        //replies pressed
-        Actions.testHomepage();
-      }
-      if(index == 2){
-        //create pressed
-        Actions.EmployerCreateListing();
-      }
-      if(index == 3){
-        //logout pressed
-        Actions.EmployerHomepage();
-      }
-    }
-
 }
 
+// class Application extends React.Component{
+//   render(){
+//     const menu = <Menu navigator = {navigator}/>;
+//
+//     return(
+//       <SideMenu menu = {menu}>
+//       <testHomepage/>
+//       </SideMenu>
+//
+//     );
+//   }
+// }
+
+class UserMenu extends React.Component{
+
+  constructor(props){
+      super(props);
+  }
+
+  render(){
+    return(
+      <SafeAreaView style = {sideStyles.menuContainer}>
+
+      <View style={sideStyles.menuContainer}>
+          <FlatList
+              style={{ flex: 1.0 }}
+              data={menu}
+              extraData={this.state}
+              renderItem={({ item, index }) => {
+                  return (
+                      <TouchableOpacity style={sideStyles.menuTitleContainer}
+                      onPress={()=>this.onPress(item, index)}>
+                          <Text style={sideStyles.menuTitle}
+                              key={index}>
+                              {item.title}
+                          </Text>
+                      </TouchableOpacity>
 
 
-
-const drawerStyles = {
-    drawer: {
-        flex: 1.0,
-        backgroundColor: '#1E2027',
-    },
-    main: {
-        flex: 1.0,
-        backgroundColor: 'white'
+                  )
+              }}
+              keyExtractor={item => item.id}
+               />
+      </View>
+      </SafeAreaView>
+    );
+  }
+  onPress(item, index){
+    if(index == 0){
+      //home pressed
+      Actions.EmployerHomepage();
     }
+    if(index == 1){
+      //replies pressed
+      Actions.EmployerHomepage();
+    }
+    if(index == 2){
+      //create pressed
+      Actions.EmployerCreateListing();
+    }
+    if(index == 3){
+      //logout pressed
+      Actions.EmployerHomepage();
+    }
+  }
 }
 
-const styles = {
+const sideStyles = StyleSheet.create({
+
+  menuContainer: {
+      flex: 1.0,
+      backgroundColor: '#34363c',
+  },
+  menuTitleContainer: {
+      alignItems: 'center',
+      height: 60,
+      width:'100%',
+      flexDirection:'row',
+
+  },
+  menuTitle: {
+      width:'100%',
+      textAlign: 'center',
+      color: 'white',
+      fontSize: 17,
+      fontFamily: 'Roboto-Thin',
+      alignSelf: 'center'
+  },
+
+});
+
+const styles = StyleSheet.create({
     mainContainer: {
-        flex: 1.0,
-        backgroundColor: 'black'
-    },
-    safeAreaStyle: {
-        flex: 1.0,
+        flex: 1,
         backgroundColor: '#1E2027',
+        // padding: 10,
+        alignItems: 'center'
     },
-    headerContainer: {
-        height: 44,
-        flexDirection: 'row',
-        justifyContect: 'center',
-        backgroundColor: '#1E2027',
+    drawerContainer:{
+        flex: 1,
+        backgroundColor: '#dcdfe5',
+        // padding: 10,
+        alignItems: 'center'
     },
-    headerTitle: {
-        flex: 1.0,
+    largeText:{
+        fontSize: 65,
         textAlign: 'center',
-        alignSelf: 'center',
-        color: 'white'
+        marginTop: 20,
+        color: '#d6d6d6',
+        fontFamily: 'Roboto-Thin'
     },
-    menuButton: {
-        marginLeft: 8,
-        marginRight: 8,
-        alignSelf: 'center',
-        tintColor: 'white',
-    },
-    buttonDesign:{
-        fontSize: 20,
-        fontWeight: 'normal',
+    mainText:{
+        fontSize: 25,
+        textAlign: 'center',
+        color: '#d6d6d6',
         fontFamily: 'Roboto-Thin',
-        padding: 10,
-        margin: 30,
-        width: 200,
-        color: '#fff',
-        borderRadius: 30,
-        borderColor: '#a9fcd4',
-        borderWidth: 1,
-    },
-    menuContainer: {
-        flex: 1.0,
-        backgroundColor: '#1E2027',
-    },
-    menuTitleContainer: {
-        alignItem:'center',
-        height: 60,
-        width:'100%',
-        flexDirection:'row',
-        borderColor: '#D3D3D3',
-        borderWidth: 1,
-    },
-    menuTitle: {
-        width:'100%',
-        textAlign: 'center',
-        color: 'white',
-        fontSize: 17,
-        fontFamily: 'Roboto-Thin',
-        alignSelf: 'center'
-
-    },
-    mainList: {
-        width:'100%',
-        color: 'black',
-        textAlign: 'center',
-        fontSize: 17,
-        alignSelf:'center',
-    },
-    mainListStatus: {
-        width:'100%',
-        color: 'black',
-        textAlign: 'left',
-        fontSize: 17,
-        alignSelf:'left',
+        marginBottom: 20,
     },
     cardStyle:{
         backgroundColor: '#34363c',
         borderRadius: 10,
     },
-}
+});

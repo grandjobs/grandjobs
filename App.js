@@ -14,10 +14,6 @@ import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
-
-
-import testHomepage from './testHomepage';
-
 import authSol from './authSol';
 
 
@@ -45,12 +41,6 @@ const App = () => {
 					component = {authSol}
 					hideNavBar={true}
 				/>
-                <Scene
-                    key = "testHomepage"
-                    component = {testHomepage}
-                    hideNavBar={true}
-                    panHandlers = {null}
-                />
                 <Scene
                     key = "AccountSetup"
                     component = {AccountSetup}
