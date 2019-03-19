@@ -15,8 +15,7 @@ import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
 import authSol from './authSol';
-
-
+import UserInfoPage from './UserInfoPage'
 
 
 const App = () => {
@@ -96,6 +95,12 @@ const App = () => {
                     title="Bus"
                     hideNavBar={true}
                     panHandlers = {null}
+                />
+                <Scene
+                    key = "UserInfoPage"
+                    component = {UserInfoPage}
+                    title="UserInfo"
+                    hideNavBar={true}
                 />
             </Scene>
 

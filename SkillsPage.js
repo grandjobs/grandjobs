@@ -3,12 +3,13 @@ import { AppRegistry, StyleSheet, Text, View, Dimensions } from 'react-native';
 import Button from 'react-native-button';
 import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
-
+import UserInfo from './UserInfo.js';
 
 export default class SkillsPage extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
+
         /**
          * The items array is populated with the list of skills.
          * The state of these skills is also populated in the array.
@@ -172,6 +173,10 @@ export default class SkillsPage extends Component {
         })
     }
 
+    /**
+     * Search for the label to remove if unselected.
+     * @param  {String} l Label name to remove.
+     */
     removeUserLabel(l){
         for (var i = 0; i < this.userSkills.length; i++){
             if (this.userSkills[i].label.localeCompare(l) == 0){
@@ -182,8 +187,16 @@ export default class SkillsPage extends Component {
         this.updateState();
     }
 
+
     nextPressed(){
-        Actions.MapsPage();
+        this.setInfoObj();
+        Actions.MapsPage({userInfo: this.props.userInfo});
+    }
+
+    setInfoObj(){
+        for (var i = 0; i < this.userSkills.length; i++){
+            this.props.userInfo.skills.push(this.userSkills[i].label);
+        }
     }
 }
 

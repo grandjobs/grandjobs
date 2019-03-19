@@ -7,8 +7,8 @@ import { Actions } from 'react-native-router-flux';
 
 export default class TempSkillsPage extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.state = {
             markerLat: 0,
@@ -28,7 +28,9 @@ export default class TempSkillsPage extends Component {
     }
 
     nextPressed(){
-        Actions.TransportType();
+        this.props.userInfo.homeLat = this.state.markerLat;
+        this.props.userInfo.homeLong = this.state.markerLong;
+        Actions.TransportType({userInfo: this.props.userInfo});
     }
 
     render(){
