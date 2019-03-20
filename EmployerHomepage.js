@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput,Platform, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import { DrawerNavigator } from 'react-navigation';
@@ -17,8 +17,6 @@ const menu = [
     { 'title': 'Log Out',
     id: 'four'}
 ]
-
-
 
 
 
@@ -82,18 +80,6 @@ export default class EmployerHomepage extends React.Component {
 
 }
 
-// class Application extends React.Component{
-//   render(){
-//     const menu = <Menu navigator = {navigator}/>;
-//
-//     return(
-//       <SideMenu menu = {menu}>
-//       <testHomepage/>
-//       </SideMenu>
-//
-//     );
-//   }
-// }
 
 class UserMenu extends React.Component{
 
@@ -154,6 +140,7 @@ const sideStyles = StyleSheet.create({
   menuContainer: {
       flex: 1.0,
       backgroundColor: '#34363c',
+      paddingTop: Platform.OS === 'android' ? 25 : 0
   },
   menuTitleContainer: {
       alignItems: 'center',
@@ -204,4 +191,5 @@ const styles = StyleSheet.create({
         backgroundColor: '#34363c',
         borderRadius: 10,
     },
+
 });
