@@ -13,9 +13,6 @@ export default class employerAuthentication extends React.Component {
             email: '',
 			passwd: '',
 			repasswd: '',
-            confirmationResult: undefined,
-            code: '',
-			registered: undefined
         }
 		//Firebase magic to check if someone is already logged in
         firebase.auth().onAuthStateChanged(user => {
@@ -23,22 +20,28 @@ export default class employerAuthentication extends React.Component {
         })
     }
 	
+	//Handles input for email address to translate to state value
     onEmailChange = (email) => {
         this.setState({email})
     }
 	
+	//Handles input for password to translate to state value
 	onPasswordChange = (passwd) => {
         this.setState({passwd})
     }
 	
+	//Handles input for password double check to translate to state value
 	onRePasswordChange = (repasswd) => {
         this.setState({repasswd})
     }
 	
+	//Asynchronous function to attempt to create a new email/password employer account
+	//with the credentials entered in the forms.
     submitNewUser = async () => {
 		if (this.state.passwd == this.state.repasswd) {
 			try {
 				await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.passwd)
+				this.setState({ userType: ''})
 				Actions.Employers({uid : this.state.user['uid']});
 			} catch (e) {
 				Alert.alert(
@@ -62,9 +65,12 @@ export default class employerAuthentication extends React.Component {
 		}
     }
 	
+	//Asynchronous function to attempt to sign in to an existing email/password employer account
+	//with the credentials entered in the forms.
 	submitReturningUser = async () => {
 		try {
 			await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.passwd)
+			this.setState({ userType: ''})
 			Actions.EmployerHomepage({uid : this.state.user['uid']});
 		} catch (e) {
 			Alert.alert(
@@ -78,6 +84,7 @@ export default class employerAuthentication extends React.Component {
 		}
     }
 	
+	//Sets the state variable userType to re-render the component with the correct page
 	returningUser = () => {
 		this.setState({ userType: 'returning'})
 	}
@@ -87,7 +94,7 @@ export default class employerAuthentication extends React.Component {
 	}
 
     render() {
-		if (this.state.userType == 'returning' && this.state.user == undefined) {
+		if (this.state.userType == 'returning') {
 			return (
 			   <View style={styles.mainContainer}>
 					<View style={styles.textContainer}>
@@ -120,7 +127,7 @@ export default class employerAuthentication extends React.Component {
 					</View>
 				</View>
 			)
-		} else if (this.state.userType == 'new' && this.state.user == undefined) {
+		} else if (this.state.userType == 'new') {
 			return (
 			   <View style={styles.mainContainer}>
 					<View style={styles.textContainer}>
@@ -153,18 +160,10 @@ export default class employerAuthentication extends React.Component {
 					<View style={styles.bottomContainer}>
 						<Button
 							style={styles.buttonDesign}
-							onPress={this.submit}
+							onPress={this.submitNewUser}
 						>
 							Submit
 						</Button>
-					</View>
-				</View>
-			)
-		} else if (this.state.user){
-			return (
-			   <View style={styles.mainContainer}>
-					<View style={styles.textContainer}>
-						<Text style={styles.mainText}>Goto employer account setup</Text>
 					</View>
 				</View>
 			)
