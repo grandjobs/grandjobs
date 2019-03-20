@@ -5,6 +5,7 @@ import {createStackNavigator, createAppNavigator} from 'react-navigation';
 import { Actions } from 'react-native-router-flux';
 import { firebase } from './db'
 import { Font } from 'expo';
+import UserInfo from './UserInfo.js';
 
 
 export default class StartPage extends React.Component {
@@ -98,18 +99,6 @@ export default class StartPage extends React.Component {
         })
     }
 }
-
-// const AppNavigator = createStackNavigator(
-//   {
-//     Home: HomeScreen,
-//     Details: DetailsScreen
-//   },
-//   {
-//     initialRouteName: "Home"
-//   }
-// );
-
-// export default createAppContainer(AppNavigator);
 
 const styles = StyleSheet.create({
     mainContainer: {

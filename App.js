@@ -16,7 +16,7 @@ import RangePage from './Range';
 import BusPage from './BusOptions';
 import seekerAuthentication from './seekerAuthentication';
 import employerAuthentication from './employerAuthentication';
-
+import UserInfoPage from './UserInfoPage'
 
 const App = () => {
     return (
@@ -26,12 +26,14 @@ const App = () => {
                     key = "StartPage"
                     component = {StartPage}
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
 
                 <Scene
                     key = "Employers"
                     component = {Employers}
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
 				<Scene
 					key = "seekerAuthentication"
@@ -48,47 +50,61 @@ const App = () => {
                     component = {AccountSetup}
                     title="Account"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "EmployerCreateListing"
                     component = {EmployerCreateListing}
                     title="Create Listing"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "EmployerHomepage"
                     component = {EmployerHomepage}
                     title="Account"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "SkillPage"
                     component = {SkillsPage}
                     title="Skills"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "MapsPage"
                     component = {MapsPage}
                     title="Maps"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "TransportType"
                     component = {TransportType}
                     title="Transport"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "RangePage"
                     component = {RangePage}
                     title="Range"
                     hideNavBar={true}
+                    panHandlers = {null}
                 />
                 <Scene
                     key = "BusPage"
                     component = {BusPage}
                     title="Bus"
+                    hideNavBar={true}
+                    panHandlers = {null}
+                />
+                <Scene
+                    key = "UserInfoPage"
+                    component = {UserInfoPage}
+                    title="UserInfo"
                     hideNavBar={true}
                 />
             </Scene>

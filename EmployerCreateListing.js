@@ -1,11 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, Alert } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TextInput, Alert, TouchableOpacity, SafeAreaView } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
 
 export default class EmployerCreateListing extends React.Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      jobTitle: '',
+      jobLocation: '',
+      jobDetails: '',
+      addtionalDetails: ''
+    };
+  }
+
     render() {
         return (
+          <SafeAreaView style = {styles.mainContainer}>
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
                     <Text style={styles.largeText}>Great!</Text>
@@ -15,16 +27,19 @@ export default class EmployerCreateListing extends React.Component {
                     {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
                     {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
                     <TextInput style={styles.inputText}
+                        onChangeText={(jobTitle) => this.setState({jobTitle})}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
                         placeholder='Job Title'
                     />
                     <TextInput style={styles.inputText}
+                        onChangeText={(jobLocation) => this.setState({jobLocation})}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
                         placeholder='Job Location'
                     />
                     <TextInput style={styles.inputText2}
+                        onChangeText={(jobDetails) => this.setState({jobDetails})}
                         selectTextOnFocus={true}
                         placeholderTextColor="#fff"
                         placeholder='Job Details'
@@ -32,12 +47,13 @@ export default class EmployerCreateListing extends React.Component {
 
                     />
                     <TextInput style={styles.inputText2}
+                        onChangeText={(additionalDetails) => this.setState({additionalDetails})}
                         selectTextOnFocus={true}
                         placeholder='Additional Details'
                         placeholderTextColor="#fff"
                         multiline = {true}
                     />
-                    <View style={styles.buttonContainer}>
+                    <View style={styles.textContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.createPressed()}>
                     Create Listing
                     </Button>
@@ -47,6 +63,7 @@ export default class EmployerCreateListing extends React.Component {
                     </View>
                 </View>
             </View>
+            </SafeAreaView>
         );
     }
 
@@ -69,18 +86,20 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         backgroundColor: '#1E2027',
-        padding: 10,
+
         // justifyContent: 'center'
     },
     textContainer:{
-        top: Dimensions.get('window').height * 0.05
+        top: Dimensions.get('window').height * 0.005,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     buttonContainer:{
         alignItems: 'center',
-        top: Dimensions.get('window').height * 0.0075
+        top: Dimensions.get('window').height * 0.005
     },
     fillContainer:{
-        top: Dimensions.get('window').height * 0.10,
+        top: Dimensions.get('window').height * 0.05,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -130,11 +149,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color:'white',
         fontFamily: 'Roboto-Thin',
-        padding: 75,
+        padding: 65,
         margin: 5,
         borderWidth: 1,
         borderRadius: 30,
         width: Dimensions.get('window').width * 0.8,
-        height: Dimensions.get('window').height * 0.2
+        height: Dimensions.get('window').height * 0.18
     },
 });
