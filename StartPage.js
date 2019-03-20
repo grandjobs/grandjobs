@@ -33,14 +33,13 @@ export default class StartPage extends React.Component {
 	
 	
     render() {
-        console.log(this.state.user)
 		if (this.state.user) {
 			return (
 				this.state.fontLoaded ? (
 					<ImageBackground source={require('./assets/Images/city-blur.png')}  style={{width: '100%', height: '100%'}}>
 						<View style={styles.mainContainer}>
 							<View style={styles.textContainer}>
-								<Text style={styles.mainText}>I am looking for...</Text>
+								<Text style={styles.mainText}>Temp SignOut Page</Text>
 							</View>
 							<View style={styles.buttonContainer}>
 								<Button style={styles.buttonDesign} onPress={()=>this.onSignOut()}>

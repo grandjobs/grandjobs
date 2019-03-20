@@ -2,23 +2,18 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput, Alert } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
+import { firebase } from './db'
 
 export default class Employers extends React.Component {
-
   constructor(props){
     super(props);
     this.state = {
-      Email: '',
       companyName: '',
       companyLocation: '',
-      Password: '',
-      confirmPassword: ''
     };
   }
 
     render() {
-        console.log(this.props)
-		
 		return (
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
@@ -28,12 +23,6 @@ export default class Employers extends React.Component {
                 <View style={styles.fillContainer}>
                     {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
                     {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
-                    <TextInput style={styles.inputText}
-                        onChangeText={(Email) => this.setState({Email})}
-                        selectTextOnFocus={true}
-                        placeholder='Email Address'
-                        placeholderTextColor="#fff"
-                    />
                     <TextInput style={styles.inputText}
                         onChangeText={(companyName) => this.setState({companyName})}
                         selectTextOnFocus={true}
@@ -46,19 +35,6 @@ export default class Employers extends React.Component {
                         placeholderTextColor="#fff"
                         placeholder='Company Location'
                     />
-                    <TextInput style={styles.inputText}
-                        onChangeText={(Password) => this.setState({Password})}
-                        selectTextOnFocus={true}
-                        placeholderTextColor="#fff"
-                        placeholder='Password'
-
-                    />
-                    <TextInput style={styles.inputText}
-                        onChangeText={(confirmPassword) => this.setState({confirmPassword})}
-                        placeholderTextColor="#fff"
-                        selectTextOnFocus={true}
-                        placeholder='Confirm Password'
-                    />
                     <View style={styles.buttonContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.createPressed()}>
                     Create Account
@@ -70,33 +46,30 @@ export default class Employers extends React.Component {
     }
 
     createPressed(){
-      console.log(this.state.Password);
       Alert.alert(
-        'Confirm Information',
-        'Create Account?',
-        [
-          {text:'OK',onPress:()=>this.checkForm()},
-          {text:'Cancel',onPress:()=>console.log('cancel pressed')}
-        ]
-      )
+			'Confirm Information',
+			'Create Account?',
+			[
+				{text:'OK',onPress:()=>this.checkForm()},
+				{text:'Cancel',onPress:()=>console.log('cancel pressed')}
+			]
+		)
     }
 
     checkForm(){
-  //     if(this.state.Email != "" && this.state.companyName != "" &&
-  //   this.state.companyLocation != "" && this.state.Password != "" &&
-  // this.state.confirmPassword != "" && this.state.confirmPassword == this.state.Password){
-  //   Actions.EmployerHomepage();
-  // }
-  if(1==1){
-    Actions.EmployerHomepage();
-  }
-  else{
-    Alert.alert(
-      'Please fill all forms and make sure both passwords match.'
-    )
-    console.log("error");
-  }
-    }
+		if (this.state.companyName != "" && this.state.companyLocation != "") {
+			let rootRef = firebase.database().ref()
+			let employerRef = rootRef.child('EMPLOYERS')
+			newAccountRef = employerRef.child(this.props.uid)
+			newAccountRef.set({'Company Name' : this.state.companyName, 'Company Location' : this.state.companyLocation})
+			Actions.EmployerHomepage();
+		} else{
+			Alert.alert(
+				'Please fill all forms.'
+			)
+			console.log("error");
+		}
+	}
 }
 
 const styles = StyleSheet.create({

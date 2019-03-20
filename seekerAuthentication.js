@@ -20,7 +20,7 @@ export default class seekerAuthentication extends React.Component {
         }
 		//Firebase magic to check if someone is already logged in
         firebase.auth().onAuthStateChanged(user => {
-            this.setState({user})
+			this.setState({user})
         })
     }
 	

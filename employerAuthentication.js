@@ -41,14 +41,13 @@ export default class employerAuthentication extends React.Component {
 		if (this.state.passwd == this.state.repasswd) {
 			try {
 				await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.passwd)
-				this.setState({ userType: ''})
-				Actions.Employers({uid : this.state.user['uid']});
+				Actions.Employers({uid : this.state.user['uid'], email : this.state.email});
 			} catch (e) {
 				Alert.alert(
 					'Input Error',
 					e.message,
 					[
-						{text: 'OK', onPress: () => console.log('OK Pressed')},
+						{text: 'OK'}
 					],
 					{cancelable: false},
 				);
@@ -58,7 +57,7 @@ export default class employerAuthentication extends React.Component {
 				'Input Error',
 				'Passwords must match',
 				[
-					{text: 'OK', onPress: () => console.log('OK Pressed')},
+					{text: 'OK'}
 				],
 				{cancelable: false},
 			);
@@ -70,14 +69,13 @@ export default class employerAuthentication extends React.Component {
 	submitReturningUser = async () => {
 		try {
 			await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.passwd)
-			this.setState({ userType: ''})
 			Actions.EmployerHomepage({uid : this.state.user['uid']});
 		} catch (e) {
 			Alert.alert(
 				'Input Error',
 				e.message,
 				[
-					{text: 'OK', onPress: () => console.log('OK Pressed')},
+					{text: 'OK'}
 				],
 				{cancelable: false},
 			);
