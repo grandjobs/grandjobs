@@ -17,7 +17,9 @@ export default class Employers extends React.Component {
   }
 
     render() {
-        return (
+        console.log(this.props)
+		
+		return (
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
                     <Text style={styles.largeText}>Awesome!</Text>

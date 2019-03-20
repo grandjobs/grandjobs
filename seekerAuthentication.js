@@ -8,7 +8,7 @@ import { Actions } from 'react-native-router-flux';
 //Static webpage to hold a reCAPTCHA object
 const captchaUrl = `https://job-push-fbb6a.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl('')}`
 
-export default class authSol extends React.Component {
+export default class seekerAuthentication extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -134,7 +134,7 @@ export default class authSol extends React.Component {
 			//Already has an account with us
 			if (this.state.registered) {
 				if (this.state.registered == true) {
-					console.log(this.state)
+					/* console.log(this.state) */
 					
 					return (
 					   <View style={styles.mainContainer}>
