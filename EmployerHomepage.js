@@ -19,10 +19,6 @@ const menu = [
     id: 'four'}
 ]
 
-
-
-
-
 export default class EmployerHomepage extends React.Component {
 
     constructor(props){

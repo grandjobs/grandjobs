@@ -17,7 +17,29 @@ export default class StartPage extends React.Component {
             this.setState({user})
 			
 			if(user) {
-				Actions.EmployerHomepage({uid : this.state.user['uid']});
+				var uid = this.state.user['uid']
+				let rootRef = firebase.database().ref()
+				console.log('Checking Firebase for uid ' + uid)
+				
+				try {
+					rootRef.once('value')
+						.then(snapshot => {
+							let seeker = snapshot.child('USERS').child(uid).exists();
+							let employer = snapshot.child('EMPLOYERS').child(uid).exists();
+							
+							if (seeker) {
+								console.log('seeker')
+							} else if (employer) {
+								console.log('employer')
+								Actions.EmployerHomepage({uid : this.state.user['uid']});
+							}
+						})
+				} catch (e) {
+					console.warn(e)
+				}
+				
+				
+				
 			}
         })
     }
