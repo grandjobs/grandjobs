@@ -15,6 +15,10 @@ export default class StartPage extends React.Component {
 		//Firebase magic to check if someone is already logged in
         firebase.auth().onAuthStateChanged(user => {
             this.setState({user})
+			
+			if(user) {
+				Actions.EmployerHomepage({uid : this.state.user['uid']});
+			}
         })
     }
 	
@@ -33,45 +37,25 @@ export default class StartPage extends React.Component {
 	
 	
     render() {
-		if (this.state.user) {
-			return (
-				this.state.fontLoaded ? (
-					<ImageBackground source={require('./assets/Images/city-blur.png')}  style={{width: '100%', height: '100%'}}>
-						<View style={styles.mainContainer}>
-							<View style={styles.textContainer}>
-								<Text style={styles.mainText}>Temp SignOut Page</Text>
-							</View>
-							<View style={styles.buttonContainer}>
-								<Button style={styles.buttonDesign} onPress={()=>this.onSignOut()}>
-								SignOut
-								</Button>
-							</View>
+		return (
+			this.state.fontLoaded ? (
+				<ImageBackground source={require('./assets/Images/city-blur.png')}  style={{width: '100%', height: '100%'}}>
+					<View style={styles.mainContainer}>
+						<View style={styles.textContainer}>
+							<Text style={styles.mainText}>I am looking for...</Text>
 						</View>
-					</ImageBackground>
-				) : null
-			);
-			
-		} else {
-			return (
-				this.state.fontLoaded ? (
-					<ImageBackground source={require('./assets/Images/city-blur.png')}  style={{width: '100%', height: '100%'}}>
-						<View style={styles.mainContainer}>
-							<View style={styles.textContainer}>
-								<Text style={styles.mainText}>I am looking for...</Text>
-							</View>
-							<View style={styles.buttonContainer}>
-								<Button style={styles.buttonDesign} onPress={()=>this.employerAuthentication()}>
-								Employees
-								</Button>
-								<Button style={styles.buttonDesign} onPress={()=>this.seekerAuthentication()}>
-								Jobs
-								</Button>
-							</View>
+						<View style={styles.buttonContainer}>
+							<Button style={styles.buttonDesign} onPress={()=>this.employerAuthentication()}>
+							Employees
+							</Button>
+							<Button style={styles.buttonDesign} onPress={()=>this.seekerAuthentication()}>
+							Jobs
+							</Button>
 						</View>
-					</ImageBackground>
-				) : null
-			);
-		}
+					</View>
+				</ImageBackground>
+			) : null
+		);
     }
 
     seekerAuthentication(){

@@ -6,6 +6,7 @@ import { DrawerNavigator } from 'react-navigation';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import Drawer from 'react-native-drawer';
 import SideMenu from 'react-native-side-menu';
+import { firebase } from './db'
 
 const menu = [
     { 'title': 'Home',
@@ -26,61 +27,84 @@ export default class EmployerHomepage extends React.Component {
 
     constructor(props){
         super(props);
+		this.state = {
+			companyName: '',
+			companyLocation: '',
+		};
+		
     }
+	
+	async  componentWillMount() {
+		let rootRef = firebase.database().ref()
+		let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
+		
+		try {
+            userRef.once('value')
+				.then(snapshot => {
+					companyInfo = snapshot.val()
+					
+					console.log('Loaded name: ' + companyInfo['Company Name'])
+					this.setState({ companyName : companyInfo['Company Name'] })
+					this.setState({ companyLocation : companyInfo['Company Location'] })
+				})
+        } catch (e) {
+            console.warn(e)
+        }
+	}
 
     render() {
-      const myMenu = <UserMenu/>;
-              return (
-            <SideMenu menu = {myMenu}>
-                <View style={styles.mainContainer}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.largeText}>Grand Jobs</Text>
-                        <Text style={styles.mainText}>Homepage</Text>
-                    </View>
+		console.log("renderEmployer Homepage")
+		const myMenu = <UserMenu/>;
+			return (
+				<SideMenu menu = {myMenu}>
+					<View style={styles.mainContainer}>
+						<View style={styles.textContainer}>
+							<Text style={styles.largeText}>Grand Jobs</Text>
+							<Text style={styles.mainText}>Homepage</Text>
+						</View>
 
-                    <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
+						<ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
 
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "Company Name Here"
-                            />
-                            <CardContent text={"Company Location:"}/>
-                            <CardContent text={"Email:"}/>
-                            <CardAction
-                            separator={true}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => {}}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
+							<Card isDark = {true} style={styles.cardStyle}>
+								<CardTitle
+								title={this.state.companyName}
+								/>
+								<CardContent text={this.state.companyLocation}/>
+								<CardContent text={"Email:"}/>
+								<CardAction
+								separator={true}
+								inColumn={false}>
+								<CardButton
+								onPress={() => {}}
+								title="Edit "
+								color="#a9fcd4"
+								/>
+								</CardAction>
+							</Card>
 
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "Welcome!"
-                            />
-                            <CardContent text={"All notifications will show up here. Swipe right for more options."}/>
-                            <CardAction
-                            separator={false}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => {}}
-                            title="Dismiss "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
+							<Card isDark = {true} style={styles.cardStyle}>
+								<CardTitle
+								title= "Welcome!"
+								/>
+								<CardContent text={"All notifications will show up here. Swipe right for more options."}/>
+								<CardAction
+								separator={false}
+								inColumn={false}>
+								<CardButton
+								onPress={() => {}}
+								title="Dismiss "
+								color="#a9fcd4"
+								/>
+								</CardAction>
+							</Card>
 
 
-                    </ScrollView>
-                </View>
-            </SideMenu>
-        );
-    }
-
-}
+						</ScrollView>
+					</View>
+				</SideMenu>
+			);
+		}
+	}
 
 // class Application extends React.Component{
 //   render(){
@@ -100,6 +124,16 @@ class UserMenu extends React.Component{
   constructor(props){
       super(props);
   }
+  
+  onSignOut = async () => {
+        try {
+            await firebase.auth().signOut().then( () => {
+				Actions.StartPage()
+			});
+        } catch (e) {
+            console.warn(e)
+        }
+    }
 
   render(){
     return(
@@ -129,6 +163,7 @@ class UserMenu extends React.Component{
       </SafeAreaView>
     );
   }
+  
   onPress(item, index){
     if(index == 0){
       //home pressed
@@ -143,8 +178,7 @@ class UserMenu extends React.Component{
       Actions.EmployerCreateListing();
     }
     if(index == 3){
-      //logout pressed
-      Actions.EmployerHomepage();
+      this.onSignOut()
     }
   }
 }
