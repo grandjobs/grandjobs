@@ -20,16 +20,6 @@ export default class employerAuthentication extends React.Component {
         })
     }
 	
-	//Handles input for email address to translate to state value
-    onEmailChange = (email) => {
-        this.setState({email})
-    }
-	
-	//Handles input for password to translate to state value
-	onPasswordChange = (passwd) => {
-        this.setState({passwd})
-    }
-	
 	//Handles input for password double check to translate to state value
 	onRePasswordChange = (repasswd) => {
         this.setState({repasswd})
@@ -103,14 +93,14 @@ export default class employerAuthentication extends React.Component {
 						<TextInput 
 							style={styles.inputText}
 							placeholder='Email Address'
-							onChangeText={this.onEmailChange}
+							onChangeText={(email) => this.setState({email})}
 							value={this.state.email}
 							selectTextOnFocus={true}
 						/>
 						<TextInput 
 							style={styles.inputText}
 							placeholder='Password'
-							onChangeText={this.onPasswordChange}
+							onChangeText={(passwd) => this.setState({passwd})}
 							value={this.state.passwd}
 							selectTextOnFocus={true}
 						/>
@@ -136,21 +126,21 @@ export default class employerAuthentication extends React.Component {
 						<TextInput 
 							style={styles.inputText}
 							placeholder='Email Address'
-							onChangeText={this.onEmailChange}
+							onChangeText={(email) => this.setState({email})}
 							value={this.state.email}
 							selectTextOnFocus={true}
 						/>
 						<TextInput 
 							style={styles.inputText}
 							placeholder='Password'
-							onChangeText={this.onPasswordChange}
+							onChangeText={(passwd) => this.setState({passwd})}
 							value={this.state.passwd}
 							selectTextOnFocus={true}
 						/>
 						<TextInput 
 							style={styles.inputText}
 							placeholder='Re-enter Password'
-							onChangeText={this.onRePasswordChange}
+							onChangeText={(repasswd) => this.setState({repasswd})}
 							value={this.state.repasswd}
 							selectTextOnFocus={true}
 						/>

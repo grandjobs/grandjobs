@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { StyleSheet, Dimensions, Text, View, ScrollView, TextInput} from 'react-native'
-import Button from 'react-native-button';
+import Button from 'react-native-button'
 import {Linking, WebBrowser} from 'expo'
 import { firebase } from './db'
-import { Actions } from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux'
 
 //Static webpage to hold a reCAPTCHA object
 const captchaUrl = `https://job-push-fbb6a.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl('')}`
@@ -92,7 +92,6 @@ export default class seekerAuthentication extends React.Component {
 		var uid = this.state.user['uid']
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('USERS')
-		console.log('Checking Firebase for uid ' + uid)
 		
 		try {
             userRef.once('value')
@@ -123,19 +122,13 @@ export default class seekerAuthentication extends React.Component {
     render() {
 		/* Signed in */
 		if (this.state.user) {
-			console.log('entering difficult stuff')
-			console.log('Registered: ' + this.state.registered)
-			
 			if (this.state.registered == undefined) {
-				console.log('check')
 				this.firebaseCheckForUser()
 			}
 			
 			//Already has an account with us
 			if (this.state.registered) {
-				if (this.state.registered == true) {
-					/* console.log(this.state) */
-					
+				if (this.state.registered == true) {					
 					return (
 					   <View style={styles.mainContainer}>
 							<View style={styles.textContainer}>
@@ -157,8 +150,6 @@ export default class seekerAuthentication extends React.Component {
 			
 			//Does not already have an account with us
 			else if (this.state.registered == false) {
-				console.log(this.state)
-				
 				return (
 				   <View style={styles.mainContainer}>
 						<View style={styles.textContainer}>

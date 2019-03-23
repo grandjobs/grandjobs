@@ -6,18 +6,15 @@ import UserInfo from './UserInfo.js';
 
 
 export default class AccountSetup extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            phoneText: '',
             firstNameText: '',
             lastNameText: '',
             emailText: ''
         };
     }
     render() {
-		console.log(this.props)
-		
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
@@ -57,6 +54,7 @@ export default class AccountSetup extends React.Component {
         userInfo.firstName = this.state.firstNameText;
         userInfo.lastName = this.state.lastNameText;
         userInfo.email = this.state.emailText;
+		userInfo.uid = this.props.uid;
 
         Actions.SkillPage({userInfo: userInfo});
     }
