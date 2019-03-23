@@ -17,6 +17,7 @@ import BusPage from './BusOptions';
 import authSol from './authSol';
 import UserInfoPage from './UserInfoPage';
 import UserHomePage from './UserHomePage';
+import JobInfoPage from './JobInfoPage';
 
 const App = () => {
     return (
@@ -105,7 +106,13 @@ const App = () => {
                 <Scene
                     key = "UserHomePage"
                     component = {UserHomePage}
-                    title="UserHim"
+                    title="UserHome"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "JobInfoPage"
+                    component = {JobInfoPage}
+                    title="Job Info"
                     hideNavBar={true}
                 />
             </Scene>

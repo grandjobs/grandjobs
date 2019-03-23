@@ -15,14 +15,15 @@ export default class UserHomePage extends React.Component {
         super(props);
         //Eventually we will be loading firebase info here....
         tempJob = new JobInfo();
-        tempJob.company = "Big Company";
-        tempJob.jobTitle = "Worker";
+        tempJob.company = "Company Co";
+        tempJob.jobTitle = "Manager";
         tempJob.distance = 5.6;
-        tempJob.skills = ["Skill 1", "Skill 2", "Skill 3"];
+        tempJob.skills = ["Skill 1", "Skill 2", "Skill 3", "Skill 4", "Skill 5", "Skill 6"];
         tempJob.description.push("Maintains admission guidelines by writing, updating, and recommending changes to admission criteria, policies and procedures.");
         tempJob.description.push("Markets programs and facilities by preparing and providing informational brochures; writing and placing advertisements; answering questions; conducting tours.");
         tempJob.description.push("Obtains applicant information by requesting completed applications and medical information; verifying and clarifying information ; interviewing patients and family members; explaining admission criteria.");
         tempJob.description.push("Screens patients by comparing patient's condition to admission criteria; evaluating and accepting or rejecting patients; referring patients and family to other programs and institutions.");
+
 
         this.allJobs = [];
         this.allJobs.push(tempJob);
@@ -78,6 +79,7 @@ export default class UserHomePage extends React.Component {
 
     cardPressed(jobInfo){
         console.log("Pressed");
+        Actions.JobInfoPage({jobInfo: jobInfo});
     }
 }
 
