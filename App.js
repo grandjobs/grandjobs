@@ -15,8 +15,8 @@ import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
 import authSol from './authSol';
-import UserInfoPage from './UserInfoPage'
-
+import UserInfoPage from './UserInfoPage';
+import UserHomePage from './UserHomePage';
 
 const App = () => {
     return (
@@ -100,6 +100,12 @@ const App = () => {
                     key = "UserInfoPage"
                     component = {UserInfoPage}
                     title="UserInfo"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "UserHomePage"
+                    component = {UserHomePage}
+                    title="UserHim"
                     hideNavBar={true}
                 />
             </Scene>

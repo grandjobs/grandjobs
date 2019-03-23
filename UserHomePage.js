@@ -2,51 +2,36 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
-import { DrawerNavigator } from 'react-navigation';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import SideMenu from 'react-native-side-menu';
-import Dialog from "react-native-dialog";
+import JobInfo from './JobInfo.js';
 import UserMenu from "./UserMenu";
 
 
 
-export default class UserInfoPage extends React.Component {
+export default class UserHomePage extends React.Component {
 
     constructor(props){
         super(props);
-        console.log(props.userInfo);
-        phoneText = "Phone: " + props.userInfo.phoneNum + "\n";
-        firstText = "First: " + props.userInfo.firstName + "\n";
-        lastText = "Last: " + props.userInfo.lastName + "\n";
-        emailText = "Email: " + props.userInfo.email;
+        //Eventually we will be loading firebase info here....
+        tempJob = new JobInfo();
+        tempJob.company = "Big Company";
+        tempJob.jobTitle = "Worker";
+        tempJob.distance = 5.6;
+        tempJob.skills = ["Skill 1", "Skill 2", "Skill 3"];
+        tempJob.description.push("Maintains admission guidelines by writing, updating, and recommending changes to admission criteria, policies and procedures.");
+        tempJob.description.push("Markets programs and facilities by preparing and providing informational brochures; writing and placing advertisements; answering questions; conducting tours.");
+        tempJob.description.push("Obtains applicant information by requesting completed applications and medical information; verifying and clarifying information ; interviewing patients and family members; explaining admission criteria.");
+        tempJob.description.push("Screens patients by comparing patient's condition to admission criteria; evaluating and accepting or rejecting patients; referring patients and family to other programs and institutions.");
 
-        this.basicInfoText = phoneText + firstText + lastText + emailText;
-
-        this.busInfoText = "";
-        for (var i = 0; i < props.userInfo.busAccess.length; i++){
-            if (i < props.userInfo.busAccess.length - 1){
-                this.busInfoText += props.userInfo.busAccess[i] + ", ";
-            }
-            else{
-                this.busInfoText += props.userInfo.busAccess[i];
-            }
-        }
-
-        this.skillInfoText = "";
-        for (var i = 0; i < props.userInfo.skills.length; i++){
-            if (i < props.userInfo.skills.length - 1){
-                this.skillInfoText += props.userInfo.skills[i] + ", ";
-            }
-            else{
-                this.skillInfoText += props.userInfo.skills[i];
-            }
-        }
-
-        this.state = {
-            showFirstDialog: false,
-            showLastDialog: false,
-            showEmailDialog: false,
-        }
+        this.allJobs = [];
+        this.allJobs.push(tempJob);
+        this.allJobs.push(tempJob);
+        this.allJobs.push(tempJob);
+        this.allJobs.push(tempJob);
+        this.allJobs.push(tempJob);
+        this.allJobs.push(tempJob);
+        this.allJobs.push(tempJob);
     }
 
     render() {
@@ -63,64 +48,37 @@ export default class UserInfoPage extends React.Component {
                     {/*Make the cards view scrollable so we can reach the cards that will be rendered
                     off screen*/}
                     <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
-
-                        {/*Card for the Phone number (Should not be able to edit)*/}
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            style={{fontSize:50}}
-                            title="Company"
-                            subtitle="Position"
-                            />
-                            <CardContent style={{fontSize:50}} text="This is a "/>
-                            <CardAction
-                            separator={true}
-                            inColumn={false}>
-                            </CardAction>
-                        </Card>
-
+                    {
+                        this.allJobs.map(( item, key ) =>
+                        (
+                            <Card isDark = {true} style={styles.cardStyle} key = {key}>
+                                <CardTitle
+                                style={{fontSize:50}}
+                                title={item.company}
+                                subtitle={item.jobTitle}
+                                />
+                                <CardContent style={{fontSize:50}} text={"Distance: " + item.distance}/>
+                                <CardAction
+                                separator={true}
+                                inColumn={false}>
+                                <CardButton
+                                onPress={() => this.cardPressed(item)}
+                                title="View "
+                                color="#a9fcd4"
+                                />
+                                </CardAction>
+                            </Card>
+                        ))
+                    }
                     </ScrollView>
                 </View>
             </SideMenu>
         );
     }
 
-    editFirstName(){
-        this.setState({
-            showFirstDialog: true,
-            showLastDialog: false,
-        })
+    cardPressed(jobInfo){
+        console.log("Pressed");
     }
-
-    editEmail(){
-        this.setState({
-            showEmailDialog: true,
-        })
-    }
-
-    closeEmail(){
-        this.setState({
-            showEmailDialog: false,
-        })
-    }
-
-    editLastName(){
-        this.setState({
-            showFirstDialog: false,
-            showLastDialog: true,
-        })
-    }
-
-    closeLastName(){
-        this.setState({
-            showFirstDialog: false,
-            showLastDialog: false,
-        })
-    }
-
-    editBusRoutes(){
-        Actions.BusPage({userInfo: this.props.userInfo, editing: true});
-    }
-
 }
 
 const styles = StyleSheet.create({

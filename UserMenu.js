@@ -31,10 +31,12 @@ export default class AccountSetup extends React.Component {
 
     homePressed(){
         console.log("Home");
+        Actions.UserHomePage();
     }
 
     infoPressed(){
         console.log("Info");
+        // Actions.UserInfoPage();
     }
 
     contactedPressed(){
