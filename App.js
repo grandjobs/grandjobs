@@ -17,6 +17,8 @@ import BusPage from './BusOptions';
 import seekerAuthentication from './seekerAuthentication';
 import employerAuthentication from './employerAuthentication';
 import UserInfoPage from './UserInfoPage'
+import EmployerSideReplies from './EmployerSideReplies';
+import ViewSeekerProfile from './ViewSeekerProfile';
 
 const App = () => {
     return (
@@ -63,6 +65,20 @@ const App = () => {
                     key = "EmployerHomepage"
                     component = {EmployerHomepage}
                     title="Account"
+                    hideNavBar={true}
+                    panHandlers = {null}
+                />
+                <Scene
+                    key = "EmployerSideReplies"
+                    component = {EmployerSideReplies}
+                    title="EmployerSideReplies"
+                    hideNavBar={true}
+                    panHandlers = {null}
+                />
+                <Scene
+                    key = "ViewSeekerProfile"
+                    component = {ViewSeekerProfile}
+                    title="ViewSeekerProfile"
                     hideNavBar={true}
                     panHandlers = {null}
                 />

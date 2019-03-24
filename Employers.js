@@ -91,12 +91,17 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         alignItems: 'center',
-        top: Dimensions.get('window').height * 0.09
+        top: Dimensions.get('window').height * 0.15
     },
     fillContainer:{
         top: Dimensions.get('window').height * 0.15,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    bottomContainer:{
+        flex: 1,
+        justifyContent: 'flex-end',
+        marginBottom: 0
     },
     largeText:{
         fontSize: 65,
