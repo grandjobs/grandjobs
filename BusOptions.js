@@ -155,7 +155,6 @@ export default class BusOptions extends Component {
 			})
 			
             Actions.UserInfoPage({userInfo: this.props.userInfo});
-        Actions.UserInfoPage({userInfo: this.props.userInfo});
     }
 
     setInfoObj(){

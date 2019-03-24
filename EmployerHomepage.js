@@ -30,7 +30,7 @@ export default class EmployerHomepage extends React.Component {
 		
     }
 	
-	async  componentWillMount() {
+	async componentWillMount() {
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
 		

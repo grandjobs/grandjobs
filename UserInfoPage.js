@@ -8,8 +8,6 @@ import SideMenu from 'react-native-side-menu';
 import Dialog from "react-native-dialog";
 import UserMenu from "./UserMenu";
 
-
-
 export default class UserInfoPage extends React.Component {
 
     constructor(props){
