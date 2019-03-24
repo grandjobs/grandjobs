@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
         borderColor: '#fff',
         color: '#fff',
         fontSize: 25,
+        textAlignVertical: 'top',
         textAlign: 'center',
         color:'white',
         fontFamily: 'Roboto-Thin',
