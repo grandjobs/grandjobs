@@ -28,6 +28,7 @@ export default class StartPage extends React.Component {
 							let employer = snapshot.child('EMPLOYERS').child(uid).exists();
 							
 							if (seeker) {
+								Actions.UserHomePage({uid : this.state.user['uid']});
 								console.log('seeker')
 							} else if (employer) {
 								console.log('employer')

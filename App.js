@@ -23,6 +23,7 @@ import EmployerSideReplies from './EmployerSideReplies';
 import ViewSeekerProfile from './ViewSeekerProfile';
 
 const App = () => {
+	console.disableYellowBox = true
     return (
         <Router>
         <Scene key="root">

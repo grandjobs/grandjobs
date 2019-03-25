@@ -88,7 +88,6 @@ export default class seekerAuthentication extends React.Component {
     }
   
 	//Function to check whether a phone number has a registered account in our database
-	//and set the registered state variable appropriately
 	async componentDidUpdate() {
 		if(this.state.user) {
 			var uid = this.state.user['uid']
@@ -102,7 +101,7 @@ export default class seekerAuthentication extends React.Component {
 							var userInfo = new UserInfo();
 							
 							//user home page
-							Actions.UserInfoPage({'userInfo': userInfo});
+							Actions.UserHomePage({'userInfo': userInfo});
 						}
 					})
 			} catch (e) {

@@ -65,7 +65,7 @@ export default class Range extends React.Component {
 				'Skills' : this.props.userInfo.skills
 			})
 			
-            Actions.UserInfoPage({userInfo: this.props.userInfo});
+            Actions.UserHomePage({userInfo: this.props.userInfo});
         }
         else if (this.props.travelVal == 1){
             console.log("User is public.");

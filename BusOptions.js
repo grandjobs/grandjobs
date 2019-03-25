@@ -138,6 +138,9 @@ export default class BusOptions extends Component {
 
     nextPressed(){
         this.setInfoObj();
+		console.log(this.user)
+		console.log(this.props.userInfo)
+		this.props.userInfo.phoneNum = '+17086634507'
 		
 		let rootRef = firebase.database().ref()
 			let userRef = rootRef.child('USERS')
