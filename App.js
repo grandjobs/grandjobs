@@ -14,6 +14,10 @@ import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
+import authSol from './authSol';
+import UserInfoPage from './UserInfoPage';
+import UserHomePage from './UserHomePage';
+import JobInfoPage from './JobInfoPage';
 import seekerAuthentication from './seekerAuthentication';
 import employerAuthentication from './employerAuthentication';
 import UserInfoPage from './UserInfoPage'
@@ -121,6 +125,18 @@ const App = () => {
                     key = "UserInfoPage"
                     component = {UserInfoPage}
                     title="UserInfo"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "UserHomePage"
+                    component = {UserHomePage}
+                    title="UserHome"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "JobInfoPage"
+                    component = {JobInfoPage}
+                    title="Job Info"
                     hideNavBar={true}
                 />
             </Scene>
