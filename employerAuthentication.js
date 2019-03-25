@@ -19,12 +19,7 @@ export default class employerAuthentication extends React.Component {
             this.setState({user})
         })
     }
-	
-	//Handles input for password double check to translate to state value
-	onRePasswordChange = (repasswd) => {
-        this.setState({repasswd})
-    }
-	
+
 	//Asynchronous function to attempt to create a new email/password employer account
 	//with the credentials entered in the forms.
     submitNewUser = async () => {
@@ -53,7 +48,7 @@ export default class employerAuthentication extends React.Component {
 			);
 		}
     }
-	
+
 	//Asynchronous function to attempt to sign in to an existing email/password employer account
 	//with the credentials entered in the forms.
 	submitReturningUser = async () => {
@@ -71,12 +66,12 @@ export default class employerAuthentication extends React.Component {
 			);
 		}
     }
-	
+
 	//Sets the state variable userType to re-render the component with the correct page
 	returningUser = () => {
 		this.setState({ userType: 'returning'})
 	}
-	
+
 	newUser = () => {
 		this.setState({ userType: 'new'})
 	}
@@ -90,17 +85,19 @@ export default class employerAuthentication extends React.Component {
 						<Text style={styles.mainText}>and password</Text>
 					</View>
 					<View style={styles.fillContainer}>
-						<TextInput 
+						<TextInput
 							style={styles.inputText}
 							placeholder='Email Address'
 							onChangeText={(email) => this.setState({email})}
+              placeholderTextColor="#fff"
 							value={this.state.email}
 							selectTextOnFocus={true}
 						/>
-						<TextInput 
+						<TextInput
 							style={styles.inputText}
 							placeholder='Password'
 							onChangeText={(passwd) => this.setState({passwd})}
+              placeholderTextColor="#fff"
 							value={this.state.passwd}
 							selectTextOnFocus={true}
 						/>
@@ -123,24 +120,28 @@ export default class employerAuthentication extends React.Component {
 						<Text style={styles.mainText}>and password</Text>
 					</View>
 					<View style={styles.fillContainer}>
-						<TextInput 
+						<TextInput
 							style={styles.inputText}
 							placeholder='Email Address'
 							onChangeText={(email) => this.setState({email})}
+              placeholderTextColor="#fff"
 							value={this.state.email}
 							selectTextOnFocus={true}
 						/>
-						<TextInput 
+						<TextInput
 							style={styles.inputText}
 							placeholder='Password'
 							onChangeText={(passwd) => this.setState({passwd})}
+              placeholderTextColor="#fff"
 							value={this.state.passwd}
 							selectTextOnFocus={true}
 						/>
-						<TextInput 
+						<TextInput
 							style={styles.inputText}
 							placeholder='Re-enter Password'
 							onChangeText={(repasswd) => this.setState({repasswd})}
+
+              placeholderTextColor="#fff"
 							value={this.state.repasswd}
 							selectTextOnFocus={true}
 						/>
@@ -183,10 +184,10 @@ export default class employerAuthentication extends React.Component {
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex: 1,
-        backgroundColor: '#1E2027',
-        justifyContent: 'center',
-        alignItems: 'center'
+      flex: 1,
+      backgroundColor: '#1E2027',
+      padding: 10,
+      alignItems: 'center'
     },
     textContainer:{
         top: Dimensions.get('window').height * 0.05
@@ -201,27 +202,27 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Roboto-Thin'
     },
     mainText:{
         fontSize: 25,
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Roboto-Thin'
     },
     inputText:{
-        borderColor: '#fff',
-        color: '#fff',
-        fontSize: 25,
-        textAlign: 'center',
-        color:'white',
-        fontFamily: 'sans-serif-thin',
-        padding: 10,
-        margin: 20,
-        borderWidth: 1,
-        borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8
+          borderColor: '#fff',
+          color: '#fff',
+          fontSize: 25,
+          textAlign: 'center',
+          color:'white',
+          fontFamily: 'Roboto-Thin',
+          padding: 13,
+          margin: 5,
+          borderWidth: 1,
+          borderRadius: 30,
+          width: Dimensions.get('window').width * 0.8
     },
     bottomContainer:{
         flex: 1,
@@ -230,11 +231,11 @@ const styles = StyleSheet.create({
     },
     buttonDesign:{
         fontSize: 20,
-        fontFamily: 'sans-serif-thin',
+        fontFamily: 'Roboto-Thin',
         padding: 10,
         margin: 30,
         width: 250,
-        color: '#fff',
+        color:'white',
         borderRadius: 30,
         borderColor: '#a9fcd4',
         borderWidth: 1,

@@ -14,9 +14,13 @@ import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
+import UserInfoPage from './UserInfoPage';
+import UserHomePage from './UserHomePage';
+import JobInfoPage from './JobInfoPage';
 import seekerAuthentication from './seekerAuthentication';
 import employerAuthentication from './employerAuthentication';
-import UserInfoPage from './UserInfoPage'
+import EmployerSideReplies from './EmployerSideReplies';
+import ViewSeekerProfile from './ViewSeekerProfile';
 
 const App = () => {
     return (
@@ -67,6 +71,20 @@ const App = () => {
                     panHandlers = {null}
                 />
                 <Scene
+                    key = "EmployerSideReplies"
+                    component = {EmployerSideReplies}
+                    title="EmployerSideReplies"
+                    hideNavBar={true}
+                    panHandlers = {null}
+                />
+                <Scene
+                    key = "ViewSeekerProfile"
+                    component = {ViewSeekerProfile}
+                    title="ViewSeekerProfile"
+                    hideNavBar={true}
+                    panHandlers = {null}
+                />
+                <Scene
                     key = "SkillPage"
                     component = {SkillsPage}
                     title="Skills"
@@ -105,6 +123,18 @@ const App = () => {
                     key = "UserInfoPage"
                     component = {UserInfoPage}
                     title="UserInfo"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "UserHomePage"
+                    component = {UserHomePage}
+                    title="UserHome"
+                    hideNavBar={true}
+                />
+                <Scene
+                    key = "JobInfoPage"
+                    component = {JobInfoPage}
+                    title="Job Info"
                     hideNavBar={true}
                 />
             </Scene>

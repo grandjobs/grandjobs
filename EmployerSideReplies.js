@@ -6,7 +6,6 @@ import { DrawerNavigator } from 'react-navigation';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import Drawer from 'react-native-drawer';
 import SideMenu from 'react-native-side-menu';
-import { firebase } from './db'
 
 
 
@@ -22,34 +21,18 @@ const menu = [
     id: 'four'}
 ]
 
-export default class EmployerHomepage extends React.Component {
+
+
+export default class EmployerSideReplies extends React.Component {
 
     constructor(props){
         super(props);
-		    this.state = {
-          companyName: '',
-          companyLocation: '',
-        };
 
     }
-	
-	async componentWillMount() {
-		let rootRef = firebase.database().ref()
-		let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
-		
-		try {
-            userRef.once('value')
-				.then(snapshot => {
-					companyInfo = snapshot.val()
-					
-					console.log('Loaded name: ' + companyInfo['Company Name'])
-					this.setState({ companyName : companyInfo['Company Name'] })
-					this.setState({ companyLocation : companyInfo['Company Location'] })
-				})
-        } catch (e) {
-            console.warn(e)
-        }
-	}
+
+    viewPressed(){
+      Actions.ViewSeekerProfile();
+    }
 
     render() {
       const myMenu = <UserMenu/>;
@@ -58,55 +41,22 @@ export default class EmployerHomepage extends React.Component {
                 <View style={styles.mainContainer}>
                     <View style={styles.textContainer}>
                         <Text style={styles.largeText}>Grand Jobs</Text>
-                        <Text style={styles.mainText}>Homepage</Text>
+                        <Text style={styles.mainText}>Replies</Text>
                     </View>
                     <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
 
-                    <Card isDark = {true} style={styles.cardStyle}>
-                        <CardTitle
-                        title= "Welcome!"
-                        />
-                        <CardContent text={"All notifications will show up here. Swipe right for more options."}/>
-                        <CardAction
-                        separator={false}
-                        inColumn={false}>
-                        <CardButton
-                        onPress={() => {}}
-                        title="Dismiss "
-                        color="#a9fcd4"
-                        />
-                        </CardAction>
-                    </Card>
-
                         <Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
-                            title= "Grand Valley State University"
+                            title= "New Reply"
                             />
-                            <CardContent text={"Company Location: 1 Campus Dr, Allendale, MI 49401"}/>
-                            <CardContent text={"Email: grandvalley@gvsu.edu"}/>
+                            <CardContent text={"Position: Professor"}/>
+                            <CardContent text={"Name: Tom"}/>
                             <CardAction
                             separator={true}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
-
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "New Listing"
-                            />
-                            <CardContent text={"Job Title: Professor"}/>
-                            <CardContent text={"Job Location: 1 Campus Dr, Allendale, MI 49401"}/>
-                            <CardAction
-                            separator={true}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => {}}
-                            title="Edit "
+                            onPress={()=>this.viewPressed()}
+                            title="View "
                             color="#a9fcd4"
                             />
                             <CardButton
@@ -119,16 +69,39 @@ export default class EmployerHomepage extends React.Component {
 
                         <Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
-                            title= "New Listing"
+                            title= "New Reply"
                             />
-                            <CardContent text={"Job Title: Network Administrator"}/>
-                            <CardContent text={"Job Location: 1 Campus Dr, Allendale, MI 49401"}/>
+                            <CardContent text={"Position: Professor"}/>
+                            <CardContent text={"Name: Dave"}/>
                             <CardAction
                             separator={true}
                             inColumn={false}>
                             <CardButton
                             onPress={() => {}}
-                            title="Edit "
+                            title="View "
+                            color="#a9fcd4"
+                            />
+                            <CardButton
+                            onPress={() => {}}
+                            title="Dismiss "
+                            color="#a9fcd4"
+                            alignSelf="right"
+                            />
+                            </CardAction>
+                        </Card>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "New Reply"
+                            />
+                            <CardContent text={"Position: Professor"}/>
+                            <CardContent text={"Name: Phil"}/>
+                            <CardAction
+                            separator={true}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="View "
                             color="#a9fcd4"
                             />
                             <CardButton
@@ -138,29 +111,69 @@ export default class EmployerHomepage extends React.Component {
                             />
                             </CardAction>
                         </Card>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "New Reply"
+                            />
+                            <CardContent text={"Position: Network Administrator"}/>
+                            <CardContent text={"Name: Mike"}/>
+                            <CardAction
+                            separator={true}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="View "
+                            color="#a9fcd4"
+                            />
+                            <CardButton
+                            onPress={() => {}}
+                            title="Dismiss "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
+
+                        <Card isDark = {true} style={styles.cardStyle}>
+                            <CardTitle
+                            title= "New Reply"
+                            />
+                            <CardContent text={"Position: Network Administrator"}/>
+                            <CardContent text={"Name: Gary"}/>
+                            <CardAction
+                            separator={true}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => {}}
+                            title="View "
+                            color="#a9fcd4"
+                            />
+                            <CardButton
+                            onPress={() => {}}
+                            title="Dismiss "
+                            color="#a9fcd4"
+                            />
+                            </CardAction>
+                        </Card>
+
+
 
                     </ScrollView>
                 </View>
             </SideMenu>
         );
     }
+
+
+
 }
+
 
 class UserMenu extends React.Component{
 
   constructor(props){
       super(props);
   }
-  
-  onSignOut = async () => {
-        try {
-            await firebase.auth().signOut().then( () => {
-				Actions.StartPage()
-			});
-        } catch (e) {
-            console.warn(e)
-        }
-    }
 
   render(){
     return(
@@ -190,7 +203,6 @@ class UserMenu extends React.Component{
       </SafeAreaView>
     );
   }
-  
   onPress(item, index){
     if(index == 0){
       //home pressed
@@ -205,10 +217,10 @@ class UserMenu extends React.Component{
       Actions.EmployerCreateListing();
     }
     if(index == 3){
-      this.onSignOut()
+      //logout pressed
+      Actions.EmployerHomepage();
     }
   }
-
 }
 
 const sideStyles = StyleSheet.create({

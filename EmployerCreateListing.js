@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, Alert, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TextInput, Alert, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
 
@@ -84,6 +84,7 @@ export default class EmployerCreateListing extends React.Component {
 
 const styles = StyleSheet.create({
     mainContainer: {
+        paddingTop: Platform.OS === 'android' ? 25 : 0,
         flex: 1,
         backgroundColor: '#1E2027',
 
@@ -146,6 +147,7 @@ const styles = StyleSheet.create({
         borderColor: '#fff',
         color: '#fff',
         fontSize: 25,
+        textAlignVertical: 'top',
         textAlign: 'center',
         color:'white',
         fontFamily: 'Roboto-Thin',

@@ -72,7 +72,7 @@ export default class seekerAuthentication extends React.Component {
             console.warn(e)
         }
     }
-	
+
     onSignOut = async () => {
         try {
 			this.setState({ registered: undefined })
@@ -86,7 +86,7 @@ export default class seekerAuthentication extends React.Component {
 	directToAccountSetup = async () => {
         Actions.AccountSetup({uid : this.state.user['uid']});
     }
-	
+  
 	//Function to check whether a phone number has a registered account in our database
 	//and set the registered state variable appropriately
 	async componentDidUpdate() {
@@ -142,10 +142,11 @@ export default class seekerAuthentication extends React.Component {
 						<Text style={styles.mainText}>All you need is a phone number :)</Text>
 					</View>
 					<View style={styles.fillContainer}>
-						<TextInput 
+						<TextInput
 							style={styles.inputText}
 							placeholder='Phone Number'
 							onChangeText={(phone) => this.setState({phone})}
+              placeholderTextColor= 'white'
 							keyboardType="phone-pad"
 							selectTextOnFocus={true}
 						/>
@@ -171,10 +172,11 @@ export default class seekerAuthentication extends React.Component {
 						<Text style={styles.mainText}>You should have recieved a text</Text>
 					</View>
 					<View style={styles.fillContainer}>
-						<TextInput 
+						<TextInput
 							style={styles.inputText}
 							placeholder='SMS Code'
 							onChangeText={(code) => this.setState({code})}
+              placeholderTextColor= 'white'
 							value={this.state.code}
 							keyboardType="numeric"
 							selectTextOnFocus={true}
@@ -215,14 +217,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Roboto-Thin'
     },
     mainText:{
         fontSize: 25,
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Roboto-Thin'
     },
     inputText:{
         borderColor: '#fff',
@@ -230,7 +232,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         textAlign: 'center',
         color:'white',
-        fontFamily: 'sans-serif-thin',
+        fontFamily: 'Roboto-Thin',
         padding: 10,
         margin: 20,
         borderWidth: 1,
@@ -254,7 +256,7 @@ const styles = StyleSheet.create({
     },
     buttonDesign:{
         fontSize: 20,
-        fontFamily: 'sans-serif-thin',
+        fontFamily: 'Roboto-Thin',
         padding: 10,
         margin: 30,
         width: 150,
