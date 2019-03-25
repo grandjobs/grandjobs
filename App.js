@@ -14,13 +14,11 @@ import MapsPage from './MapsPage';
 import TransportType from './TransportType';
 import RangePage from './Range';
 import BusPage from './BusOptions';
-import authSol from './authSol';
 import UserInfoPage from './UserInfoPage';
 import UserHomePage from './UserHomePage';
 import JobInfoPage from './JobInfoPage';
 import seekerAuthentication from './seekerAuthentication';
 import employerAuthentication from './employerAuthentication';
-import UserInfoPage from './UserInfoPage'
 import EmployerSideReplies from './EmployerSideReplies';
 import ViewSeekerProfile from './ViewSeekerProfile';
 
