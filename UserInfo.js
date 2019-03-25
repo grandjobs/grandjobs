@@ -8,9 +8,7 @@ export default class UserInfo{
         this.skills = [];
         this.busAccess = [];
         this.homeRange = 0;
-        this.busRange = 2;
         this.homeLat = 0.0;
         this.homeLong = 0.0;
     }
-
 }

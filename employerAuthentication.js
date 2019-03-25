@@ -20,35 +20,19 @@ export default class employerAuthentication extends React.Component {
         })
     }
 
-	//Handles input for email address to translate to state value
-    onEmailChange = (email) => {
-        this.setState({email})
-    }
-
-	//Handles input for password to translate to state value
-	onPasswordChange = (passwd) => {
-        this.setState({passwd})
-    }
-
-	//Handles input for password double check to translate to state value
-	onRePasswordChange = (repasswd) => {
-        this.setState({repasswd})
-    }
-
 	//Asynchronous function to attempt to create a new email/password employer account
 	//with the credentials entered in the forms.
     submitNewUser = async () => {
 		if (this.state.passwd == this.state.repasswd) {
 			try {
 				await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.passwd)
-				this.setState({ userType: ''})
-				Actions.Employers({uid : this.state.user['uid']});
+				Actions.Employers({uid : this.state.user['uid'], email : this.state.email});
 			} catch (e) {
 				Alert.alert(
 					'Input Error',
 					e.message,
 					[
-						{text: 'OK', onPress: () => console.log('OK Pressed')},
+						{text: 'OK'}
 					],
 					{cancelable: false},
 				);
@@ -58,7 +42,7 @@ export default class employerAuthentication extends React.Component {
 				'Input Error',
 				'Passwords must match',
 				[
-					{text: 'OK', onPress: () => console.log('OK Pressed')},
+					{text: 'OK'}
 				],
 				{cancelable: false},
 			);
@@ -70,14 +54,13 @@ export default class employerAuthentication extends React.Component {
 	submitReturningUser = async () => {
 		try {
 			await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.passwd)
-			this.setState({ userType: ''})
 			Actions.EmployerHomepage({uid : this.state.user['uid']});
 		} catch (e) {
 			Alert.alert(
 				'Input Error',
 				e.message,
 				[
-					{text: 'OK', onPress: () => console.log('OK Pressed')},
+					{text: 'OK'}
 				],
 				{cancelable: false},
 			);
@@ -105,16 +88,16 @@ export default class employerAuthentication extends React.Component {
 						<TextInput
 							style={styles.inputText}
 							placeholder='Email Address'
+							onChangeText={(email) => this.setState({email})}
               placeholderTextColor="#fff"
-							onChangeText={this.onEmailChange}
 							value={this.state.email}
 							selectTextOnFocus={true}
 						/>
 						<TextInput
 							style={styles.inputText}
 							placeholder='Password'
+							onChangeText={(passwd) => this.setState({passwd})}
               placeholderTextColor="#fff"
-							onChangeText={this.onPasswordChange}
 							value={this.state.passwd}
 							selectTextOnFocus={true}
 						/>
@@ -140,24 +123,25 @@ export default class employerAuthentication extends React.Component {
 						<TextInput
 							style={styles.inputText}
 							placeholder='Email Address'
+							onChangeText={(email) => this.setState({email})}
               placeholderTextColor="#fff"
-							onChangeText={this.onEmailChange}
 							value={this.state.email}
 							selectTextOnFocus={true}
 						/>
 						<TextInput
 							style={styles.inputText}
 							placeholder='Password'
+							onChangeText={(passwd) => this.setState({passwd})}
               placeholderTextColor="#fff"
-							onChangeText={this.onPasswordChange}
 							value={this.state.passwd}
 							selectTextOnFocus={true}
 						/>
 						<TextInput
 							style={styles.inputText}
 							placeholder='Re-enter Password'
+							onChangeText={(repasswd) => this.setState({repasswd})}
+
               placeholderTextColor="#fff"
-							onChangeText={this.onRePasswordChange}
 							value={this.state.repasswd}
 							selectTextOnFocus={true}
 						/>

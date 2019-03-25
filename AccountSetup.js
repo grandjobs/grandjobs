@@ -6,18 +6,15 @@ import UserInfo from './UserInfo.js';
 
 
 export default class AccountSetup extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            phoneText: '',
             firstNameText: '',
             lastNameText: '',
             emailText: ''
         };
     }
     render() {
-		console.log(this.props)
-
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
@@ -25,14 +22,6 @@ export default class AccountSetup extends React.Component {
                     <Text style={styles.mainText}>Lets fill out some information.</Text>
                 </View>
                 <View style={styles.fillContainer}>
-                    {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
-                    {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
-                    <TextInput style={styles.inputText}
-                        keyboardType='numeric'
-                        selectTextOnFocus={true}
-                        placeholder='Phone #'
-                        onChangeText={(phoneText) => this.setState({phoneText})}
-                    />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholder='First Name (Optional)'
@@ -62,10 +51,10 @@ export default class AccountSetup extends React.Component {
 
     nextPressed(){
         var userInfo = new UserInfo();
-        userInfo.phoneNum = this.state.phoneText;
         userInfo.firstName = this.state.firstNameText;
         userInfo.lastName = this.state.lastNameText;
         userInfo.email = this.state.emailText;
+		userInfo.uid = this.props.uid;
 
         Actions.SkillPage({userInfo: userInfo});
     }

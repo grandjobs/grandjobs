@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, Dimensions } from 'react-native';
-import Button from 'react-native-button';
-import Swiper from 'react-native-swiper';
-import { Actions } from 'react-native-router-flux';
+import React, { Component } from 'react'
+import { AppRegistry, StyleSheet, Text, View, Dimensions } from 'react-native'
+import Button from 'react-native-button'
+import Swiper from 'react-native-swiper'
+import { Actions } from 'react-native-router-flux'
+import { firebase } from './db'
 
 
 export default class BusOptions extends Component {
@@ -137,7 +138,23 @@ export default class BusOptions extends Component {
 
     nextPressed(){
         this.setInfoObj();
-        Actions.UserInfoPage({userInfo: this.props.userInfo});
+		
+		let rootRef = firebase.database().ref()
+			let userRef = rootRef.child('USERS')
+			newAccountRef = userRef.child(this.props.userInfo.uid)
+			newAccountRef.set({
+				'Bus Access' : this.props.userInfo.busAccess,
+				'Email' : this.props.userInfo.email,
+				'First Name' : this.props.userInfo.firstName,
+				'Last Name' : this.props.userInfo.lastName,
+				'Home Location' : {
+					'Latitude' : this.props.userInfo.homeLat,
+					'Longitude' : this.props.userInfo.homeLong
+				},
+				'Skills' : this.props.userInfo.skills
+			})
+			
+            Actions.UserInfoPage({userInfo: this.props.userInfo});
     }
 
     setInfoObj(){

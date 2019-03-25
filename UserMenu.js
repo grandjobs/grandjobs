@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import UserInfo from './UserInfo.js';
+import { firebase } from './db'
 
 
 export default class AccountSetup extends React.Component {
@@ -18,6 +19,13 @@ export default class AccountSetup extends React.Component {
                     }}
                 />
                 <Text style={styles.largeText} onPress={()=>this.contactedPressed()}>Contacted Companies</Text>
+                <View
+                    style={{
+                        borderBottomColor: '#d6d6d6',
+                        borderBottomWidth: 1,
+                    }}
+                />
+				<Text style={styles.largeText} onPress={()=>this.onSignOut()}>Sign Out(temp)</Text>
                 <View
                     style={{
                         borderBottomColor: '#d6d6d6',
@@ -41,6 +49,16 @@ export default class AccountSetup extends React.Component {
 
     contactedPressed(){
         console.log("Contacted");
+    }
+	
+	onSignOut = async () => {
+        try {
+            await firebase.auth().signOut().then( () => {
+				Actions.StartPage()
+			});
+        } catch (e) {
+            console.warn(e)
+        }
     }
 }
 

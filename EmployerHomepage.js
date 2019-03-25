@@ -6,6 +6,7 @@ import { DrawerNavigator } from 'react-navigation';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import Drawer from 'react-native-drawer';
 import SideMenu from 'react-native-side-menu';
+import { firebase } from './db'
 
 
 
@@ -21,14 +22,34 @@ const menu = [
     id: 'four'}
 ]
 
-
-
 export default class EmployerHomepage extends React.Component {
 
     constructor(props){
         super(props);
+		    this.state = {
+          companyName: '',
+          companyLocation: '',
+        };
 
     }
+	
+	async componentWillMount() {
+		let rootRef = firebase.database().ref()
+		let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
+		
+		try {
+            userRef.once('value')
+				.then(snapshot => {
+					companyInfo = snapshot.val()
+					
+					console.log('Loaded name: ' + companyInfo['Company Name'])
+					this.setState({ companyName : companyInfo['Company Name'] })
+					this.setState({ companyLocation : companyInfo['Company Location'] })
+				})
+        } catch (e) {
+            console.warn(e)
+        }
+	}
 
     render() {
       const myMenu = <UserMenu/>;
@@ -123,18 +144,23 @@ export default class EmployerHomepage extends React.Component {
             </SideMenu>
         );
     }
-
-
-
 }
-
-
 
 class UserMenu extends React.Component{
 
   constructor(props){
       super(props);
   }
+  
+  onSignOut = async () => {
+        try {
+            await firebase.auth().signOut().then( () => {
+				Actions.StartPage()
+			});
+        } catch (e) {
+            console.warn(e)
+        }
+    }
 
   render(){
     return(
@@ -164,6 +190,7 @@ class UserMenu extends React.Component{
       </SafeAreaView>
     );
   }
+  
   onPress(item, index){
     if(index == 0){
       //home pressed
@@ -178,8 +205,7 @@ class UserMenu extends React.Component{
       Actions.EmployerCreateListing();
     }
     if(index == 3){
-      //logout pressed
-      Actions.EmployerHomepage();
+      this.onSignOut()
     }
   }
 

@@ -1,7 +1,8 @@
-import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, Slider } from 'react-native';
-import Button from 'react-native-button';
-import { Actions } from 'react-native-router-flux';
+import React from 'react'
+import { StyleSheet, Text, View, Dimensions, TextInput, Slider } from 'react-native'
+import Button from 'react-native-button'
+import { Actions } from 'react-native-router-flux'
+import { firebase } from './db'
 
 
 export default class Range extends React.Component {
@@ -49,7 +50,21 @@ export default class Range extends React.Component {
     nextPressed(){
         this.props.userInfo.homeRange = this.state.range;
         if (this.props.travelVal == 0){
-            console.log("User has a car.");
+			let rootRef = firebase.database().ref()
+			let userRef = rootRef.child('USERS')
+			newAccountRef = userRef.child(this.props.userInfo.uid)
+			newAccountRef.set({
+				'Bus Access' : this.props.userInfo.busAccess,
+				'Email' : this.props.userInfo.email,
+				'First Name' : this.props.userInfo.firstName,
+				'Last Name' : this.props.userInfo.lastName,
+				'Home Location' : {
+					'Latitude' : this.props.userInfo.homeLat,
+					'Longitude' : this.props.userInfo.homeLong
+				},
+				'Skills' : this.props.userInfo.skills
+			})
+			
             Actions.UserInfoPage({userInfo: this.props.userInfo});
         }
         else if (this.props.travelVal == 1){
