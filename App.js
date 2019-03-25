@@ -18,6 +18,11 @@ import authSol from './authSol';
 import UserInfoPage from './UserInfoPage';
 import UserHomePage from './UserHomePage';
 import JobInfoPage from './JobInfoPage';
+import seekerAuthentication from './seekerAuthentication';
+import employerAuthentication from './employerAuthentication';
+import UserInfoPage from './UserInfoPage'
+import EmployerSideReplies from './EmployerSideReplies';
+import ViewSeekerProfile from './ViewSeekerProfile';
 
 const App = () => {
     return (
@@ -37,8 +42,13 @@ const App = () => {
                     panHandlers = {null}
                 />
 				<Scene
-					key = "authTesting"
-					component = {authSol}
+					key = "seekerAuthentication"
+					component = {seekerAuthentication}
+					hideNavBar={true}
+				/>
+				<Scene
+					key = "employerAuthentication"
+					component = {employerAuthentication}
 					hideNavBar={true}
 				/>
                 <Scene
@@ -59,6 +69,20 @@ const App = () => {
                     key = "EmployerHomepage"
                     component = {EmployerHomepage}
                     title="Account"
+                    hideNavBar={true}
+                    panHandlers = {null}
+                />
+                <Scene
+                    key = "EmployerSideReplies"
+                    component = {EmployerSideReplies}
+                    title="EmployerSideReplies"
+                    hideNavBar={true}
+                    panHandlers = {null}
+                />
+                <Scene
+                    key = "ViewSeekerProfile"
+                    component = {ViewSeekerProfile}
+                    title="ViewSeekerProfile"
                     hideNavBar={true}
                     panHandlers = {null}
                 />

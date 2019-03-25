@@ -17,7 +17,7 @@ export default class AccountSetup extends React.Component {
     }
     render() {
 		console.log(this.props)
-		
+
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>

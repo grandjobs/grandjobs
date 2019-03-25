@@ -8,7 +8,7 @@ import { Actions } from 'react-native-router-flux';
 //Static webpage to hold a reCAPTCHA object
 const captchaUrl = `https://job-push-fbb6a.firebaseapp.com/captcha.html?appurl=${Linking.makeUrl('')}`
 
-export default class authSol extends React.Component {
+export default class seekerAuthentication extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -23,12 +23,12 @@ export default class authSol extends React.Component {
             this.setState({user})
         })
     }
-	
+
 	//Handles input for phone number to translate to state value
     onPhoneChange = (phone) => {
         this.setState({phone})
     }
-	
+
 	//Sends phone number to the static captch page hosted on Firebase
     onPhoneComplete = async () => {
         let token = null
@@ -57,12 +57,12 @@ export default class authSol extends React.Component {
 
         }
     }
-	
+
 	//Handles input for SMS confirmation code to translate to state value
     onCodeChange = (code) => {
         this.setState({code})
     }
-	
+
     onSignIn = async () => {
         const {confirmationResult, code} = this.state
         try {
@@ -70,12 +70,12 @@ export default class authSol extends React.Component {
         } catch (e) {
             console.warn(e)
         }
-		
+
 		//need to figure out why we reset here..I'm sure this will cause issues down the road especially
 		//with my heavy modifications to the file from its original implementation
         this.reset()
     }
-	
+
     onSignOut = async () => {
         try {
 			this.setState({ registered: undefined })
@@ -84,7 +84,7 @@ export default class authSol extends React.Component {
             console.warn(e)
         }
     }
-	
+
 	//Function to check whether a phone number has a registered account in our database
 	//and set the registered state variable appropriately
 	firebaseCheckForUser = async () => {
@@ -93,7 +93,7 @@ export default class authSol extends React.Component {
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('USERS')
 		console.log('Checking Firebase for uid ' + uid)
-		
+
 		try {
             userRef.once('value')
 				.then(snapshot => {
@@ -105,12 +105,12 @@ export default class authSol extends React.Component {
             console.warn(e)
         }
 	}
-	
+
 	//If an user is unregistered this function will direct them to the account setup flow
 	directToAccountSetup = async () => {
         Actions.AccountSetup({uid : this.state.user['uid']});
     }
-	
+
     reset = () => {
         this.setState({
             phone: '',
@@ -125,17 +125,17 @@ export default class authSol extends React.Component {
 		if (this.state.user) {
 			console.log('entering difficult stuff')
 			console.log('Registered: ' + this.state.registered)
-			
+
 			if (this.state.registered == undefined) {
 				console.log('check')
 				this.firebaseCheckForUser()
 			}
-			
+
 			//Already has an account with us
 			if (this.state.registered) {
 				if (this.state.registered == true) {
-					console.log(this.state)
-					
+					/* console.log(this.state) */
+
 					return (
 					   <View style={styles.mainContainer}>
 							<View style={styles.textContainer}>
@@ -153,12 +153,12 @@ export default class authSol extends React.Component {
 						</View>
 					)
 				}
-			} 
-			
+			}
+
 			//Does not already have an account with us
 			else if (this.state.registered == false) {
 				console.log(this.state)
-				
+
 				return (
 				   <View style={styles.mainContainer}>
 						<View style={styles.textContainer}>
@@ -183,7 +183,7 @@ export default class authSol extends React.Component {
 					</View>
 				)
 			}
-		} 
+		}
 		/* Sign in case */
 		if (!this.state.confirmationResult && !this.state.user) {
 			return (
@@ -193,9 +193,10 @@ export default class authSol extends React.Component {
 						<Text style={styles.mainText}>All you need is a phone number :)</Text>
 					</View>
 					<View style={styles.fillContainer}>
-						<TextInput 
+						<TextInput
 							style={styles.inputText}
 							placeholder='Phone Number'
+              placeholderTextColor= 'white'
 							onChangeText={this.onPhoneChange}
 							value={this.state.phone}
 							keyboardType="phone-pad"
@@ -223,9 +224,10 @@ export default class authSol extends React.Component {
 						<Text style={styles.mainText}>You should have recieved a text</Text>
 					</View>
 					<View style={styles.fillContainer}>
-						<TextInput 
+						<TextInput
 							style={styles.inputText}
 							placeholder='SMS Code'
+              placeholderTextColor= 'white'
 							onChangeText={this.onCodeChange}
 							value={this.state.code}
 							keyboardType="numeric"
@@ -267,14 +269,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Roboto-Thin'
     },
     mainText:{
         fontSize: 25,
         textAlign: 'center',
         top: 20,
         color: '#d6d6d6',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'Roboto-Thin'
     },
     inputText:{
         borderColor: '#fff',
@@ -282,7 +284,7 @@ const styles = StyleSheet.create({
         fontSize: 25,
         textAlign: 'center',
         color:'white',
-        fontFamily: 'sans-serif-thin',
+        fontFamily: 'Roboto-Thin',
         padding: 10,
         margin: 20,
         borderWidth: 1,
@@ -306,7 +308,7 @@ const styles = StyleSheet.create({
     },
     buttonDesign:{
         fontSize: 20,
-        fontFamily: 'sans-serif-thin',
+        fontFamily: 'Roboto-Thin',
         padding: 10,
         margin: 30,
         width: 150,

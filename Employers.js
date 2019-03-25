@@ -8,16 +8,15 @@ export default class Employers extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      Email: '',
       companyName: '',
       companyLocation: '',
-      Password: '',
-      confirmPassword: ''
     };
   }
 
     render() {
-        return (
+        console.log(this.props)
+
+		return (
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
                     <Text style={styles.largeText}>Awesome!</Text>
@@ -26,12 +25,7 @@ export default class Employers extends React.Component {
                 <View style={styles.fillContainer}>
                     {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
                     {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
-                    <TextInput style={styles.inputText}
-                        onChangeText={(Email) => this.setState({Email})}
-                        selectTextOnFocus={true}
-                        placeholder='Email Address'
-                        placeholderTextColor="#fff"
-                    />
+
                     <TextInput style={styles.inputText}
                         onChangeText={(companyName) => this.setState({companyName})}
                         selectTextOnFocus={true}
@@ -44,19 +38,7 @@ export default class Employers extends React.Component {
                         placeholderTextColor="#fff"
                         placeholder='Company Location'
                     />
-                    <TextInput style={styles.inputText}
-                        onChangeText={(Password) => this.setState({Password})}
-                        selectTextOnFocus={true}
-                        placeholderTextColor="#fff"
-                        placeholder='Password'
 
-                    />
-                    <TextInput style={styles.inputText}
-                        onChangeText={(confirmPassword) => this.setState({confirmPassword})}
-                        placeholderTextColor="#fff"
-                        selectTextOnFocus={true}
-                        placeholder='Confirm Password'
-                    />
                     <View style={styles.buttonContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.createPressed()}>
                     Create Account
@@ -109,12 +91,17 @@ const styles = StyleSheet.create({
     },
     buttonContainer:{
         alignItems: 'center',
-        top: Dimensions.get('window').height * 0.09
+        top: Dimensions.get('window').height * 0.15
     },
     fillContainer:{
         top: Dimensions.get('window').height * 0.15,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    bottomContainer:{
+        flex: 1,
+        justifyContent: 'flex-end',
+        marginBottom: 0
     },
     largeText:{
         fontSize: 65,
