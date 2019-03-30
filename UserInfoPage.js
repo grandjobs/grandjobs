@@ -13,6 +13,7 @@ export default class UserInfoPage extends React.Component {
     constructor(props){
         super(props);
         console.log(props.userInfo);
+        //Grab the user information to fill in the 
         phoneText = "Phone: " + props.userInfo.phoneNum + "\n";
         firstText = "First: " + props.userInfo.firstName + "\n";
         lastText = "Last: " + props.userInfo.lastName + "\n";

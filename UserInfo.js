@@ -1,5 +1,12 @@
+/*
+A class that is used to create an object that will hold all information that the
+user gives the application
+ */
 export default class UserInfo{
 
+    /**
+     * Constructor used for initializing all fields to blanks.
+     */
     constructor(){
         this.phoneNum = "";
         this.firstName = "";
