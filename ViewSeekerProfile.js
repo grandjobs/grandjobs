@@ -20,16 +20,13 @@ export default class ViewSeekerProfile extends React.Component {
                 </View>
                 <View style={styles.textContainer}>
                 <Text style={styles.descriptionText}>          </Text>
-                <Text style={styles.descriptionText}>          </Text>
                 <Text style={styles.mainText}>Phone:</Text>
                 <Text style={styles.descriptionText}>          </Text>
                 <Text style={styles.descriptionText}>616-999-9999</Text>
                 <Text style={styles.descriptionText}>          </Text>
-                <Text style={styles.descriptionText}>          </Text>
                 <Text style={styles.mainText}>Qualifications</Text>
                 <Text style={styles.descriptionText}>          </Text>
                 <Text style={styles.descriptionText}> Master's Degree in Mathematics</Text>
-                <Text style={styles.descriptionText}>          </Text>
                 <Text style={styles.descriptionText}>          </Text>
                 <Text style={styles.mainText}>Skills</Text>
                 <Text style={styles.descriptionText}>          </Text>
@@ -66,11 +63,11 @@ export default class ViewSeekerProfile extends React.Component {
     }
 
     cancelPressed(){
-      Actions.EmployerHomepage();
+      Actions.EmployerSideReplies();
 
     }
     contactPressed(){
-      Actions.EmployerHomepage();
+      Actions.EmployerSideReplies();
     }
 }
 

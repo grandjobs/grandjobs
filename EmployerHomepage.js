@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput,Platform, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, Alert, View, ScrollView, Dimensions, TextInput,Platform, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import { DrawerNavigator } from 'react-navigation';
@@ -7,6 +7,7 @@ import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 
 import Drawer from 'react-native-drawer';
 import SideMenu from 'react-native-side-menu';
 import { firebase } from './db'
+import Dialog from "react-native-dialog";
 
 
 
@@ -29,19 +30,25 @@ export default class EmployerHomepage extends React.Component {
 		    this.state = {
           companyName: '',
           companyLocation: '',
+
+
+          showLocationDialog: false,
+          showEmailDialog: false,
+          introCard: true,
+
         };
 
     }
-	
+
 	async componentWillMount() {
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
-		
+
 		try {
             userRef.once('value')
 				.then(snapshot => {
 					companyInfo = snapshot.val()
-					
+
 					console.log('Loaded name: ' + companyInfo['Company Name'])
 					this.setState({ companyName : companyInfo['Company Name'] })
 					this.setState({ companyLocation : companyInfo['Company Location'] })
@@ -55,6 +62,19 @@ export default class EmployerHomepage extends React.Component {
       const myMenu = <UserMenu/>;
               return (
             <SideMenu menu = {myMenu}>
+
+            <Dialog.Container visible={this.state.showLocationDialog}>
+                <Dialog.Title>Location</Dialog.Title>
+                <Dialog.Description>
+                Please enter your location.
+                </Dialog.Description>
+
+                <Dialog.Input placeholder="location" wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}
+                onChangeText={companyLocation => this.setState({companyLocation})}/>
+                <Dialog.Button label="Confirm " onPress={() => this.closeLocation()}/>
+                <Dialog.Button label="Cancel " onPress={() => this.closeLocation()}/>
+            </Dialog.Container>
+
                 <View style={styles.mainContainer}>
                     <View style={styles.textContainer}>
                         <Text style={styles.largeText}>Grand Jobs</Text>
@@ -62,7 +82,7 @@ export default class EmployerHomepage extends React.Component {
                     </View>
                     <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
 
-                    <Card isDark = {true} style={styles.cardStyle}>
+                    <Card isDark = {true} style={styles.cardStyle} visible={this.state.introCard}>
                         <CardTitle
                         title= "Welcome!"
                         />
@@ -71,7 +91,7 @@ export default class EmployerHomepage extends React.Component {
                         separator={false}
                         inColumn={false}>
                         <CardButton
-                        onPress={() => {}}
+                        onPress={() => this.removeIntroCard()}
                         title="Dismiss "
                         color="#a9fcd4"
                         />
@@ -80,15 +100,15 @@ export default class EmployerHomepage extends React.Component {
 
                         <Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
-                            title= "Grand Valley State University"
+                            title= "Profile"
                             />
-                            <CardContent text={"Company Location: 1 Campus Dr, Allendale, MI 49401"}/>
-                            <CardContent text={"Email: grandvalley@gvsu.edu"}/>
+                            <CardContent text={"Company Name: " + this.state.companyName}/>
+                            <CardContent text={"Location: " + this.state.companyLocation}/>
                             <CardAction
                             separator={true}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.editLocation()}
                             title="Edit "
                             color="#a9fcd4"
                             />
@@ -105,13 +125,8 @@ export default class EmployerHomepage extends React.Component {
                             separator={true}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            <CardButton
-                            onPress={() => {}}
-                            title="Dismiss "
+                            onPress={() => this.deletePosting()}
+                            title="Remove "
                             color="#a9fcd4"
                             />
                             </CardAction>
@@ -127,13 +142,8 @@ export default class EmployerHomepage extends React.Component {
                             separator={true}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            <CardButton
-                            onPress={() => {}}
-                            title="Dismiss "
+                            onPress={() => this.deletePosting()}
+                            title="Remove "
                             color="#a9fcd4"
                             />
                             </CardAction>
@@ -144,6 +154,39 @@ export default class EmployerHomepage extends React.Component {
             </SideMenu>
         );
     }
+
+    editLocation(){
+    //  console.log("hello");
+        this.setState({
+            showLocationDialog: true,
+
+        })
+
+    }
+
+    removeIntroCard(){
+      console.log("hello");
+      this.setState({
+        introCard: false,
+      })
+    }
+
+    deletePosting(){
+      Alert.alert(
+      'Delete',
+      'Are you sure you want to delete this posting?',
+      [
+        {text:'Delete',onPress:()=>console.log('delete')},
+        {text:'Cancel',onPress:()=>console.log('cancel pressed')}
+      ]
+    )
+    }
+
+    closeLocation(){
+        this.setState({
+            showLocationDialog: false,
+        })
+    }
 }
 
 class UserMenu extends React.Component{
@@ -151,7 +194,7 @@ class UserMenu extends React.Component{
   constructor(props){
       super(props);
   }
-  
+
   onSignOut = async () => {
         try {
             await firebase.auth().signOut().then( () => {
@@ -190,7 +233,7 @@ class UserMenu extends React.Component{
       </SafeAreaView>
     );
   }
-  
+
   onPress(item, index){
     if(index == 0){
       //home pressed

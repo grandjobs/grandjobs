@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput,Platform, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Alert,Dimensions, TextInput,Platform, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import { DrawerNavigator } from 'react-navigation';
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import Drawer from 'react-native-drawer';
 import SideMenu from 'react-native-side-menu';
+import { firebase } from './db';
 
 
 
@@ -60,7 +61,7 @@ export default class EmployerSideReplies extends React.Component {
                             color="#a9fcd4"
                             />
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.deleteCard()}
                             title="Dismiss "
                             color="#a9fcd4"
                             />
@@ -77,12 +78,12 @@ export default class EmployerSideReplies extends React.Component {
                             separator={true}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.viewPressed()}
                             title="View "
                             color="#a9fcd4"
                             />
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.deleteCard()}
                             title="Dismiss "
                             color="#a9fcd4"
                             alignSelf="right"
@@ -100,12 +101,12 @@ export default class EmployerSideReplies extends React.Component {
                             separator={true}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.viewPressed()}
                             title="View "
                             color="#a9fcd4"
                             />
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.deleteCard()}
                             title="Dismiss "
                             color="#a9fcd4"
                             />
@@ -122,12 +123,12 @@ export default class EmployerSideReplies extends React.Component {
                             separator={true}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.viewPressed()}
                             title="View "
                             color="#a9fcd4"
                             />
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.deleteCard()}
                             title="Dismiss "
                             color="#a9fcd4"
                             />
@@ -144,12 +145,12 @@ export default class EmployerSideReplies extends React.Component {
                             separator={true}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.viewPressed()}
                             title="View "
                             color="#a9fcd4"
                             />
                             <CardButton
-                            onPress={() => {}}
+                            onPress={() => this.deleteCard()}
                             title="Dismiss "
                             color="#a9fcd4"
                             />
@@ -164,7 +165,16 @@ export default class EmployerSideReplies extends React.Component {
         );
     }
 
-
+    deleteCard(){
+      Alert.alert(
+      'Delete',
+      'Are you sure you want to delete this reply?',
+      [
+        {text:'Delete',onPress:()=>console.log('delete')},
+        {text:'Cancel',onPress:()=>console.log('cancel pressed')}
+      ]
+    )
+    }
 
 }
 
@@ -174,6 +184,16 @@ class UserMenu extends React.Component{
   constructor(props){
       super(props);
   }
+
+  onSignOut = async () => {
+        try {
+            await firebase.auth().signOut().then( () => {
+        Actions.StartPage()
+      });
+        } catch (e) {
+            console.warn(e)
+        }
+    }
 
   render(){
     return(
@@ -218,7 +238,7 @@ class UserMenu extends React.Component{
     }
     if(index == 3){
       //logout pressed
-      Actions.EmployerHomepage();
+      this.onSignOut()
     }
   }
 }
