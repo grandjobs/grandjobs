@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions,ScrollView, TextInput, Alert, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
+import { firebase } from './db'
 
 export default class ViewSeekerProfile extends React.Component {
 

@@ -60,7 +60,8 @@ export default class EmployerHomepage extends React.Component {
 
     render() {
       const myMenu = <UserMenu/>;
-              return (
+      if (this.state.introCard){
+                      return (
             <SideMenu menu = {myMenu}>
 
             <Dialog.Container visible={this.state.showLocationDialog}>
@@ -82,7 +83,9 @@ export default class EmployerHomepage extends React.Component {
                     </View>
                     <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
 
-                    <Card isDark = {true} style={styles.cardStyle} visible={this.state.introCard}>
+
+
+                     <Card isDark = {true} style={styles.cardStyle} visible={this.state.introCard}>
                         <CardTitle
                         title= "Welcome!"
                         />
@@ -97,6 +100,8 @@ export default class EmployerHomepage extends React.Component {
                         />
                         </CardAction>
                     </Card>
+
+
 
                         <Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
@@ -154,6 +159,89 @@ export default class EmployerHomepage extends React.Component {
             </SideMenu>
         );
     }
+    else{
+      return (
+            <SideMenu menu = {myMenu}>
+
+            <Dialog.Container visible={this.state.showLocationDialog}>
+            <Dialog.Title>Location</Dialog.Title>
+            <Dialog.Description>
+            Please enter your location.
+            </Dialog.Description>
+
+            <Dialog.Input placeholder="location" wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}
+            onChangeText={companyLocation => this.setState({companyLocation})}/>
+            <Dialog.Button label="Confirm " onPress={() => this.closeLocation()}/>
+            <Dialog.Button label="Cancel " onPress={() => this.closeLocation()}/>
+            </Dialog.Container>
+
+            <View style={styles.mainContainer}>
+                <View style={styles.textContainer}>
+                    <Text style={styles.largeText}>Grand Jobs</Text>
+                    <Text style={styles.mainText}>Homepage</Text>
+                </View>
+                <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
+
+                    <Card isDark = {true} style={styles.cardStyle}>
+                        <CardTitle
+                        title= "Profile"
+                        />
+                        <CardContent text={"Company Name: " + this.state.companyName}/>
+                        <CardContent text={"Location: " + this.state.companyLocation}/>
+                        <CardAction
+                        separator={true}
+                        inColumn={false}>
+                        <CardButton
+                        onPress={() => this.editLocation()}
+                        title="Edit "
+                        color="#a9fcd4"
+                        />
+                        </CardAction>
+                    </Card>
+
+                    <Card isDark = {true} style={styles.cardStyle}>
+                        <CardTitle
+                        title= "New Listing"
+                        />
+                        <CardContent text={"Job Title: Professor"}/>
+                        <CardContent text={"Job Location: 1 Campus Dr, Allendale, MI 49401"}/>
+                        <CardAction
+                        separator={true}
+                        inColumn={false}>
+                        <CardButton
+                        onPress={() => this.deletePosting()}
+                        title="Remove "
+                        color="#a9fcd4"
+                        />
+                        </CardAction>
+                    </Card>
+
+                    <Card isDark = {true} style={styles.cardStyle}>
+                        <CardTitle
+                        title= "New Listing"
+                        />
+                        <CardContent text={"Job Title: Network Administrator"}/>
+                        <CardContent text={"Job Location: 1 Campus Dr, Allendale, MI 49401"}/>
+                        <CardAction
+                        separator={true}
+                        inColumn={false}>
+                        <CardButton
+                        onPress={() => this.deletePosting()}
+                        title="Remove "
+                        color="#a9fcd4"
+                        />
+                        </CardAction>
+                    </Card>
+
+                </ScrollView>
+            </View>
+            </SideMenu>
+            );
+
+    }
+
+  }
+
 
     editLocation(){
     //  console.log("hello");
@@ -187,6 +275,8 @@ export default class EmployerHomepage extends React.Component {
             showLocationDialog: false,
         })
     }
+
+
 }
 
 class UserMenu extends React.Component{

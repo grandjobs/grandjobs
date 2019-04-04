@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Dimensions, TextInput, Alert, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
+import { firebase } from './db'
 
 export default class EmployerCreateListing extends React.Component {
 
@@ -14,6 +15,8 @@ export default class EmployerCreateListing extends React.Component {
       addtionalDetails: ''
     };
   }
+
+
 
     render() {
         return (
@@ -77,9 +80,34 @@ export default class EmployerCreateListing extends React.Component {
         ]
       )
     }
-    createPressed(){
-      Actions.EmployerHomepage();
+
+      checkListingForm(){
+      if (this.state.jobTitle != "" && this.state.jobLocation != "" && this.state.jobDetails != "" && this.state.additionalDetails != "") {
+        let rootRef = firebase.database().ref()
+    //    let employerRef = rootRef.child('EMPLOYERS LISTING')
+        let userRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS')
+    //    newAccountRef = employerRef.child(this.props.uid)
+        userRef.set({'Job Title' : this.state.jobTitle, 'Job Location' : this.state.jobLocation, 'Job Details' : this.state.jobDetails, 'Job Addtional Details' : this.state.jobadditionalDetails})
+        Actions.EmployerHomepage();
+      } else{
+        Alert.alert(
+          'Please fill all forms.'
+        )
+        console.log("error");
+      }
     }
+
+    createPressed(){
+      Alert.alert(
+			'Confirm Information',
+			'Create Listing?',
+			[
+				{text:'OK',onPress:()=>this.checkListingForm()},
+				{text:'Cancel',onPress:()=>console.log('cancel pressed')}
+			]
+		)
+    }
+
 }
 
 const styles = StyleSheet.create({
