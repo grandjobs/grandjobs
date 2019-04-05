@@ -23,18 +23,20 @@ const menu = [
     id: 'four'}
 ]
 
+let arr = [];
+
 export default class EmployerHomepage extends React.Component {
 
     constructor(props){
         super(props);
+
+
 		    this.state = {
           companyName: '',
           companyLocation: '',
-
-          jobInfo: {},
+          refresh: false,
           showLocationDialog: false,
           showEmailDialog: false,
-          introCard: true,
 
         };
 
@@ -59,25 +61,21 @@ export default class EmployerHomepage extends React.Component {
 
 
       try{
-        //    let rootRef = firebase.database().ref()
     let employerJobRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS')
     if (employerJobRef != undefined) {
       employerJobRef.once('value')
       	.then(snapshot => {
         	let jobs = snapshot.val()
-        //  var size = Object.keys(jobs).length;
 
-        //  for(var i = 0; i < size; i++){
-          //  console.log(jobs[i]['Job Title']);
-        //  }
+        Object.keys(jobs).forEach(key=>{
+          //have to figure out how to add this key when pushing to array
+          console.log(key);
 
-          this.setState({jobInfo: jobs})
-
-
-          console.log(this.state.jobInfo);
-    //      console.log(this.state.jobInfo['JobTitle']);
+          arr.push(jobs[key]);
+        })
 
 
+        console.log(arr);
     	})
 
     }
@@ -88,115 +86,21 @@ export default class EmployerHomepage extends React.Component {
 
 }
 
+fbPush(){
+console.log(this.state.companyLocation);
+let rootRef = firebase.database().ref();
+let userRef = rootRef.child('EMPLOYERS');
+    //TODO: Get UID from props?
+EmployerAccountRef = userRef.child(this.props.uid);
+EmployerAccountRef.update({
+  'Company Location' : this.state.companyLocation,
+});
+}
+
 
 
     render() {
       const myMenu = <UserMenu/>;
-
-      const { jobInfo } = this.state;
-
-
-
-      if (this.state.introCard){
-                      return (
-            <SideMenu menu = {myMenu}>
-
-            <Dialog.Container visible={this.state.showLocationDialog}>
-                <Dialog.Title>Location</Dialog.Title>
-                <Dialog.Description>
-                Please enter your location.
-                </Dialog.Description>
-
-                <Dialog.Input placeholder="location" wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}
-                onChangeText={companyLocation => this.setState({companyLocation})}/>
-                <Dialog.Button label="Confirm " onPress={() => this.closeLocation()}/>
-                <Dialog.Button label="Cancel " onPress={() => this.closeLocation()}/>
-            </Dialog.Container>
-
-                <View style={styles.mainContainer}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.largeText}>Grand Jobs</Text>
-                        <Text style={styles.mainText}>Homepage</Text>
-                    </View>
-                    <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
-
-
-
-                     <Card isDark = {true} style={styles.cardStyle} visible={this.state.introCard}>
-                        <CardTitle
-                        title= "Welcome!"
-                        />
-                        <CardContent text={"All notifications will show up here. Swipe right for more options."}/>
-                        <CardAction
-                        separator={false}
-                        inColumn={false}>
-                        <CardButton
-                        onPress={() => this.removeIntroCard()}
-                        title="Dismiss "
-                        color="#a9fcd4"
-                        />
-                        </CardAction>
-                    </Card>
-
-
-
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "Profile"
-                            />
-                            <CardContent text={"Company Name: " + this.state.companyName}/>
-                            <CardContent text={"Location: " + this.state.companyLocation}/>
-                            <CardAction
-                            separator={true}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => this.editLocation()}
-                            title="Edit "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
-
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "New Listing"
-                            />
-                            <CardContent text={"Job Title: Professor"}/>
-                            <CardContent text={"Job Location: 1 Campus Dr, Allendale, MI 49401"}/>
-                            <CardAction
-                            separator={true}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => this.deletePosting()}
-                            title="Remove "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
-
-                        <Card isDark = {true} style={styles.cardStyle}>
-                            <CardTitle
-                            title= "New Listing"
-                            />
-                            <CardContent text={"Job Title: Network Administrator"}/>
-                            <CardContent text={"Job Location: 1 Campus Dr, Allendale, MI 49401"}/>
-                            <CardAction
-                            separator={true}
-                            inColumn={false}>
-                            <CardButton
-                            onPress={() => this.deletePosting()}
-                            title="Remove "
-                            color="#a9fcd4"
-                            />
-                            </CardAction>
-                        </Card>
-
-                    </ScrollView>
-                </View>
-            </SideMenu>
-        );
-    }
-    else{
       return (
             <SideMenu menu = {myMenu}>
 
@@ -208,7 +112,7 @@ export default class EmployerHomepage extends React.Component {
 
             <Dialog.Input placeholder="location" wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}
             onChangeText={companyLocation => this.setState({companyLocation})}/>
-            <Dialog.Button label="Confirm " onPress={() => this.closeLocation()}/>
+            <Dialog.Button label="Confirm " onPress={() => this.confirmLocationEdit()}/>
             <Dialog.Button label="Cancel " onPress={() => this.closeLocation()}/>
             </Dialog.Container>
 
@@ -236,52 +140,48 @@ export default class EmployerHomepage extends React.Component {
                         </CardAction>
                     </Card>
 
-                    <Card isDark = {true} style={styles.cardStyle}>
-                        <CardTitle
-                        title= "New Listing"
-                        />
-                        <CardContent text={"Job Title: Professor"}/>
-                        <CardContent text={"Job Location: 1 Campus Dr, Allendale, MI 49401"}/>
-                        <CardAction
-                        separator={true}
-                        inColumn={false}>
-                        <CardButton
-                        onPress={() => this.deletePosting()}
-                        title="Remove "
-                        color="#a9fcd4"
-                        />
-                        </CardAction>
-                    </Card>
-
-                    <Card isDark = {true} style={styles.cardStyle}>
-                        <CardTitle
-                        title= "New Listing"
-                        />
-                        <CardContent text={"Job Title: Network Administrator"}/>
-                        <CardContent text={"Job Location: 1 Campus Dr, Allendale, MI 49401"}/>
-                        <CardAction
-                        separator={true}
-                        inColumn={false}>
-                        <CardButton
-                        onPress={() => this.deletePosting()}
-                        title="Remove "
-                        color="#a9fcd4"
-                        />
-                        </CardAction>
-                    </Card>
+                    {this.renderJobCards()}
 
                 </ScrollView>
             </View>
             </SideMenu>
             );
+  }
+
+  renderJobCards(){
+
+    var elements = [];
+
+
+    for(let i = 0; i < arr.length; i++){
+
+
+      elements.push(<Card isDark = {true} style={styles.cardStyle}>
+          <CardTitle
+          title= "Created Listing"/>
+          <CardContent text={"Job Title: " + arr[i]['JobTitle']}/>
+          <CardContent text={"Job Location: " + arr[i]['JobLocation']}/>
+          <CardAction
+          separator={true}
+          inColumn={false}>
+          <CardButton
+          onPress={() => this.deletePosting()}
+          title="Remove "
+          color="#a9fcd4"
+          />
+          </CardAction>
+      </Card>);
 
     }
+
+    return(
+      elements
+    );
 
   }
 
 
     editLocation(){
-    //  console.log("hello");
         this.setState({
             showLocationDialog: true,
 
@@ -289,22 +189,41 @@ export default class EmployerHomepage extends React.Component {
 
     }
 
-    removeIntroCard(){
-      console.log("hello");
-      this.setState({
-        introCard: false,
-      })
-    }
 
     deletePosting(){
       Alert.alert(
       'Delete',
       'Are you sure you want to delete this posting?',
       [
-        {text:'Delete',onPress:()=>console.log('delete')},
+        {text:'Delete',onPress:()=>this.confirmDelete()},
         {text:'Cancel',onPress:()=>console.log('cancel pressed')}
       ]
     )
+    }
+
+    confirmDelete(){
+      //is not causing a page refresh
+      this.deleteCardFB();
+      this.setState({
+          refresh: true,
+
+      })
+    }
+
+    deleteCardFB(){
+
+      let rootRef = firebase.database().ref();
+      rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').child('-Lbigz3Nr_H4Ot10ph2c').remove();
+
+    }
+
+
+
+    confirmLocationEdit(){
+      this.fbPush();
+      this.setState({
+          showLocationDialog: false,
+      })
     }
 
     closeLocation(){

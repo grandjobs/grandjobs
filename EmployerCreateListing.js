@@ -82,7 +82,7 @@ export default class EmployerCreateListing extends React.Component {
     }
 
       checkListingForm(){
-      if (this.state.jobTitle != "" && this.state.jobLocation != "" && this.state.jobDetails != "" && this.state.additionalDetails != "") {
+      if (this.state.jobTitle != "" && this.state.jobLocation != "" && this.state.jobDetails != "" && this.state.JobAddtionalDetails != "") {
 
         let rootRef = firebase.database().ref()
           console.log(this.props.uid);
