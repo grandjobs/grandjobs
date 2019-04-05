@@ -58,9 +58,8 @@ export default class Employers extends React.Component {
 		if (this.state.companyName != "" && this.state.companyLocation != "") {
 			let rootRef = firebase.database().ref()
 			let employerRef = rootRef.child('EMPLOYERS')
-			newAccountRef = employerRef.child(this.props.uid)
-			newAccountRef.set({'Company Name' : this.state.companyName, 'Company Location' : this.state.companyLocation})
-			Actions.EmployerHomepage();
+			newAccountRef = employerRef.child(this.props.uid).set({'Company Name' : this.state.companyName, 'Company Location' : this.state.companyLocation})
+			Actions.EmployerHomepage({uid : this.state.user['uid']});
 		} else{
 			Alert.alert(
 				'Please fill all forms.'

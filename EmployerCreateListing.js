@@ -83,13 +83,19 @@ export default class EmployerCreateListing extends React.Component {
 
       checkListingForm(){
       if (this.state.jobTitle != "" && this.state.jobLocation != "" && this.state.jobDetails != "" && this.state.additionalDetails != "") {
+
         let rootRef = firebase.database().ref()
+          console.log(this.props.uid);
     //    let employerRef = rootRef.child('EMPLOYERS LISTING')
-        let userRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS')
-    //    newAccountRef = employerRef.child(this.props.uid)
-        userRef.set({'Job Title' : this.state.jobTitle, 'Job Location' : this.state.jobLocation, 'Job Details' : this.state.jobDetails, 'Job Addtional Details' : this.state.jobadditionalDetails})
-        Actions.EmployerHomepage();
-      } else{
+    let employerRef = rootRef.child('EMPLOYERS').child('QT41NaRkMjR55kqzIh5Dj4vIXdv2').child('JOBS').push()
+    .set({'JobTitle' : this.state.jobTitle,
+    'JobLocation' : this.state.jobLocation,
+    'JobDetails' : this.state.jobDetails,
+    'JobAddtionalDetails' : this.state.additionalDetails})
+    Actions.EmployerHomepage();
+      }
+
+       else{
         Alert.alert(
           'Please fill all forms.'
         )

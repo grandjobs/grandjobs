@@ -31,7 +31,7 @@ export default class EmployerHomepage extends React.Component {
           companyName: '',
           companyLocation: '',
 
-
+          jobInfo: {},
           showLocationDialog: false,
           showEmailDialog: false,
           introCard: true,
@@ -40,7 +40,7 @@ export default class EmployerHomepage extends React.Component {
 
     }
 
-	async componentWillMount() {
+	async componentDidMount() {
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
 
@@ -56,10 +56,47 @@ export default class EmployerHomepage extends React.Component {
         } catch (e) {
             console.warn(e)
         }
-	}
+
+
+      try{
+        //    let rootRef = firebase.database().ref()
+    let employerJobRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS')
+    if (employerJobRef != undefined) {
+      employerJobRef.once('value')
+      	.then(snapshot => {
+        	let jobs = snapshot.val()
+        //  var size = Object.keys(jobs).length;
+
+        //  for(var i = 0; i < size; i++){
+          //  console.log(jobs[i]['Job Title']);
+        //  }
+
+          this.setState({jobInfo: jobs})
+
+
+          console.log(this.state.jobInfo);
+    //      console.log(this.state.jobInfo['JobTitle']);
+
+
+    	})
+
+    }
+  }
+  catch (e) {
+      console.warn(e)
+  }
+
+}
+
+
 
     render() {
       const myMenu = <UserMenu/>;
+
+      const { jobInfo } = this.state;
+
+
+
       if (this.state.introCard){
                       return (
             <SideMenu menu = {myMenu}>
