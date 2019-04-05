@@ -6,8 +6,7 @@ import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 
 import SideMenu from 'react-native-side-menu';
 import JobInfo from './JobInfo.js';
 import UserMenu from "./UserMenu";
-
-
+import Swiper from 'react-native-swiper';
 
 export default class UserHomePage extends React.Component {
 
@@ -23,7 +22,6 @@ export default class UserHomePage extends React.Component {
         tempJob.description.push("Markets programs and facilities by preparing and providing informational brochures; writing and placing advertisements; answering questions; conducting tours.");
         tempJob.description.push("Obtains applicant information by requesting completed applications and medical information; verifying and clarifying information ; interviewing patients and family members; explaining admission criteria.");
         tempJob.description.push("Screens patients by comparing patient's condition to admission criteria; evaluating and accepting or rejecting patients; referring patients and family to other programs and institutions.");
-
 
         this.allJobs = [];
         this.allJobs.push(tempJob);
@@ -47,7 +45,8 @@ export default class UserHomePage extends React.Component {
                     </View>
 
                     {/*Make the cards view scrollable so we can reach the cards that will be rendered
-                    off screen*/}
+                    off screen. Also map the cards to entries that we pull from
+                    the database.*/}
                     <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
                     {
                         this.allJobs.map(( item, key ) =>
@@ -77,6 +76,7 @@ export default class UserHomePage extends React.Component {
         );
     }
 
+    //Handle the press of the card and send to the job info page.
     cardPressed(jobInfo){
         console.log("Pressed");
         Actions.JobInfoPage({jobInfo: jobInfo});

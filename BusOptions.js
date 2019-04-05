@@ -165,22 +165,22 @@ export default class BusOptions extends Component {
 
         //The public transport user is now done, so add the to firebase.
 		let rootRef = firebase.database().ref()
-			let userRef = rootRef.child('USERS')
-			newAccountRef = userRef.child(this.props.userInfo.uid)
-			newAccountRef.set({
-				'Bus Access' : this.props.userInfo.busAccess,
-				'Email' : this.props.userInfo.email,
-				'First Name' : this.props.userInfo.firstName,
-				'Last Name' : this.props.userInfo.lastName,
-				'Home Location' : {
-					'Latitude' : this.props.userInfo.homeLat,
-					'Longitude' : this.props.userInfo.homeLong
-				},
-				'Skills' : this.props.userInfo.skills
-			})
+		let userRef = rootRef.child('USERS')
+		newAccountRef = userRef.child(this.props.userInfo.uid)
+		newAccountRef.set({
+			'Bus Access' : this.props.userInfo.busAccess,
+			'Email' : this.props.userInfo.email,
+			'First Name' : this.props.userInfo.firstName,
+			'Last Name' : this.props.userInfo.lastName,
+			'Home Location' : {
+				'Latitude' : this.props.userInfo.homeLat,
+				'Longitude' : this.props.userInfo.homeLong
+			},
+			'Skills' : this.props.userInfo.skills
+		})
 
-            //Head to the main page.
-            Actions.UserInfoPage({userInfo: this.props.userInfo});
+        //Head to the main page.
+        Actions.UserInfoPage({userInfo: this.props.userInfo});
     }
 
     /**
