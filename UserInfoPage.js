@@ -102,7 +102,7 @@ export default class UserInfoPage extends React.Component {
         //Load in the menu.
         const menu = <UserMenu/>;
         return (
-            <SideMenu menu={menu} bounceBackOnOverdraw={false}>
+            <SideMenu menu={menu} bounceBackOnOverdraw={false} edgeHitWidth={Dimensions.get('window').width}>
                 {/*Dialog box for the user editing the first name*/}
                 <Dialog.Container visible={this.state.showFirstDialog}>
                     <Dialog.Title>First Name</Dialog.Title>
@@ -319,7 +319,7 @@ export default class UserInfoPage extends React.Component {
      */
     editBusRoutes(){
         tempObj = new UserInfo();
-        tempObj.busAccess = this.firebaseUser['Bus Access'];
+        tempObj.busAccess = this.firebaseUser['Travel']['Bus Routes'];
         console.log(tempObj.busAccess);
         Actions.BusPage({userInfo: tempObj, editing: true});
     }
