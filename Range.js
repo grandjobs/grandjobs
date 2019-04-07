@@ -54,7 +54,10 @@ export default class Range extends React.Component {
 			let userRef = rootRef.child('USERS')
 			newAccountRef = userRef.child(this.props.userInfo.uid)
 			newAccountRef.set({
-				'Bus Access' : this.props.userInfo.busAccess,
+				'Travel' : {
+					'Type': 'car',
+					'Range': this.props.userInfo.homeRange
+				},
 				'Email' : this.props.userInfo.email,
 				'First Name' : this.props.userInfo.firstName,
 				'Last Name' : this.props.userInfo.lastName,

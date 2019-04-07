@@ -138,15 +138,17 @@ export default class BusOptions extends Component {
 
     nextPressed(){
         this.setInfoObj();
-		console.log(this.user)
 		console.log(this.props.userInfo)
-		this.props.userInfo.phoneNum = '+17086634507'
 		
 		let rootRef = firebase.database().ref()
 			let userRef = rootRef.child('USERS')
 			newAccountRef = userRef.child(this.props.userInfo.uid)
 			newAccountRef.set({
-				'Bus Access' : this.props.userInfo.busAccess,
+				'Travel' : {
+					'Type': 'public',
+					'Bus Routes': this.props.userInfo.busAccess,
+					'Range': this.props.userInfo.homeRange
+				},
 				'Email' : this.props.userInfo.email,
 				'First Name' : this.props.userInfo.firstName,
 				'Last Name' : this.props.userInfo.lastName,
@@ -155,7 +157,7 @@ export default class BusOptions extends Component {
 					'Longitude' : this.props.userInfo.homeLong
 				},
 				'Skills' : this.props.userInfo.skills,
-				'Phone Number': this.props.userInfo.phone
+				'Phone Number': this.props.userInfo.phoneNum
 			})
 			
             Actions.UserHomePage({uid: this.props.userInfo.uid});
