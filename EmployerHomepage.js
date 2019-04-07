@@ -30,12 +30,14 @@ export default class EmployerHomepage extends React.Component {
 
     constructor(props){
         super(props);
+        arr = [];
+        key_arr = [];
 
 
 		    this.state = {
           companyName: '',
           companyLocation: '',
-          refresh: false,
+          refresh: true,
           showLocationDialog: false,
           showEmailDialog: false,
 
@@ -103,7 +105,9 @@ EmployerAccountRef.update({
 
 
     render() {
+      const {refresh} = this.state;
       const myMenu = <UserMenu uid={this.props.uid}/>;
+
       return (
             <SideMenu menu = {myMenu}>
 
@@ -149,7 +153,8 @@ EmployerAccountRef.update({
             </View>
             </SideMenu>
             );
-  }
+
+}
 
   renderJobCards(){
 
@@ -212,10 +217,12 @@ EmployerAccountRef.update({
       rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').child(key_arr[id]).remove();
       key_arr.splice(id,1);
       console.log(key_arr);
-      this.setState({
-          refresh: true,
 
-      })
+      // this.setState({
+      //     refresh: true,
+      //
+      // })
+
 
     }
 
