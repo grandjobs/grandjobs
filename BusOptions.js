@@ -154,10 +154,11 @@ export default class BusOptions extends Component {
 					'Latitude' : this.props.userInfo.homeLat,
 					'Longitude' : this.props.userInfo.homeLong
 				},
-				'Skills' : this.props.userInfo.skills
+				'Skills' : this.props.userInfo.skills,
+				'Phone Number': this.props.userInfo.phone
 			})
 			
-            Actions.UserInfoPage({userInfo: this.props.userInfo});
+            Actions.UserHomePage({uid: this.props.userInfo.uid});
     }
 
     setInfoObj(){

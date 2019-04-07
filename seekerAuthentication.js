@@ -84,7 +84,7 @@ export default class seekerAuthentication extends React.Component {
 
 	//If an user is unregistered this function will direct them to the account setup flow
 	directToAccountSetup = async () => {
-        Actions.AccountSetup({uid : this.state.user['uid']});
+        Actions.AccountSetup({uid : this.state.user['uid'], phone : this.state.user['phoneNumber']});
     }
   
 	//Function to check whether a phone number has a registered account in our database
@@ -98,10 +98,7 @@ export default class seekerAuthentication extends React.Component {
 				userRef.once('value')
 					.then(snapshot => {
 						if(snapshot.child(uid).exists()) {
-							var userInfo = new UserInfo();
-							
-							//user home page
-							Actions.UserHomePage({'userInfo': userInfo});
+							Actions.UserHomePage({'uid': uid});
 						}
 					})
 			} catch (e) {

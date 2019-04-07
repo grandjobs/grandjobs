@@ -43,6 +43,7 @@ export default class EmployerHomepage extends React.Component {
     }
 
 	async componentDidMount() {
+		console.log(this.state.user)
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
 
@@ -100,7 +101,7 @@ EmployerAccountRef.update({
 
 
     render() {
-      const myMenu = <UserMenu/>;
+      const myMenu = <UserMenu uid={this.props.uid}/>;
       return (
             <SideMenu menu = {myMenu}>
 
@@ -291,7 +292,7 @@ class UserMenu extends React.Component{
     }
     if(index == 2){
       //create pressed
-      Actions.EmployerCreateListing();
+      Actions.EmployerCreateListing({uid: this.props.uid});
     }
     if(index == 3){
       this.onSignOut()

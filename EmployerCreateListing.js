@@ -85,15 +85,16 @@ export default class EmployerCreateListing extends React.Component {
       if (this.state.jobTitle != "" && this.state.jobLocation != "" && this.state.jobDetails != "" && this.state.JobAddtionalDetails != "") {
 
         let rootRef = firebase.database().ref()
-          console.log(this.props.uid);
-    //    let employerRef = rootRef.child('EMPLOYERS LISTING')
-    let employerRef = rootRef.child('EMPLOYERS').child('QT41NaRkMjR55kqzIh5Dj4vIXdv2').child('JOBS').push()
-    .set({'JobTitle' : this.state.jobTitle,
-    'JobLocation' : this.state.jobLocation,
-    'JobDetails' : this.state.jobDetails,
-    'JobAddtionalDetails' : this.state.additionalDetails})
-    Actions.EmployerHomepage();
-      }
+        
+		let employerRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').push().set({
+			'JobTitle' : this.state.jobTitle,
+			'JobLocation' : this.state.jobLocation,
+			'JobDetails' : this.state.jobDetails,
+			'JobAddtionalDetails' : this.state.additionalDetails
+		})
+		
+		Actions.EmployerHomepage({uid: this.props.uid});
+	}
 
        else{
         Alert.alert(

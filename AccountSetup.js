@@ -51,6 +51,7 @@ export default class AccountSetup extends React.Component {
 
     nextPressed(){
         var userInfo = new UserInfo();
+		userInfo.phoneNum = this.props.phone
         userInfo.firstName = this.state.firstNameText;
         userInfo.lastName = this.state.lastNameText;
         userInfo.email = this.state.emailText;

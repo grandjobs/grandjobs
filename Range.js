@@ -62,7 +62,8 @@ export default class Range extends React.Component {
 					'Latitude' : this.props.userInfo.homeLat,
 					'Longitude' : this.props.userInfo.homeLong
 				},
-				'Skills' : this.props.userInfo.skills
+				'Skills' : this.props.userInfo.skills,
+				'Phone Number': this.props.userInfo.phoneNum
 			})
 			
             Actions.UserHomePage({userInfo: this.props.userInfo});
