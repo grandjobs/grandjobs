@@ -167,7 +167,7 @@ export default class BusOptions extends Component {
         //The public transport user is now done, so add the to firebase.
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('USERS')
-		newAccountRef = userRef.child("XskmWu729ZTdSGqzqWcoGohmSuu1")
+		newAccountRef = userRef.child(global.GloablUID)
         if (!this.props.editing){
             newAccountRef.set({
 				'Travel' : {
@@ -187,13 +187,13 @@ export default class BusOptions extends Component {
 			})
         }
         else{
-            newAccountRef.update({
-    			'Bus Access' : this.props.userInfo.busAccess,
+            newAccountRef.child('Travel').update({
+				'Bus Routes': this.props.userInfo.busAccess
     		})
         }
 
         //Head to the main page.
-        Actions.UserInfoPage({uid: this.props.userInfo.uid});
+        Actions.UserInfoPage();
     }
 
     /**

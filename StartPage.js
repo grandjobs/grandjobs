@@ -19,7 +19,7 @@ export default class StartPage extends React.Component {
 				var uid = this.state.user['uid']
 				let rootRef = firebase.database().ref()
 				console.log('Checking Firebase for uid ' + uid)
-
+                global.GloablUID = uid;
 				try {
 					rootRef.once('value')
 						.then(snapshot => {

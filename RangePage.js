@@ -82,7 +82,7 @@ export default class Range extends React.Component {
 			})
 
             //Actually launch to the hompage along with passing the user info object.
-            Actions.UserHomePage({userInfo: this.props.userInfo});
+            Actions.UserHomePage();
         }
         //If the user has access to public transportation, then we move on to bus access.
         else if (this.props.travelVal == 1){

@@ -44,8 +44,7 @@ export default class UserInfoPage extends React.Component {
     fbPull(){
         let rootRef = firebase.database().ref();
         //TODO: Get UID from props.
-        let userRef = rootRef.child('USERS').child("XskmWu729ZTdSGqzqWcoGohmSuu1");
-
+        let userRef = rootRef.child('USERS').child(global.GloablUID);
         try {
             userRef.once('value')
             .then(snapshot => {
@@ -64,12 +63,12 @@ export default class UserInfoPage extends React.Component {
                 }
 
                 busInfoText = "";
-                for (var i = 0; i < this.firebaseUser['Bus Access'].length; i++){
-                    if (i < this.firebaseUser['Bus Access'].length - 1){
-                        busInfoText += this.firebaseUser['Bus Access'][i] + ", ";
+                for (var i = 0; i < this.firebaseUser['Travel']['Bus Routes'].length; i++){
+                    if (i <  this.firebaseUser['Travel']['Bus Routes'].length - 1){
+                        busInfoText +=  this.firebaseUser['Travel']['Bus Routes'][i] + ", ";
                     }
                     else{
-                        busInfoText += this.firebaseUser['Bus Access'][i];
+                        busInfoText +=  this.firebaseUser['Travel']['Bus Routes'][i];
                     }
                 }
 
@@ -77,6 +76,7 @@ export default class UserInfoPage extends React.Component {
                     firstName : this.firebaseUser['First Name'],
                     lastName : this.firebaseUser['Last Name'],
                     email : this.firebaseUser['Email'],
+                    phoneNum: this.firebaseUser['Phone Number'],
                     skills: skillInfoText,
                     busRoutes: busInfoText,
                 });
@@ -90,7 +90,7 @@ export default class UserInfoPage extends React.Component {
         let rootRef = firebase.database().ref();
 		let userRef = rootRef.child('USERS');
         //TODO: Get UID from props?
-		newAccountRef = userRef.child("XskmWu729ZTdSGqzqWcoGohmSuu1");
+		newAccountRef = userRef.child(global.GloablUID);
 		newAccountRef.update({
 			'Email' : this.state.email,
 			'First Name' : this.state.firstName,
@@ -154,7 +154,7 @@ export default class UserInfoPage extends React.Component {
                             style={{fontSize:50}}
                             title= "Phone Number"
                             />
-                            <CardContent style={{fontSize:50}} text={"NEEDS TO BE ADDED TO FB"}/>
+                            <CardContent style={{fontSize:50}} text={this.state.phoneNum}/>
                             <CardAction
                             separator={true}
                             inColumn={false}>
