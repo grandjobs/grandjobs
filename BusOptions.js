@@ -31,12 +31,24 @@ export default class BusOptions extends Component {
         //Routes that the user actually selects.
         this.userList= [];
 
+        //State to hold the user and bus list.
         this.state={
             busList: this.busList,
             userList: this.userList,
         }
+
+        this.buttonText = "Next";
+        if(props.editing){
+            this.buttonText = "Confirm";
+        }
     }
 
+    /**
+     * Used for when the user goes back to edit the bus information. Wait for the
+     * component to mount and then auto select the routes that they already have
+     * selected.
+     * @return {Promise} [description]
+     */
     async componentDidMount() {
         this.busAccessCopy = this.props.userInfo.busAccess;
         this.props.userInfo.busAccess = [];
@@ -66,7 +78,7 @@ export default class BusOptions extends Component {
 
                 <View style={styles.bottomContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.nextPressed()}>
-                    Next
+                    {this.buttonText}
                     </Button>
                 </View>
             </View>
@@ -97,10 +109,6 @@ export default class BusOptions extends Component {
     /**
      * Set the state to the newly updated list.
      *
-     * (Apparently this is the proper way to do this. I guess you're not
-     * allowed to modify the index of the state, so you have to reset the entire
-     * variable)
-     *
      * https://reactjs.org/docs/react-component.html#state
      * https://stackoverflow.com/questions/42029477/how-to-update-array-state-in-react-native/42029551
      */
@@ -111,6 +119,10 @@ export default class BusOptions extends Component {
         })
     }
 
+    /**
+     * Remove the label from the userlist that the user selects.
+     * @param  {[type]} l label content
+     */
     removeUserLabel(l){
         for (var i = 0; i < this.userList.length; i++){
             if (this.userList[i].label.localeCompare(l) == 0){
@@ -118,15 +130,24 @@ export default class BusOptions extends Component {
                 break;
             }
         }
+        //Update the state after the label has been remvoed from the list.
         this.updateState();
     }
 
+    /**
+     * Auto select labels for the user (Used for when the user goes back to edit).
+     */
     selectUserLabels(){
         for (var i = 0; i < this.busAccessCopy.length; i++){
             this.labelSelected(this.getLabelIndex(this.busAccessCopy[i]));
         }
     }
 
+    /**
+     * Get the index in the list that some label is sitting at
+     * @param  {[type]} l Label value to search for.
+     * @return {[type]}   index of where the label sits at.
+     */
     getLabelIndex(l){
         for (var i = 0; i < this.busList.length; i++){
             if (this.busList[i].label.localeCompare(l) == 0){
@@ -136,14 +157,19 @@ export default class BusOptions extends Component {
         }
     }
 
+    /**
+     * Handle the press of the next button.
+     */
     nextPressed(){
+
+        //Update the state of the userinfo object.
         this.setInfoObj();
-		console.log(this.props.userInfo)
-		
+        //The public transport user is now done, so add the to firebase.
 		let rootRef = firebase.database().ref()
-			let userRef = rootRef.child('USERS')
-			newAccountRef = userRef.child(this.props.userInfo.uid)
-			newAccountRef.set({
+		let userRef = rootRef.child('USERS')
+		newAccountRef = userRef.child("XskmWu729ZTdSGqzqWcoGohmSuu1")
+        if (!this.props.editing){
+            newAccountRef.set({
 				'Travel' : {
 					'Type': 'public',
 					'Bus Routes': this.props.userInfo.busAccess,
@@ -159,10 +185,20 @@ export default class BusOptions extends Component {
 				'Skills' : this.props.userInfo.skills,
 				'Phone Number': this.props.userInfo.phoneNum
 			})
-			
-            Actions.UserHomePage({uid: this.props.userInfo.uid});
+        }
+        else{
+            newAccountRef.update({
+    			'Bus Access' : this.props.userInfo.busAccess,
+    		})
+        }
+
+        //Head to the main page.
+        Actions.UserInfoPage({uid: this.props.userInfo.uid});
     }
 
+    /**
+     * Update the user info object with the selected bus values.
+     */
     setInfoObj(){
         for (var i = 0; i < this.userList.length; i++){
             this.props.userInfo.busAccess.push(this.userList[i].label);

@@ -12,7 +12,7 @@ import EmployerCreateListing from './EmployerCreateListing';
 import Drawer from 'react-native-drawer';
 import MapsPage from './MapsPage';
 import TransportType from './TransportType';
-import RangePage from './Range';
+import RangePage from './RangePage';
 import BusPage from './BusOptions';
 import UserInfoPage from './UserInfoPage';
 import UserHomePage from './UserHomePage';

@@ -43,14 +43,14 @@ export default class AccountSetup extends React.Component {
     }
 
     infoPressed(){
-        console.log("Info");
-        // Actions.UserInfoPage();
+        // console.log("Info");
+        Actions.UserInfoPage();
     }
 
     contactedPressed(){
         console.log("Contacted");
     }
-	
+
 	onSignOut = async () => {
         try {
             await firebase.auth().signOut().then( () => {

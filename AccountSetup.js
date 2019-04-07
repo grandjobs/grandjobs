@@ -6,8 +6,11 @@ import UserInfo from './UserInfo.js';
 
 
 export default class AccountSetup extends React.Component {
+
     constructor(props) {
         super(props);
+
+        //State to keep track of the information the user enters in the fields.
         this.state = {
             firstNameText: '',
             lastNameText: '',
@@ -17,29 +20,34 @@ export default class AccountSetup extends React.Component {
     render() {
         return (
             <View style={styles.mainContainer}>
+                {/*Container for the text...*/}
                 <View style={styles.textContainer}>
                     <Text style={styles.largeText}>Awesome!</Text>
                     <Text style={styles.mainText}>Lets fill out some information.</Text>
                 </View>
+                {/*Container to hold all of the input fields.*/}
                 <View style={styles.fillContainer}>
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholder='First Name (Optional)'
+                        //Update the state when the field is changed
                         onChangeText={(firstNameText) => this.setState({firstNameText})}
-
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholder='Last Name (Optional)'
+                        //Update the state when the field is changed
                         onChangeText={(lastNameText) => this.setState({lastNameText})}
                     />
                     <TextInput style={styles.inputText}
                         selectTextOnFocus={true}
                         placeholder='Email (Optional)'
+                        //Update the state when the field is changed
                         onChangeText={(emailText) => this.setState({emailText})}
                     />
                 </View>
 
+                {/*Container for setting the button to be at the bottom of the page*/}
                 <View style={styles.bottomContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.nextPressed()}>
                     Next
@@ -49,7 +57,10 @@ export default class AccountSetup extends React.Component {
         );
     }
 
+    //Handle the next button press.
     nextPressed(){
+        //Create the user info object that will hold all information that the user
+        //Gives the application.
         var userInfo = new UserInfo();
 		userInfo.phoneNum = this.props.phone
         userInfo.firstName = this.state.firstNameText;
@@ -57,6 +68,7 @@ export default class AccountSetup extends React.Component {
         userInfo.email = this.state.emailText;
 		userInfo.uid = this.props.uid;
 
+        //Head to the next page (also passing the userInfo object).
         Actions.SkillPage({userInfo: userInfo});
     }
 }

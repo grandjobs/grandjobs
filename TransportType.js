@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 
-
 export default class TransportType extends React.Component {
     constructor(props){
         super(props);
@@ -17,7 +16,7 @@ export default class TransportType extends React.Component {
                     Do you drive a car, or do you use public transportation (walking,
                     biking, bus, etc...)</Text>
                 </View>
-
+                {/*Container to hold the two button types */}
                 <View style={styles.fillContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.carPressed()}>
                     Car
@@ -31,14 +30,20 @@ export default class TransportType extends React.Component {
         );
     }
 
+    //Handle the press for the car.
     carPressed(){
+        //Head to the range page marking that the user is non public (travelVal = 0).
+        //Also sending the userinfo object.
         Actions.RangePage({
             travelVal: 0,
             userInfo: this.props.userInfo,
         });
     }
 
+    //Handle the press for the public transport.
     publicPressed(){
+        //Head to the range page marking that the user is public (travelVal = 1).
+        //Also sending the userinfo object.
         Actions.RangePage({
             travelVal: 1,
             userInfo: this.props.userInfo,

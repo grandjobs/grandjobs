@@ -8,7 +8,9 @@ import { firebase } from './db'
 export default class Range extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
+
+        //State to hold the range of the user (default to 15)
         this.state = {
             range: 15
         }
@@ -23,10 +25,13 @@ export default class Range extends React.Component {
                     </Text>
                 </View>
 
+                {/*Container to hold the slider*/}
                 <View style={styles.sliderContainer}>
+                    {/*Text to display the current user selected range.*/}
                     <Text style={styles.largeText}>
                     {this.state.range}
                     </Text>
+                    {/*Slider for the user to adjust.*/}
                     <Slider style={styles.sliderStyle}
                         step={1}
                         minimumValue={1}
@@ -37,6 +42,7 @@ export default class Range extends React.Component {
                     />
                 </View>
 
+                {/*Container to hold the button to the bottom of the screen*/}
                 <View style={styles.bottomContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.nextPressed()}>
                     Next
@@ -47,8 +53,14 @@ export default class Range extends React.Component {
         );
     }
 
+    //Handle the press of the next button
     nextPressed(){
+        //Grab the users desired range.
         this.props.userInfo.homeRange = this.state.range;
+
+        //If the user does not take the bus, then they are done with the account
+        //setup process, so they are uploaded to firebase and sent to the main
+        //pages.
         if (this.props.travelVal == 0){
 			let rootRef = firebase.database().ref()
 			let userRef = rootRef.child('USERS')
@@ -68,9 +80,11 @@ export default class Range extends React.Component {
 				'Skills' : this.props.userInfo.skills,
 				'Phone Number': this.props.userInfo.phoneNum
 			})
-			
+
+            //Actually launch to the hompage along with passing the user info object.
             Actions.UserHomePage({userInfo: this.props.userInfo});
         }
+        //If the user has access to public transportation, then we move on to bus access.
         else if (this.props.travelVal == 1){
             console.log("User is public.");
             Actions.BusPage({userInfo: this.props.userInfo});

@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
+import MapView, { Marker, CallOut } from 'react-native-maps';
+
 
 export default class JobInfoPage extends React.Component {
     constructor(props) {
@@ -16,6 +18,7 @@ export default class JobInfoPage extends React.Component {
                 <Text style={styles.mainText}>{this.jobInfo.jobTitle}</Text>
                 {/*Main ScrollView for the jobs*/}
                 <ScrollView style={styles.infoContainer}>
+                    {/*Map the description of the jobs to the text.*/}
                     <Text style={styles.sectionText}>Job Description</Text>
                     {
                         this.jobInfo.description.map(( item, key ) =>
@@ -28,6 +31,7 @@ export default class JobInfoPage extends React.Component {
                         ))
                     }
                     <Text style={[styles.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Wanted Skills</Text>
+                    {/*Map the skills of the job to the screen*/}
                     <View style={styles.skillsContainer}>
                         {
                             this.jobInfo.skills.map(( item, key ) =>
@@ -43,6 +47,7 @@ export default class JobInfoPage extends React.Component {
 
                     <Text style={styles.sectionText}>Location</Text>
 
+                    {/*Display all other information to the screen.*/}
                     <Text style={styles.distanceText}>
                         Distance from home:
                         <Text style={[styles.distanceText, {color: "#a9fcd4"}]}>
@@ -51,6 +56,24 @@ export default class JobInfoPage extends React.Component {
                         miles
                     </Text>
 
+                    {
+                        /*Display the map on the page for the user view the jobs
+                        location*/
+                    }
+                    <MapView
+                        style={styles.mapStyle}
+                        region={{
+                            latitude: 42.9634,
+                            longitude: -85.6681,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421
+                        }}
+                        onPress={e => this.handlePress(e)}
+                        >
+                        <Marker coordinate={{latitude: 42.9634, longitude: -85.6681}}/>
+                    </MapView>
+
+                    {/*Container to anchor the buttons to the bottom of the screen.*/}
                     <View style={styles.bottomContainer}>
                         <Button style={styles.buttonDesign} onPress={()=>this.contactPressed()}>
                         Contact
@@ -65,10 +88,18 @@ export default class JobInfoPage extends React.Component {
         );
     }
 
+    /**
+     * Handler for the user contacting this job.
+     * @return {[type]} [description]
+     */
     contactPressed(){
         console.log("Contact");
     }
 
+    /**
+     * Handler for the user exiting this job.
+     * @return {[type]} [description]
+     */
     backPressed(){
         Actions.UserHomePage();
     }
@@ -158,5 +189,10 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         borderColor: '#a9fcd4',
         borderWidth: 1,
+    },
+    mapStyle:{
+        height: Dimensions.get('window').height * 0.50,
+        width: Dimensions.get('window').width * 0.85,
+        margin: 10
     },
 });

@@ -10,6 +10,8 @@ export default class TempSkillsPage extends Component {
     constructor(props){
         super(props);
 
+        //State that holds the lat and long info of the location that the user
+        //pressed.
         this.state = {
             markerLat: 0,
             markerLong: 0,
@@ -18,6 +20,7 @@ export default class TempSkillsPage extends Component {
         }
     }
 
+    //Handle a press on the map and update the state with the proper coordinates.
     handlePress(e){
         this.setState({
             markerLat: e.nativeEvent.coordinate.latitude,
@@ -27,9 +30,12 @@ export default class TempSkillsPage extends Component {
         })
     }
 
+    //Handle the press of the next button.
     nextPressed(){
+        //Update the user info object with the information on the lat and longs
         this.props.userInfo.homeLat = this.state.markerLat;
         this.props.userInfo.homeLong = this.state.markerLong;
+        //Move on to the transport type page (passing the userinfo object)
         Actions.TransportType({userInfo: this.props.userInfo});
     }
 
@@ -45,6 +51,7 @@ export default class TempSkillsPage extends Component {
                 </Text>
 
                 <View style={styles.bottomContainer}>
+                    {/*Display the map on the page for the user to select a location*/}
                     <MapView
                         style={styles.mapStyle}
                         region={{
@@ -58,6 +65,10 @@ export default class TempSkillsPage extends Component {
                         <Marker coordinate={{latitude: this.state.markerLat, longitude: this.state.markerLong}}/>
                     </MapView>
 
+                    {/*
+                        A button that will not show until the user has a location
+                        selected on the map.
+                    */}
                     <Button style={[styles.buttonDesign, {opacity: this.state.opac}]}
                     disabled={this.state.disable}
                     onPress={()=>this.nextPressed()}>

@@ -7,47 +7,99 @@ import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 
 import SideMenu from 'react-native-side-menu';
 import Dialog from "react-native-dialog";
 import UserMenu from "./UserMenu";
+import { firebase } from './db';
+import UserInfo from './UserInfo';
 
 export default class UserInfoPage extends React.Component {
 
     constructor(props){
         super(props);
-        console.log(props.userInfo);
-        phoneText = "Phone: " + props.userInfo.phoneNum + "\n";
-        firstText = "First: " + props.userInfo.firstName + "\n";
-        lastText = "Last: " + props.userInfo.lastName + "\n";
-        emailText = "Email: " + props.userInfo.email;
 
-        this.basicInfoText = phoneText + firstText + lastText + emailText;
+        this.emailEdit = "";
+        this.firstNameEdit = "";
+        this.lastNameEdit = "";
+        this.firebaseUser = null;
 
-        this.busInfoText = "";
-        for (var i = 0; i < props.userInfo.busAccess.length; i++){
-            if (i < props.userInfo.busAccess.length - 1){
-                this.busInfoText += props.userInfo.busAccess[i] + ", ";
-            }
-            else{
-                this.busInfoText += props.userInfo.busAccess[i];
-            }
-        }
-
-        this.skillInfoText = "";
-        for (var i = 0; i < props.userInfo.skills.length; i++){
-            if (i < props.userInfo.skills.length - 1){
-                this.skillInfoText += props.userInfo.skills[i] + ", ";
-            }
-            else{
-                this.skillInfoText += props.userInfo.skills[i];
-            }
-        }
-
+        //State to show the editing dialog.
         this.state = {
             showFirstDialog: false,
             showLastDialog: false,
             showEmailDialog: false,
+            firstName: "Loading...",
+            lastName: "",
+            phoneNum: "Loading...",
+            email: "Loading...",
+            busRoutes: "Loading...",
+            skills: "Loading...",
         }
     }
 
+    async componentWillMount(){
+        this.fbPull();
+    }
+
+    /**
+    * Pull user information from firebase
+    */
+    fbPull(){
+        let rootRef = firebase.database().ref();
+        //TODO: Get UID from props.
+        let userRef = rootRef.child('USERS').child("XskmWu729ZTdSGqzqWcoGohmSuu1");
+
+        try {
+            userRef.once('value')
+            .then(snapshot => {
+                this.firebaseUser = snapshot.val();
+
+                //Tabs arent working for the card view???
+                spacing = "      ";
+                skillInfoText = "";
+                for (var i = 0; i < this.firebaseUser['Skills'].length; i++){
+                    if ((i+1) % 3 == 0){
+                        skillInfoText += "- " + this.firebaseUser['Skills'][i] + "\n";
+                    }
+                    else{
+                        skillInfoText += "- " + this.firebaseUser['Skills'][i] + spacing;
+                    }
+                }
+
+                busInfoText = "";
+                for (var i = 0; i < this.firebaseUser['Bus Access'].length; i++){
+                    if (i < this.firebaseUser['Bus Access'].length - 1){
+                        busInfoText += this.firebaseUser['Bus Access'][i] + ", ";
+                    }
+                    else{
+                        busInfoText += this.firebaseUser['Bus Access'][i];
+                    }
+                }
+
+                this.setState({
+                    firstName : this.firebaseUser['First Name'],
+                    lastName : this.firebaseUser['Last Name'],
+                    email : this.firebaseUser['Email'],
+                    skills: skillInfoText,
+                    busRoutes: busInfoText,
+                });
+            });
+        } catch (e) {
+            console.warn(e);
+        }
+    }
+
+    fbPush(){
+        let rootRef = firebase.database().ref();
+		let userRef = rootRef.child('USERS');
+        //TODO: Get UID from props?
+		newAccountRef = userRef.child("XskmWu729ZTdSGqzqWcoGohmSuu1");
+		newAccountRef.update({
+			'Email' : this.state.email,
+			'First Name' : this.state.firstName,
+			'Last Name' : this.state.lastName,
+		});
+    }
+
     render() {
+        //Load in the menu.
         const menu = <UserMenu/>;
         return (
             <SideMenu menu={menu} bounceBackOnOverdraw={false}>
@@ -57,10 +109,10 @@ export default class UserInfoPage extends React.Component {
                     <Dialog.Description>
                     Please enter your FIRST name.
                     </Dialog.Description>
-                    <Dialog.Input placeholder='First Name' wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}/>
+                    <Dialog.Input placeholder='First Name' wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}  onChangeText={(first) => this.changeFirst(first)}/>
                     {/*OnPress will auto enable the last name edit*/}
-                    <Dialog.Button label="Confirm " onPress={() => this.editLastName()}/>
-                    <Dialog.Button label="Cancel " onPress={() => this.closeLastName()}/>
+                    <Dialog.Button label="Confirm " onPress={() => this.confirmFirstEdit()}/>
+                    <Dialog.Button label="Cancel " onPress={() => this.closeAll()}/>
                 </Dialog.Container>
 
                 {/*Dialog box for the user editing the last name*/}
@@ -69,9 +121,9 @@ export default class UserInfoPage extends React.Component {
                     <Dialog.Description>
                     Please enter your LAST name.
                     </Dialog.Description>
-                    <Dialog.Input placeholder='Last Name' wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}/>
-                    <Dialog.Button label="Confirm " onPress={() => this.closeLastName()}/>
-                    <Dialog.Button label="Cancel " onPress={() => this.closeLastName()}/>
+                    <Dialog.Input placeholder='Last Name' wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}  onChangeText={(last) => this.changeLast(last)}/>
+                    <Dialog.Button label="Confirm " onPress={() => this.confirmLastEdit()}/>
+                    <Dialog.Button label="Cancel " onPress={() => this.closeAll()}/>
                 </Dialog.Container>
 
                 {/*Dialog box for the user editing their email*/}
@@ -80,9 +132,9 @@ export default class UserInfoPage extends React.Component {
                     <Dialog.Description>
                     Please enter your email.
                     </Dialog.Description>
-                    <Dialog.Input placeholder='example@mail.com' wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}}/>
-                    <Dialog.Button label="Confirm " onPress={() => this.closeEmail()}/>
-                    <Dialog.Button label="Cancel " onPress={() => this.closeEmail()}/>
+                    <Dialog.Input placeholder='example@mail.com' wrapperStyle={{borderColor: '#000000', borderBottomWidth: 2}} onChangeText={(email) => this.changeEmail(email)}/>
+                    <Dialog.Button label="Confirm " onPress={(Email) => this.confirmEmailEdit()}/>
+                    <Dialog.Button label="Cancel " onPress={() => this.closeAll()}/>
                 </Dialog.Container>
 
                 {/*Main container for this page*/}
@@ -102,7 +154,7 @@ export default class UserInfoPage extends React.Component {
                             style={{fontSize:50}}
                             title= "Phone Number"
                             />
-                            <CardContent style={{fontSize:50}} text={this.props.userInfo.phoneNum}/>
+                            <CardContent style={{fontSize:50}} text={"NEEDS TO BE ADDED TO FB"}/>
                             <CardAction
                             separator={true}
                             inColumn={false}>
@@ -114,12 +166,12 @@ export default class UserInfoPage extends React.Component {
                             <CardTitle
                             title= "Name"
                             />
-                            <CardContent text={this.props.userInfo.firstName + " " + this.props.userInfo.lastName}/>
+                            <CardContent text={this.state.firstName + " " + this.state.lastName}/>
                             <CardAction
                             separator={false}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => this.editFirstName()}
+                            onPress={() => this.openFirstName()}
                             title="Edit "
                             color="#a9fcd4"
                             />
@@ -131,12 +183,12 @@ export default class UserInfoPage extends React.Component {
                             <CardTitle
                             title= "Email"
                             />
-                            <CardContent text={this.props.userInfo.email}/>
+                            <CardContent text={this.state.email}/>
                             <CardAction
                             separator={false}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => this.editEmail()}
+                            onPress={() => this.openEmail()}
                             title="Edit "
                             color="#a9fcd4"
                             />
@@ -148,7 +200,7 @@ export default class UserInfoPage extends React.Component {
                             <CardTitle
                             title= "Bus Routes"
                             />
-                            <CardContent text={this.busInfoText}/>
+                            <CardContent text={this.state.busRoutes}/>
                             <CardAction
                             separator={false}
                             inColumn={false}>
@@ -165,7 +217,7 @@ export default class UserInfoPage extends React.Component {
                             <CardTitle
                             title= "Skills"
                             />
-                            <CardContent text={this.skillInfoText}/>
+                            <CardContent text={this.state.skills}/>
                             <CardAction
                             separator={false}
                             inColumn={false}>
@@ -182,41 +234,94 @@ export default class UserInfoPage extends React.Component {
         );
     }
 
-    editFirstName(){
+    /**
+     * Display the edit page for the first name.
+     */
+    openFirstName(){
         this.setState({
             showFirstDialog: true,
             showLastDialog: false,
         })
     }
 
-    editEmail(){
-        this.setState({
-            showEmailDialog: true,
-        })
-    }
-
-    closeEmail(){
-        this.setState({
-            showEmailDialog: false,
-        })
-    }
-
-    editLastName(){
+    /**
+     * Display the edit page for the last name.
+     */
+    openLastName(){
         this.setState({
             showFirstDialog: false,
             showLastDialog: true,
         })
     }
 
-    closeLastName(){
+    /**
+     * Display the edit page for the email.
+     */
+    openEmail(){
         this.setState({
-            showFirstDialog: false,
-            showLastDialog: false,
+            showEmailDialog: true,
         })
     }
 
+    changeEmail(email){
+        this.emailEdit = email;
+    }
+
+    changeFirst(first){
+        this.firstNameEdit = first;
+    }
+
+    changeLast(last){
+        this.lastNameEdit = last;
+    }
+
+    confirmFirstEdit(){
+        this.setState({
+            firstName: this.firstNameEdit,
+        },
+        () => {this.fbPush()}
+        );
+        this.closeAll();
+        this.openLastName();
+    }
+
+    confirmLastEdit(){
+        this.setState({
+            lastName: this.lastNameEdit,
+        },
+        () => {this.fbPush()}
+        );
+        this.closeAll();
+    }
+
+    /**
+     * Close the email dialog.
+     */
+    confirmEmailEdit(){
+        this.setState({
+            email: this.emailEdit,
+        },
+        () => {this.fbPush()}
+        );
+        this.closeAll();
+    }
+
+    closeAll(){
+        this.setState({
+            showFirstDialog: false,
+            showLastDialog: false,
+            showEmailDialog: false,
+        })
+    }
+
+    /**
+     * Send the user to the bus info page so they can edit the routes.
+     */
     editBusRoutes(){
-        Actions.BusPage({userInfo: this.props.userInfo, editing: true});
+        tempObj = new UserInfo();
+        tempObj.busAccess = this.firebaseUser['Bus Access'];
+        console.log(tempObj.busAccess);
+        Actions.BusPage({userInfo: tempObj, editing: true});
     }
 
 }

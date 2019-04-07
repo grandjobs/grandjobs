@@ -22,6 +22,7 @@ export default class SkillsPage extends Component {
             this.skills.push(new SkillElement("Skill " + i, false, 1));
         }
 
+        //Similar logic for Certifications.
         this.certs = [];
         for (let i = 0; i < 13; i++){
             this.certs.push(new SkillElement("Cert " + i, false, 1));
@@ -43,7 +44,10 @@ export default class SkillsPage extends Component {
 
     render(){
         return (
+            //Wrap the entire page in "Wrapper". This allows for the sliding
+            //mechanism throughout the page.
             <Swiper style={styles.wrapper} loop={false}>
+                {/*First slide of the wrapper*/}
                 <View style={styles.slide1}>
                     <Text style={[styles.largeText, {top:0, marginBottom: 0}]}>Your Skills</Text>
                     <Text
@@ -53,9 +57,14 @@ export default class SkillsPage extends Component {
                         it will be for us to find you jobs!
                     </Text>
                 </View>
+                {/*Second slide of the wrapper*/}
                 <View style={styles.slide2}>
                     <Text style={styles.largeText}>Skills</Text>
                     <View style={styles.labelContainer}>
+                    {/*
+                    Mapping each item in the loaded list of skills to the
+                    labels on the page.
+                    */}
                     {
                         this.skills.map(( item, key ) =>
                         (
@@ -69,9 +78,14 @@ export default class SkillsPage extends Component {
                     }
                     </View>
                 </View>
+                {/*Third slide of the wrapper*/}
                 <View style={styles.slide3}>
                     <Text style={styles.largeText}>Certifications</Text>
                     <View style={styles.labelContainer}>
+                    {/*
+                    Mapping each item in the loaded list of Certifications to the
+                    labels on the page.
+                    */}
                     {
                         this.certs.map(( item, key ) =>
                         (
@@ -92,6 +106,11 @@ export default class SkillsPage extends Component {
                         These are your currently selected Skills and Certifications.
                     </Text>
                     <View style={styles.labelContainer}>
+                    {/*
+                    Mapping each item in the list of user selected skills to the
+                    labels on the page. (This shrinks and expands as the user
+                    selects and deselects labels)
+                    */}
                     {
                         this.userSkills.map(( item, key ) =>
                         (
@@ -103,6 +122,8 @@ export default class SkillsPage extends Component {
                         ))
                     }
                     </View>
+                    {/*Bottom container that holds the next button. (Also on the
+                    last wrapper page)*/}
                     <View style={styles.bottomContainer}>
                         <Button style={styles.buttonDesign} onPress={()=>this.nextPressed()}>
                         Next
@@ -187,12 +208,14 @@ export default class SkillsPage extends Component {
         this.updateState();
     }
 
-
+    //Handle sending to the next page.
     nextPressed(){
         this.setInfoObj();
+        //Also send the updated user info to the next page.
         Actions.MapsPage({userInfo: this.props.userInfo});
     }
 
+    //Update the userInfo object with the skills/certs that the user selected.
     setInfoObj(){
         for (var i = 0; i < this.userSkills.length; i++){
             this.props.userInfo.skills.push(this.userSkills[i].label);
