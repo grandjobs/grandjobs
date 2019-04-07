@@ -36,6 +36,11 @@ export default class BusOptions extends Component {
             busList: this.busList,
             userList: this.userList,
         }
+
+        this.buttonText = "Next";
+        if(props.editing){
+            this.buttonText = "Confirm";
+        }
     }
 
     /**
@@ -73,7 +78,7 @@ export default class BusOptions extends Component {
 
                 <View style={styles.bottomContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.nextPressed()}>
-                    Next
+                    {this.buttonText}
                     </Button>
                 </View>
             </View>
@@ -156,6 +161,7 @@ export default class BusOptions extends Component {
      * Handle the press of the next button.
      */
     nextPressed(){
+
         //Update the state of the userinfo object.
         this.setInfoObj();
 		console.log(this.user);
@@ -166,21 +172,28 @@ export default class BusOptions extends Component {
         //The public transport user is now done, so add the to firebase.
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('USERS')
-		newAccountRef = userRef.child(this.props.userInfo.uid)
-		newAccountRef.set({
-			'Bus Access' : this.props.userInfo.busAccess,
-			'Email' : this.props.userInfo.email,
-			'First Name' : this.props.userInfo.firstName,
-			'Last Name' : this.props.userInfo.lastName,
-			'Home Location' : {
-				'Latitude' : this.props.userInfo.homeLat,
-				'Longitude' : this.props.userInfo.homeLong
-			},
-			'Skills' : this.props.userInfo.skills
-		})
+		newAccountRef = userRef.child("XskmWu729ZTdSGqzqWcoGohmSuu1")
+        if (!this.props.editing){
+    		newAccountRef.set({
+    			'Bus Access' : this.props.userInfo.busAccess,
+    			'Email' : this.props.userInfo.email,
+    			'First Name' : this.props.userInfo.firstName,
+    			'Last Name' : this.props.userInfo.lastName,
+    			'Home Location' : {
+    				'Latitude' : this.props.userInfo.homeLat,
+    				'Longitude' : this.props.userInfo.homeLong
+    			},
+    			'Skills' : this.props.userInfo.skills
+    		})
+        }
+        else{
+            newAccountRef.update({
+    			'Bus Access' : this.props.userInfo.busAccess,
+    		})
+        }
 
         //Head to the main page.
-        Actions.UserInfoPage({userInfo: this.props.userInfo});
+        Actions.UserInfoPage();
     }
 
     /**

@@ -8,6 +8,7 @@ import SideMenu from 'react-native-side-menu';
 import Dialog from "react-native-dialog";
 import UserMenu from "./UserMenu";
 import { firebase } from './db';
+import UserInfo from './UserInfo';
 
 export default class UserInfoPage extends React.Component {
 
@@ -17,6 +18,7 @@ export default class UserInfoPage extends React.Component {
         this.emailEdit = "";
         this.firstNameEdit = "";
         this.lastNameEdit = "";
+        this.firebaseUser = null;
 
         //State to show the editing dialog.
         this.state = {
@@ -47,34 +49,34 @@ export default class UserInfoPage extends React.Component {
         try {
             userRef.once('value')
             .then(snapshot => {
-                userInfo = snapshot.val();
+                this.firebaseUser = snapshot.val();
 
                 //Tabs arent working for the card view???
                 spacing = "      ";
                 skillInfoText = "";
-                for (var i = 0; i < userInfo['Skills'].length; i++){
+                for (var i = 0; i < this.firebaseUser['Skills'].length; i++){
                     if ((i+1) % 3 == 0){
-                        skillInfoText += "- " + userInfo['Skills'][i] + "\n";
+                        skillInfoText += "- " + this.firebaseUser['Skills'][i] + "\n";
                     }
                     else{
-                        skillInfoText += "- " + userInfo['Skills'][i] + spacing;
+                        skillInfoText += "- " + this.firebaseUser['Skills'][i] + spacing;
                     }
                 }
 
                 busInfoText = "";
-                for (var i = 0; i < userInfo['Bus Access'].length; i++){
-                    if (i < userInfo['Bus Access'].length - 1){
-                        busInfoText += userInfo['Bus Access'][i] + ", ";
+                for (var i = 0; i < this.firebaseUser['Bus Access'].length; i++){
+                    if (i < this.firebaseUser['Bus Access'].length - 1){
+                        busInfoText += this.firebaseUser['Bus Access'][i] + ", ";
                     }
                     else{
-                        busInfoText += userInfo['Bus Access'][i];
+                        busInfoText += this.firebaseUser['Bus Access'][i];
                     }
                 }
 
                 this.setState({
-                    firstName : userInfo['First Name'],
-                    lastName : userInfo['Last Name'],
-                    email : userInfo['Email'],
+                    firstName : this.firebaseUser['First Name'],
+                    lastName : this.firebaseUser['Last Name'],
+                    email : this.firebaseUser['Email'],
                     skills: skillInfoText,
                     busRoutes: busInfoText,
                 });
@@ -314,10 +316,12 @@ export default class UserInfoPage extends React.Component {
 
     /**
      * Send the user to the bus info page so they can edit the routes.
-     * @return {[type]} [description]
      */
     editBusRoutes(){
-        Actions.BusPage({userInfo: this.props.userInfo, editing: true});
+        tempObj = new UserInfo();
+        tempObj.busAccess = this.firebaseUser['Bus Access'];
+        console.log(tempObj.busAccess);
+        Actions.BusPage({userInfo: tempObj, editing: true});
     }
 
 }
