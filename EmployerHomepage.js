@@ -24,6 +24,7 @@ const menu = [
 ]
 
 let arr = [];
+let key_arr = [];
 
 export default class EmployerHomepage extends React.Component {
 
@@ -70,13 +71,14 @@ export default class EmployerHomepage extends React.Component {
 
         Object.keys(jobs).forEach(key=>{
           //have to figure out how to add this key when pushing to array
-          console.log(key);
-
+      //    console.log(key);
           arr.push(jobs[key]);
+          key_arr.push(key);
         })
 
 
         console.log(arr);
+        console.log(key_arr);
     	})
 
     }
@@ -166,7 +168,7 @@ EmployerAccountRef.update({
           separator={true}
           inColumn={false}>
           <CardButton
-          onPress={() => this.deletePosting()}
+          onPress={() => this.deletePosting(i)}
           title="Remove "
           color="#a9fcd4"
           />
@@ -191,30 +193,29 @@ EmployerAccountRef.update({
     }
 
 
-    deletePosting(){
+    deletePosting(id){
+      console.log(id);
       Alert.alert(
       'Delete',
       'Are you sure you want to delete this posting?',
       [
-        {text:'Delete',onPress:()=>this.confirmDelete()},
+        {text:'Delete',onPress:()=>this.deleteCardFB(id)},
         {text:'Cancel',onPress:()=>console.log('cancel pressed')}
       ]
     )
     }
 
-    confirmDelete(){
-      //is not causing a page refresh
-      this.deleteCardFB();
+
+    deleteCardFB(id){
+
+      let rootRef = firebase.database().ref();
+      rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').child(key_arr[id]).remove();
+      key_arr.splice(id,1);
+      console.log(key_arr);
       this.setState({
           refresh: true,
 
       })
-    }
-
-    deleteCardFB(){
-
-      let rootRef = firebase.database().ref();
-      rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').child('-Lbigz3Nr_H4Ot10ph2c').remove();
 
     }
 
