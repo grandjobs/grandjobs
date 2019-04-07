@@ -1,4 +1,7 @@
-const allStyles = StyleSheet.create({
+'use strict';
+import { StyleSheet } from 'react-native';
+
+export default StyleSheet.create({
     mainContainer: {
         flex: 1,
         // backgroundColor: '#1E2027',
