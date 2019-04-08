@@ -292,17 +292,18 @@ class UserMenu extends React.Component{
   onPress(item, index){
     if(index == 0){
       //home pressed
-      Actions.EmployerHomepage();
+      Actions.EmployerHomepage({uid: this.props.uid});
     }
     if(index == 1){
       //replies pressed
-      Actions.EmployerSideReplies();
+      Actions.EmployerSideReplies({uid: this.props.uid});
     }
     if(index == 2){
       //create pressed
       Actions.EmployerCreateListing({uid: this.props.uid});
     }
     if(index == 3){
+      //sign out pressed
       this.onSignOut()
     }
   }

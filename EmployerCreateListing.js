@@ -75,7 +75,7 @@ export default class EmployerCreateListing extends React.Component {
         'Cancel',
         'Cancel Listing?',
         [
-          {text:'OK',onPress:()=>Actions.EmployerHomepage()},
+          {text:'OK',onPress:()=>Actions.EmployerHomepage({uid: this.props.uid})},
           {text:'Cancel',onPress:()=>console.log('cancel pressed')}
         ]
       )

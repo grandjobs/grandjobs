@@ -9,7 +9,8 @@ import SideMenu from 'react-native-side-menu';
 import { firebase } from './db';
 
 
-
+let arr = [];
+let key_arr = [];
 
 const menu = [
     { 'title': 'Home',
@@ -28,12 +29,92 @@ export default class EmployerSideReplies extends React.Component {
 
     constructor(props){
         super(props);
+        arr = [];
+        key_arr = [];
 
     }
+
+    async componentDidMount() {
+      console.log(this.state.user)
+      let rootRef = firebase.database().ref()
+      let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
+
+      try {
+              userRef.once('value')
+          .then(snapshot => {
+            companyInfo = snapshot.val()
+
+            console.log('Loaded name: ' + companyInfo['Company Name'])
+            // this.setState({ companyName : companyInfo['Company Name'] })
+            // this.setState({ companyLocation : companyInfo['Company Location'] })
+          })
+          } catch (e) {
+              console.warn(e)
+          }
+
+
+    //     try{
+    //   let employerJobRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS')
+    //   if (employerJobRef != undefined) {
+    //     employerJobRef.once('value')
+    //       .then(snapshot => {
+    //         let jobs = snapshot.val()
+    //
+    //       Object.keys(jobs).forEach(key=>{
+    //         //have to figure out how to add this key when pushing to array
+    //     //    console.log(key);
+    //         arr.push(jobs[key]);
+    //         key_arr.push(key);
+    //       })
+    //
+    //
+    //       console.log(arr);
+    //       console.log(key_arr);
+    //     })
+    //
+    //   }
+    // }
+    // catch (e) {
+    //     console.warn(e)
+    // }
+
+  }
 
     viewPressed(){
       Actions.ViewSeekerProfile();
     }
+
+    // renderReplyCards(){
+    //
+    //   var elements = [];
+    //
+    //
+    //   for(let i = 0; i < arr.length; i++){
+    //
+    //
+    //     elements.push(<Card isDark = {true} style={styles.cardStyle}>
+    //         <CardTitle
+    //         title= "New Reply"/>
+    //         <CardContent text={"Job Title: " + arr[i]['JobTitle']}/>
+    //         <CardContent text={"Job Location: " + arr[i]['JobLocation']}/>
+    //         <CardAction
+    //         separator={true}
+    //         inColumn={false}>
+    //         <CardButton
+    //         onPress={() => this.deletePosting(i)}
+    //         title="Remove "
+    //         color="#a9fcd4"
+    //         />
+    //         </CardAction>
+    //     </Card>);
+    //
+    //   }
+    //
+    //   return(
+    //     elements
+    //   );
+    //
+    // }
 
     render() {
       const myMenu = <UserMenu/>;
@@ -226,15 +307,15 @@ class UserMenu extends React.Component{
   onPress(item, index){
     if(index == 0){
       //home pressed
-      Actions.EmployerHomepage();
+      Actions.EmployerHomepage({uid: this.props.uid});
     }
     if(index == 1){
       //replies pressed
-      Actions.EmployerSideReplies();
+      Actions.EmployerSideReplies({uid: this.props.uid});
     }
     if(index == 2){
       //create pressed
-      Actions.EmployerCreateListing();
+      Actions.EmployerCreateListing({uid: this.props.uid});
     }
     if(index == 3){
       //logout pressed
