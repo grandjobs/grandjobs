@@ -8,6 +8,7 @@ import Drawer from 'react-native-drawer';
 import SideMenu from 'react-native-side-menu';
 import { firebase } from './db'
 import Dialog from "react-native-dialog";
+import Geocoder from 'react-native-geocoding';
 
 
 
@@ -37,9 +38,10 @@ export default class EmployerHomepage extends React.Component {
 		    this.state = {
           companyName: '',
           companyLocation: '',
-          refresh: true,
+          refresh: false,
           showLocationDialog: false,
           showEmailDialog: false,
+          key: 1,
 
         };
 
@@ -78,7 +80,6 @@ export default class EmployerHomepage extends React.Component {
           key_arr.push(key);
         })
 
-
         console.log(arr);
         console.log(key_arr);
     	})
@@ -100,12 +101,23 @@ EmployerAccountRef = userRef.child(this.props.uid);
 EmployerAccountRef.update({
   'Company Location' : this.state.companyLocation,
 });
+
+// Geocoder.init('AIzaSyARMQhGlo4u3NMTNXhcY_Q6FGzAJf01q6Y'); // use a valid API key
+//
+// Geocoder.from(this.state.companyLocation)
+//         .then(json => {
+//             var location = json.results[0].geometry.location;
+//             console.log(location);
+//         })
+//         .catch(error => console.warn(error));
+
 }
 
 
 
     render() {
-      const {refresh} = this.state;
+
+
       const myMenu = <UserMenu uid={this.props.uid}/>;
 
       return (
@@ -128,7 +140,7 @@ EmployerAccountRef.update({
                     <Text style={styles.largeText}>Grand Jobs</Text>
                     <Text style={styles.mainText}>Homepage</Text>
                 </View>
-                <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
+                <ScrollView style={{width: Dimensions.get('window').width * 0.90}} key = {this.state.key}>
 
                     <Card isDark = {true} style={styles.cardStyle}>
                         <CardTitle
@@ -217,7 +229,10 @@ EmployerAccountRef.update({
       rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').child(key_arr[id]).remove();
       key_arr.splice(id,1);
       console.log(key_arr);
-
+      arr = [];
+      key_arr = [];
+      this.componentDidMount();
+      this.setState({ key: Math.random() });
       // this.setState({
       //     refresh: true,
       //

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Dimensions, TextInput, Alert, TouchableOpacity,
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
 import { firebase } from './db'
+import Geocode from "react-geocode";
 
 export default class EmployerCreateListing extends React.Component {
 
@@ -12,7 +13,7 @@ export default class EmployerCreateListing extends React.Component {
       jobTitle: '',
       jobLocation: '',
       jobDetails: '',
-      addtionalDetails: ''
+      addtionalDetails: '',
     };
   }
 
@@ -82,16 +83,43 @@ export default class EmployerCreateListing extends React.Component {
     }
 
       checkListingForm(){
+
+
       if (this.state.jobTitle != "" && this.state.jobLocation != "" && this.state.jobDetails != "" && this.state.JobAddtionalDetails != "") {
 
-        let rootRef = firebase.database().ref()
+        Geocode.setApiKey('AIzaSyARMQhGlo4u3NMTNXhcY_Q6FGzAJf01q6Y');
+        var lat;
+        var lng;
+        Geocode.fromAddress(this.state.jobLocation).then(
+          response => {
+            const { lat, lng } = response.results[0].geometry.location;
+            console.log(lat, lng);
+            let rootRef = firebase.database().ref()
 
-		let employerRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').push().set({
-			'JobTitle' : this.state.jobTitle,
-			'JobLocation' : this.state.jobLocation,
-			'JobDetails' : this.state.jobDetails,
-			'JobAddtionalDetails' : this.state.additionalDetails
-		})
+            let employerRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').push().set({
+              'JobTitle' : this.state.jobTitle,
+              'JobLocation' : this.state.jobLocation,
+              'JobDetails' : this.state.jobDetails,
+              'JobAddtionalDetails' : this.state.additionalDetails,
+              'Coordinate_LAT' : lat,
+              'Coordinate_LNG' : lng,
+            })
+          },
+          error => {
+            console.error(error);
+          }
+        );
+
+    // let rootRef = firebase.database().ref()
+    //
+		// let employerRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').push().set({
+		// 	'JobTitle' : this.state.jobTitle,
+		// 	'JobLocation' : this.state.jobLocation,
+		// 	'JobDetails' : this.state.jobDetails,
+		// 	'JobAddtionalDetails' : this.state.additionalDetails,
+    //   'Coordinate_LAT' : lat,
+    //   'Coordinate_LNG' : lng,
+		// })
 
 		Actions.EmployerHomepage({uid: this.props.uid});
 	}
