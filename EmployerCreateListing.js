@@ -87,7 +87,7 @@ export default class EmployerCreateListing extends React.Component {
 
       if (this.state.jobTitle != "" && this.state.jobLocation != "" && this.state.jobDetails != "" && this.state.JobAddtionalDetails != "") {
 
-        Geocode.setApiKey('AIzaSyARMQhGlo4u3NMTNXhcY_Q6FGzAJf01q6Y');
+        Geocode.setApiKey('***************************');
         var lat;
         var lng;
         Geocode.fromAddress(this.state.jobLocation).then(
