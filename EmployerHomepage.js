@@ -74,8 +74,7 @@ export default class EmployerHomepage extends React.Component {
         	let jobs = snapshot.val()
 
         Object.keys(jobs).forEach(key=>{
-          //have to figure out how to add this key when pushing to array
-      //    console.log(key);
+  
           arr.push(jobs[key]);
           key_arr.push(key);
         })
@@ -102,14 +101,7 @@ EmployerAccountRef.update({
   'Company Location' : this.state.companyLocation,
 });
 
-// Geocoder.init('AIzaSyARMQhGlo4u3NMTNXhcY_Q6FGzAJf01q6Y'); // use a valid API key
-//
-// Geocoder.from(this.state.companyLocation)
-//         .then(json => {
-//             var location = json.results[0].geometry.location;
-//             console.log(location);
-//         })
-//         .catch(error => console.warn(error));
+
 
 }
 
@@ -233,10 +225,7 @@ EmployerAccountRef.update({
       key_arr = [];
       this.componentDidMount();
       this.setState({ key: Math.random() });
-      // this.setState({
-      //     refresh: true,
-      //
-      // })
+
 
 
     }
