@@ -64,11 +64,11 @@ export default class ViewSeekerProfile extends React.Component {
     }
 
     cancelPressed(){
-      Actions.EmployerSideReplies();
+      Actions.EmployerSideReplies({uid: this.props.uid});
 
     }
     contactPressed(){
-      Actions.EmployerSideReplies();
+      Actions.EmployerSideReplies({uid: this.props.uid});
     }
 }
 

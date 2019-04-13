@@ -38,7 +38,6 @@ export default class EmployerHomepage extends React.Component {
 		    this.state = {
           companyName: '',
           companyLocation: '',
-          refresh: false,
           showLocationDialog: false,
           showEmailDialog: false,
           key: 1,
@@ -74,7 +73,7 @@ export default class EmployerHomepage extends React.Component {
         	let jobs = snapshot.val()
 
         Object.keys(jobs).forEach(key=>{
-  
+
           arr.push(jobs[key]);
           key_arr.push(key);
         })
