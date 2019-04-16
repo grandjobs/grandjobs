@@ -3,6 +3,7 @@
  */
 export default class JobInfo{
     constructor(){
+        this.jobKey = "";
         this.company = "";
         this.jobTitle = "";
         this.distance = -1;

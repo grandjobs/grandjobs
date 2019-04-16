@@ -3,12 +3,16 @@ import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput } from 'react
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import MapView, { Marker, CallOut } from 'react-native-maps';
+import { firebase } from './db';
+
 
 
 export default class JobInfoPage extends React.Component {
     constructor(props) {
         super(props);
         this.jobInfo = this.props.jobInfo;
+        this.contactedList = [];
+        this.loadContacted();
     }
 
     render() {
@@ -67,9 +71,7 @@ export default class JobInfoPage extends React.Component {
                             longitude: -85.6681,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421
-                        }}
-                        onPress={e => this.handlePress(e)}
-                        >
+                        }}>
                         <Marker coordinate={{latitude: 42.9634, longitude: -85.6681}}/>
                     </MapView>
 
@@ -93,7 +95,34 @@ export default class JobInfoPage extends React.Component {
      * @return {[type]} [description]
      */
     contactPressed(){
-        console.log("Contact");
+        try{
+            let rootRef = firebase.database().ref();
+    		let userRef = rootRef.child('USERS').child(global.GloablUID);
+
+            this.contactedList.push(this.jobInfo.jobKey);
+
+            userRef.update({
+                'Contacted' : this.contactedList
+    		});
+        }
+        catch(e){
+            console.warn(e);
+        }
+    }
+
+    loadContacted(){
+        try{
+            let rootRef = firebase.database().ref();
+    		let userRef = rootRef.child('USERS').child(global.GloablUID).child('Contacted');
+            userRef.once('value')
+            .then(snapshot => {
+                contacted = snapshot.val();
+                this.contactedList = contacted;
+            });
+        }
+        catch(e){
+            console.warn(e);
+        }
     }
 
     /**

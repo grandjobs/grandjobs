@@ -21,6 +21,7 @@ import seekerAuthentication from './seekerAuthentication';
 import employerAuthentication from './employerAuthentication';
 import EmployerSideReplies from './EmployerSideReplies';
 import ViewSeekerProfile from './ViewSeekerProfile';
+import ContactedPage from './ContactedPage';
 
 const App = () => {
 	console.disableYellowBox = true
@@ -136,6 +137,12 @@ const App = () => {
                     key = "JobInfoPage"
                     component = {JobInfoPage}
                     title="Job Info"
+                    hideNavBar={true}
+                />
+				<Scene
+                    key = "ContactedPage"
+                    component = {ContactedPage}
+                    title="Contacted Companies"
                     hideNavBar={true}
                 />
             </Scene>

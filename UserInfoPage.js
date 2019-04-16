@@ -88,10 +88,9 @@ export default class UserInfoPage extends React.Component {
 
     fbPush(){
         let rootRef = firebase.database().ref();
-		let userRef = rootRef.child('USERS');
+		let userRef = rootRef.child('USERS').child(global.GloablUID);
         //TODO: Get UID from props?
-		newAccountRef = userRef.child(global.GloablUID);
-		newAccountRef.update({
+		userRef.update({
 			'Email' : this.state.email,
 			'First Name' : this.state.firstName,
 			'Last Name' : this.state.lastName,

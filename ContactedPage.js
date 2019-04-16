@@ -33,7 +33,7 @@ export default class UserHomePage extends React.Component {
                 {/*Main container for this page*/}
                 <View style={styles.mainContainer}>
                     <View style={styles.textContainer}>
-                        <Text style={styles.largeText}>Explore</Text>
+                        <Text style={styles.largeText}>Contacted</Text>
                     </View>
 
                     {/*Make the cards view scrollable so we can reach the cards that will be rendered
@@ -73,6 +73,9 @@ export default class UserHomePage extends React.Component {
         Actions.JobInfoPage({jobInfo: jobInfo});
     }
 
+    /**
+    * Pull user information from firebase
+    */
     fbPull(){
         let rootRef = firebase.database().ref();
         //TODO: Get UID from props.
@@ -100,29 +103,24 @@ export default class UserHomePage extends React.Component {
                         //Loop through all of the jobs that this employer has posted.
                         for (var jobKey in snap[employerKey]["JOBS"]) {
                             // console.log(snap[employerKey]["JOBS"]);
-                            contacted = false;
-
                             for (var i in contactedJobs){
                                 contactJob = contactedJobs[i];
                                 console.log("Contacted: " + contactJob + " - Viewing: " + jobKey);
                                 if (contactJob === jobKey){
-                                    contacted = true;
+                                    //Store this job for convenience
+                                    job = snap[employerKey]["JOBS"][jobKey];
+
+                                    //Create a job info object.
+                                    curJob = new JobInfo();
+
+                                    //Set attributes from loaded job.
+                                    curJob.company = employer["Company Name"];
+                                    curJob.jobTitle = job["JobTitle"];
+                                    curJob.distance = job["JobLocation"];
+                                    curJob.skills = ["Skill 1", "Skill 2", "Skill 3", "Skill 4", "Skill 5", "Skill 6"];
+                                    curJob.jobKey = jobKey;
+                                    loadedJobs.push(curJob);
                                 }
-                            }
-                            if (!contacted){
-                                //Store this job for convenience
-                                job = snap[employerKey]["JOBS"][jobKey];
-
-                                //Create a job info object.
-                                curJob = new JobInfo();
-
-                                //Set attributes from loaded job.
-                                curJob.company = employer["Company Name"];
-                                curJob.jobTitle = job["JobTitle"];
-                                curJob.distance = job["JobLocation"];
-                                curJob.skills = ["Skill 1", "Skill 2", "Skill 3", "Skill 4", "Skill 5", "Skill 6"];
-                                curJob.jobKey = jobKey;
-                                loadedJobs.push(curJob);
                             }
                         }
                     }
