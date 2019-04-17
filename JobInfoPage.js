@@ -4,20 +4,68 @@ import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import MapView, { Marker, CallOut } from 'react-native-maps';
 import { firebase } from './db';
+import Dialog from "react-native-dialog";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 
 
 export default class JobInfoPage extends React.Component {
+
+
     constructor(props) {
         super(props);
         this.jobInfo = this.props.jobInfo;
         this.contactedList = [];
         this.loadContacted();
+
+        this.state = {
+            showDialog: false
+        }
+    }
+
+    dialogConfirm(){
+        try{
+            let rootRef = firebase.database().ref();
+    		let userRef = rootRef.child('USERS').child(global.GloablUID);
+
+            this.contactedList.push(this.jobInfo.jobKey);
+
+            userRef.update({
+                'Contacted' : this.contactedList
+    		});
+        }
+        catch(e){
+            console.warn(e);
+        }
+
+        this.setState({
+            showDialog: false
+        });
+        this.backPressed();
+    }
+
+
+    dialogCancel(){
+        this.setState({
+            showDialog: false
+        });
     }
 
     render() {
         return (
             <View style={styles.mainContainer}>
+                <Dialog.Container visible={this.state.showDialog}>
+                    <Dialog.Title>First Name</Dialog.Title>
+                    <Dialog.Description>
+                    Are you sure you want to contact this position?
+                    </Dialog.Description>
+                    {/*OnPress will auto enable the last name edit*/}
+                    <Dialog.Button label="Confirm " onPress={() => this.dialogConfirm()}/>
+                    <Dialog.Button label="Cancel " onPress={() => this.dialogCancel()}/>
+                </Dialog.Container>
+
+
                 <Text style={styles.largeText}>{this.jobInfo.company}</Text>
                 <Text style={styles.mainText}>{this.jobInfo.jobTitle}</Text>
                 {/*Main ScrollView for the jobs*/}
@@ -95,19 +143,9 @@ export default class JobInfoPage extends React.Component {
      * @return {[type]} [description]
      */
     contactPressed(){
-        try{
-            let rootRef = firebase.database().ref();
-    		let userRef = rootRef.child('USERS').child(global.GloablUID);
-
-            this.contactedList.push(this.jobInfo.jobKey);
-
-            userRef.update({
-                'Contacted' : this.contactedList
-    		});
-        }
-        catch(e){
-            console.warn(e);
-        }
+        this.setState({
+            showDialog: true
+        });
     }
 
     loadContacted(){
@@ -117,7 +155,9 @@ export default class JobInfoPage extends React.Component {
             userRef.once('value')
             .then(snapshot => {
                 contacted = snapshot.val();
-                this.contactedList = contacted;
+                if (contacted !== null){
+                    this.contactedList = contacted;
+                }
             });
         }
         catch(e){

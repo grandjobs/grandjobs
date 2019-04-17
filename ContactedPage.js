@@ -28,7 +28,7 @@ export default class UserHomePage extends React.Component {
     render() {
         const menu = <UserMenu/>;
         return (
-            <SideMenu menu={menu} bounceBackOnOverdraw={false}>
+            <SideMenu menu={menu} bounceBackOnOverdraw={false} edgeHitWidth={Dimensions.get('window').width}>
 
                 {/*Main container for this page*/}
                 <View style={styles.mainContainer}>
@@ -105,7 +105,6 @@ export default class UserHomePage extends React.Component {
                             // console.log(snap[employerKey]["JOBS"]);
                             for (var i in contactedJobs){
                                 contactJob = contactedJobs[i];
-                                console.log("Contacted: " + contactJob + " - Viewing: " + jobKey);
                                 if (contactJob === jobKey){
                                     //Store this job for convenience
                                     job = snap[employerKey]["JOBS"][jobKey];

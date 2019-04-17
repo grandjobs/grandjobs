@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import Button from 'react-native-button'
 import {Router, Scene,Actions, DefaultRenderer} from 'react-native-router-flux';
 import { TabNavigator } from "react-navigation";
+import { ToastContainer, toast } from 'react-toastify';
 import AccountSetup from './AccountSetup';
 import StartPage from './StartPage';
 import Employers from './Employers';
