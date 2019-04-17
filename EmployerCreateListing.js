@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux'
 import { firebase } from './db'
 import Geocode from "react-geocode";
 import Swiper from 'react-native-swiper';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default class EmployerCreateListing extends React.Component {
 
@@ -25,168 +26,290 @@ export default class EmployerCreateListing extends React.Component {
 
     //Skills that the user actually selects.
     this.userSkills = [];
+    let jobDetailsArray = [];
+    let lat = "";
+    let lng = "";
 
     this.state = {
       jobTitle: '',
       jobLocation: '',
       jobDetails: '',
-      addtionalDetails: '',
-      formType: 'formFill',
       skills: this.skills,
       certs: this.certs,
       userSkills: this.userSkills,
+
+      jobDetails_1: '',
+      jobDetails_2: '',
+      jobDetails_3: '',
+      jobDetails_4: '',
+      jobDetails_5: '',
+      jobDetails_6: '',
+      jobDetails_7: '',
+      jobDetails_8: '',
     };
 
   }
 
-  changeFormFill = () => {
-		this.setState({ formType: 'formFill'})
-	}
-
-	changeSkillsList = () => {
-		this.setState({ formType: 'skillsList'})
-	}
-
 
     render() {
-      if (this.state.formType == 'formFill') {
         return (
-          <View style={styles.slide4}>
-              <Text style={[styles.largeText, {marginBottom: 20}]}>Create Listing</Text>
-              <Text
-                  style={styles.mainText}>
-                  Please fill out all forms, then advance to the next page.
-              </Text>
-                <View style={styles.fillContainer}>
-                    {/*// <Text style={{textAlign: 'right', color: 'white'}}>Phone:</Text> */}
-                    {/* // <PhoneInput ref='phone' style={styles.inputPhone} textStyle={{fontSize: 18, color:'white', fontFamily: 'sans-serif-thin', }}/>*/}
-                    <TextInput style={styles.inputText}
-                        onChangeText={(jobTitle) => this.setState({jobTitle})}
-                        selectTextOnFocus={true}
-                        placeholderTextColor="#fff"
-                        placeholder='Job Title'
-                    />
-                    <TextInput style={styles.inputText}
-                        onChangeText={(jobLocation) => this.setState({jobLocation})}
-                        selectTextOnFocus={true}
-                        placeholderTextColor="#fff"
-                        placeholder='Job Location'
-                    />
-                    <TextInput style={styles.inputText2}
-                        onChangeText={(jobDetails) => this.setState({jobDetails})}
-                        selectTextOnFocus={true}
-                        placeholderTextColor="#fff"
-                        placeholder='Job Details'
-                        multiline = {true}
+            //Wrap the entire page in "Wrapper". This allows for the sliding
+            //mechanism throughout the page.
+            <Swiper style={styles.wrapper} loop={false}>
 
-                    />
-                    <TextInput style={styles.inputText2}
-                        onChangeText={(additionalDetails) => this.setState({additionalDetails})}
-                        selectTextOnFocus={true}
-                        placeholder='Additional Details'
-                        placeholderTextColor="#fff"
-                        multiline = {true}
-                    />
+                {/*first slide of the wrapper*/}
+                <View style={styles.slide1_formFill}>
+                    <Text style={styles.largeText}>Basic Information</Text>
+                    <Text style={styles.mainText}>Let's start by giving basic information about your company.</Text>
                     <View style={styles.fillContainer}>
-                    <Button style={styles.buttonDesign} onPress={()=>this.changeSkillsList()}>
-                    Choose Skills
+
+                    <TextInput style={styles.inputText}
+                    onChangeText={(jobTitle) => this.setState({jobTitle})}
+                    selectTextOnFocus={true}
+                    placeholderTextColor="#fff"
+                    placeholder='Job Title'
+                    />
+                    <GooglePlacesAutocomplete
+                    ref={(instance) => { this.GooglePlacesRef = instance }}
+                    placeholder='Address'
+                    minLength={2} // minimum length of text to search
+                    autoFocus={false}
+                    returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+                    keyboardAppearance={'light'} // Can be left out for default keyboardAppearance https://facebook.github.io/react-native/docs/textinput.html#keyboardappearance
+                    listViewDisplayed='auto'    // true/false/undefined
+                    fetchDetails={true}
+                    renderDescription={row => row.description} // custom description render
+                    onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+                    this.setLatLong(details);}}
+                    query={{
+                      // available options: https://developers.google.com/places/web-service/autocomplete
+                      key: 'AIzaSyARMQhGlo4u3NMTNXhcY_Q6FGzAJf01q6Y',
+                      language: 'en', // language of the results
+                      types: 'geocode' // default: 'geocode'
+                    }}
+                    styles={{
+                      textInputContainer: {
+                        backgroundColor: 'transparent',
+                        borderWidth: 0,
+                        width: '100%',
+                        height: 60,
+                        borderTopWidth: 0,
+                        borderBottomWidth:0,
+                      },
+                      textInput:{
+                        textAlign: 'center',
+                        borderColor: '#fff',
+                        color: '#fff',
+                        fontSize: 25,
+                        textAlign: 'center',
+                        color:'white',
+                        fontFamily: 'Roboto-Thin',
+                        padding: 10,
+                        margin: 20,
+                        borderWidth: 1,
+                        borderRadius: 30,
+                        backgroundColor: 'transparent',
+                        height: 60,
+                        width: Dimensions.get('window').width * .9,
+                      },
+                      description: {
+                        fontSize: 16,
+                        textAlign: 'center',
+                        color: '#fff',
+                        fontFamily: 'Roboto-Thin',
+                        alignItems: 'center',
+                        width: '100%',
+                      },
+                      poweredContainer:{
+                        backgroundColor: 'transparent',
+                      }
+                    }}
+                    nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
+                    GooglePlacesSearchQuery={{
+                      // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+                      rankby: 'distance',
+                      type: 'cafe'
+                    }}
+                    GooglePlacesDetailsQuery={{
+                      // available options for GooglePlacesDetails API : https://developers.google.com/places/web-service/details
+                      fields: 'formatted_address',
+                    }}
+                    filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
+
+                    debounce={200} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+                    />
+
+                    </View>
+
+                    </View>
+                {/*second slide of the wrapper*/}
+                <View style={styles.slide2_formFill}>
+                    <Text style={styles.largeText}>Job Details</Text>
+                    <Text style={styles.mainText}>Bulleted list of details. Please fill out at least three fields.</Text>
+
+                    <View style={styles.fillContainer}>
+
+                    <TextInput style={styles.inputText}
+                    onChangeText={(jobDetails_1) => this.setState({jobDetails_1})}
+                    selectTextOnFocus={true}
+                    placeholderTextColor="#fff"
+                    placeholder='Job Detail (1)'
+                    multiline = {true}
+                    />
+                    <TextInput style={styles.inputText}
+                    onChangeText={(jobDetails_2) => this.setState({jobDetails_2})}
+                    selectTextOnFocus={true}
+                    placeholderTextColor="#fff"
+                    placeholder='Job Details (2)'
+                    multiline = {true}
+                    />
+                    <TextInput style={styles.inputText}
+                    onChangeText={(jobDetails_3) => this.setState({jobDetails_3})}
+                    selectTextOnFocus={true}
+                    placeholderTextColor="#fff"
+                    placeholder='Job Details (3)'
+                    multiline = {true}
+                    />
+                    <TextInput style={styles.inputText}
+                    onChangeText={(jobDetails_4) => this.setState({jobDetails_4})}
+                    selectTextOnFocus={true}
+                    placeholderTextColor="#fff"
+                    placeholder='Job Details (4)'
+                    multiline = {true}
+                    />
+                    <TextInput style={styles.inputText}
+                    onChangeText={(jobDetails_5) => this.setState({jobDetails_5})}
+                    selectTextOnFocus={true}
+                    placeholderTextColor="#fff"
+                    placeholder='Job Details (5)'
+                    multiline = {true}
+                    />
+                    <TextInput style={styles.inputText}
+                    onChangeText={(jobDetails_6) => this.setState({jobDetails_6})}
+                    selectTextOnFocus={true}
+                    placeholderTextColor="#fff"
+                    placeholder='Job Details (6)'
+                    multiline = {true}
+                    />
+                    <TextInput style={styles.inputText}
+                    onChangeText={(jobDetails_7) => this.setState({jobDetails_7})}
+                    selectTextOnFocus={true}
+                    placeholderTextColor="#fff"
+                    placeholder='Job Details (7)'
+                    multiline = {true}
+                    />
+                    <TextInput style={styles.inputText}
+                    onChangeText={(jobDetails_8) => this.setState({jobDetails_8})}
+                    selectTextOnFocus={true}
+                    placeholderTextColor="#fff"
+                    placeholder='Job Details (8)'
+                    multiline = {true}
+                    />
+
+                    </View>
+
+                    <View style={styles.bottomContainer}>
+                    <Button style={styles.buttonDesign} onPress={()=>this.cancelPressed()}>
+                    Cancel
+                    </Button>
+                    </View>
+
+
+                </View>
+
+
+                <View style={styles.slide1_Skills}>
+                    <Text style={styles.largeText}>Skills</Text>
+                    <View style={styles.labelContainer}>
+                    {/*
+                    Mapping each item in the loaded list of skills to the
+                    labels on the page.
+                    */}
+                    {
+                        this.skills.map(( item, key ) =>
+                        (
+                            <Text
+                            onPress={() => this.labelSelected(0, key)}
+                            key = {key}
+                            style = { [styles.label, { opacity: this.state.skills[key].opacity } ] }>
+                            { item.label }
+                            </Text>
+                        ))
+                    }
+                    </View>
+
+                    <View style={styles.bottomContainer}>
+                    <Button style={styles.buttonDesign} onPress={()=>this.cancelPressed()}>
+                    Cancel
+                    </Button>
+                    </View>
+
+                </View>
+                {/*second slide of the wrapper*/}
+                <View style={styles.slide2_Skills}>
+                    <Text style={styles.largeText}>Certifications</Text>
+                    <View style={styles.labelContainer}>
+                    {/*
+                    Mapping each item in the loaded list of Certifications to the
+                    labels on the page.
+                    */}
+                    {
+                        this.certs.map(( item, key ) =>
+                        (
+                            <Text
+                            onPress={() => this.labelSelected(1, key)}
+                            key = {key}
+                            style = { [styles.label, { opacity: this.state.certs[key].opacity } ] }>
+                            { item.label }
+                            </Text>
+                        ))
+                    }
+                    </View>
+
+                    <View style={styles.bottomContainer}>
+                    <Button style={styles.buttonDesign} onPress={()=>this.cancelPressed()}>
+                    Cancel
+                    </Button>
+                    </View>
+
+                </View>
+                <View style={styles.slide3_Skills}>
+                    <Text style={[styles.largeText, {marginBottom: 20}]}>Selected</Text>
+                    <Text
+                        style={styles.mainText}>
+                        These are the currently selected Skills and Certifications. Must choose more than 3.
+                    </Text>
+                    <View style={styles.labelContainer}>
+                    {/*
+                    Mapping each item in the list of user selected skills to the
+                    labels on the page. (This shrinks and expands as the user
+                    selects and deselects labels)
+                    */}
+                    {
+                        this.userSkills.map(( item, key ) =>
+                        (
+                            <Text
+                            key = {key}
+                            style = { [styles.label] }>
+                            { item.label }
+                            </Text>
+                        ))
+                    }
+                    </View>
+                    {/*Bottom container that holds the next button. (Also on the
+                    last wrapper page)*/}
+                    <View style={styles.bottomContainer}>
+                    <Button style={styles.buttonDesign} onPress={()=>this.checkListingForm()}>
+                    Create Listing
                     </Button>
                     <Button style={styles.buttonDesign} onPress={()=>this.cancelPressed()}>
                     Cancel
                     </Button>
                     </View>
                 </View>
-            </View>
 
+            </Swiper>
         );
-    }
-    if(this.state.formType == 'skillsList'){
-      return (
-          //Wrap the entire page in "Wrapper". This allows for the sliding
-          //mechanism throughout the page.
-          <Swiper style={styles.wrapper} loop={false}>
-
-              {/*first slide of the wrapper*/}
-              <View style={styles.slide2}>
-                  <Text style={styles.largeText}>Skills</Text>
-                  <View style={styles.labelContainer}>
-                  {/*
-                  Mapping each item in the loaded list of skills to the
-                  labels on the page.
-                  */}
-                  {
-                      this.skills.map(( item, key ) =>
-                      (
-                          <Text
-                          onPress={() => this.labelSelected(0, key)}
-                          key = {key}
-                          style = { [styles.label, { opacity: this.state.skills[key].opacity } ] }>
-                          { item.label }
-                          </Text>
-                      ))
-                  }
-                  </View>
-              </View>
-              {/*second slide of the wrapper*/}
-              <View style={styles.slide3}>
-                  <Text style={styles.largeText}>Certifications</Text>
-                  <View style={styles.labelContainer}>
-                  {/*
-                  Mapping each item in the loaded list of Certifications to the
-                  labels on the page.
-                  */}
-                  {
-                      this.certs.map(( item, key ) =>
-                      (
-                          <Text
-                          onPress={() => this.labelSelected(1, key)}
-                          key = {key}
-                          style = { [styles.label, { opacity: this.state.certs[key].opacity } ] }>
-                          { item.label }
-                          </Text>
-                      ))
-                  }
-                  </View>
-              </View>
-              <View style={styles.slide4}>
-                  <Text style={[styles.largeText, {marginBottom: 20}]}>Selected</Text>
-                  <Text
-                      style={styles.mainText}>
-                      These are the currently selected Skills and Certifications. Must choose more than 3.
-                  </Text>
-                  <View style={styles.labelContainer}>
-                  {/*
-                  Mapping each item in the list of user selected skills to the
-                  labels on the page. (This shrinks and expands as the user
-                  selects and deselects labels)
-                  */}
-                  {
-                      this.userSkills.map(( item, key ) =>
-                      (
-                          <Text
-                          key = {key}
-                          style = { [styles.label] }>
-                          { item.label }
-                          </Text>
-                      ))
-                  }
-                  </View>
-                  {/*Bottom container that holds the next button. (Also on the
-                  last wrapper page)*/}
-                  <View style={styles.bottomContainer}>
-                  <Button style={styles.buttonDesign} onPress={()=>this.checkListingForm()}>
-                  Create Listing
-                  </Button>
-                  <Button style={styles.buttonDesign} onPress={()=>this.changeFormFill()}>
-                  Back
-                  </Button>
-                  </View>
-              </View>
-          </Swiper>
-      );
-
-    }
-
 
   }
 
@@ -202,17 +325,51 @@ export default class EmployerCreateListing extends React.Component {
       )
     }
 
+    makeDetailArray(){
+      if(this.state.jobDetails_1 != ""){
+        jobDetailsArray.push(this.state.jobDetails_1);
+      }
+      if(this.state.jobDetails_2 != ""){
+        jobDetailsArray.push(this.state.jobDetails_2);
+      }
+      if(this.state.jobDetails_3 != ""){
+        jobDetailsArray.push(this.state.jobDetails_3);
+      }
+      if(this.state.jobDetails_4 != ""){
+        jobDetailsArray.push(this.state.jobDetails_4);
+      }
+      if(this.state.jobDetails_5 != ""){
+        jobDetailsArray.push(this.state.jobDetails_5);
+      }
+      if(this.state.jobDetails_6 != ""){
+        jobDetailsArray.push(this.state.jobDetails_6);
+      }
+      if(this.state.jobDetails_7 != ""){
+        jobDetailsArray.push(this.state.jobDetails_7);
+      }
+      if(this.state.jobDetails_8 != ""){
+        jobDetailsArray.push(this.state.jobDetails_8);
+      }
+
+
+    }
+
+    setLatLong(details){
+      lat = details["geometry"]["location"]["lat"];
+      lng = details["geometry"]["location"]["lng"];
+      this.state.jobLocation = details['formatted_address'];
+      console.log(lat);
+      console.log(lng);
+      console.log(this.state.jobLocation);
+    }
+
     checkListingForm(){
 
+        jobDetailsArray = [];
        let skillsArray = [];
-      // this.userSkills.map(( item, key ) =>
-      // (
-      //   key = {key};
-      //   skillsArray.push(item.label);
-      // ))
-      //
-      //
-      // console.log(skillsArray);
+
+       this.makeDetailArray();
+
 
       Object.keys(this.state.userSkills).forEach(key=>{
 
@@ -222,31 +379,21 @@ export default class EmployerCreateListing extends React.Component {
 //      console.log(skillsArray);
 
 
-      if (this.state.jobTitle != "" && this.state.jobLocation != "" && this.state.jobDetails != "" && this.state.JobAddtionalDetails != "" && skillsArray.length > 2) {
+      if (this.state.jobTitle != "" && this.state.jobLocation != "" && this.state.jobDetails_1 != ""
+      && this.state.jobDetails_2 != "" && this.state.jobDetails_3 != ""  && skillsArray.length > 2) {
+      console.log(jobDetailsArray);
 
-        Geocode.setApiKey('******************');
-        var lat;
-        var lng;
-        Geocode.fromAddress(this.state.jobLocation).then(
-          response => {
-            const { lat, lng } = response.results[0].geometry.location;
-            console.log(lat, lng);
             let rootRef = firebase.database().ref()
 
             let employerRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').push().set({
               'JobTitle' : this.state.jobTitle,
               'JobLocation' : this.state.jobLocation,
-              'JobDetails' : this.state.jobDetails,
-              'JobAddtionalDetails' : this.state.additionalDetails,
+              'JobDetails' : jobDetailsArray,
               'Coordinate_LAT' : lat,
               'Coordinate_LNG' : lng,
               'Skills': skillsArray,
             })
-          },
-          error => {
-            console.error(error);
-          }
-        );
+
 
 		Actions.EmployerHomepage({uid: this.props.uid});
 	}
@@ -400,26 +547,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color:'white',
         fontFamily: 'Roboto-Thin',
-        padding: 13,
+        padding: 20,
         margin: 5,
         borderWidth: 1,
         borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8
-    },
-    inputText2:{
-        borderColor: '#fff',
-        color: '#fff',
-        fontSize: 25,
-        textAlignVertical: 'top',
-        textAlign: 'center',
-        color:'white',
-        fontFamily: 'Roboto-Thin',
-        padding: 65,
-        margin: 5,
-        borderWidth: 1,
-        borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8,
-        height: Dimensions.get('window').height * 0.18
+        width: Dimensions.get('window').width * .9,
+        height: 60,
     },
     labelContainer:{
         flexDirection: 'row',
@@ -429,28 +562,41 @@ const styles = StyleSheet.create({
     },
     wrapper: {
     },
-    slide1: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#1E2027',
-        padding: 10
-    },
-    slide2: {
+    slide1_Skills: {
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#1E2027',
         padding: 10
 
     },
-    slide3: {
+    slide2_Skills: {
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#1E2027',
         padding: 10
 
     },
-    slide4: {
+    slide3_Skills: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#1E2027',
+        padding: 10
+    },
+    slide1_formFill: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#1E2027',
+        padding: 10
+
+    },
+    slide2_formFill: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#1E2027',
+        padding: 10
+
+    },
+    slide3_formFill: {
         flex: 1,
         alignItems: 'center',
         backgroundColor: '#1E2027',

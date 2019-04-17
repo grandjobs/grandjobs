@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, Alert, View, ScrollView, Dimensions, TextInput,Platform, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, RefreshControl,Text, Alert, View, ScrollView, Dimensions, TextInput,Platform, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import { DrawerNavigator } from 'react-navigation';
@@ -34,6 +34,7 @@ export default class EmployerHomepage extends React.Component {
         arr = [];
         key_arr = [];
 
+//global.GloablUID
 
 		    this.state = {
           companyName: '',
@@ -41,15 +42,16 @@ export default class EmployerHomepage extends React.Component {
           showLocationDialog: false,
           showEmailDialog: false,
           key: 1,
+          refreshing: false,
 
         };
 
     }
 
 	async componentDidMount() {
-		console.log(this.state.user)
 		let rootRef = firebase.database().ref()
-		let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
+		let userRef = rootRef.child('EMPLOYERS').child(global.GloablUID)
+
 
 		try {
             userRef.once('value')
@@ -66,11 +68,14 @@ export default class EmployerHomepage extends React.Component {
 
 
       try{
-    let employerJobRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS')
+    let employerJobRef = rootRef.child('EMPLOYERS').child(global.GloablUID).child('JOBS')
     if (employerJobRef != undefined) {
       employerJobRef.once('value')
       	.then(snapshot => {
         	let jobs = snapshot.val()
+
+          arr = [];
+          key_arr = [];
 
         Object.keys(jobs).forEach(key=>{
 
@@ -101,9 +106,7 @@ EmployerAccountRef.update({
 });
 
 
-
 }
-
 
 
     render() {
@@ -112,7 +115,7 @@ EmployerAccountRef.update({
       const myMenu = <UserMenu uid={this.props.uid}/>;
 
       return (
-            <SideMenu menu = {myMenu}>
+            <SideMenu menu = {myMenu} bounceBackOnOverdraw={false} edgeHitWidth={Dimensions.get('window').width}>
 
             <Dialog.Container visible={this.state.showLocationDialog}>
             <Dialog.Title>Location</Dialog.Title>
@@ -131,7 +134,18 @@ EmployerAccountRef.update({
                     <Text style={styles.largeText}>Grand Jobs</Text>
                     <Text style={styles.mainText}>Homepage</Text>
                 </View>
-                <ScrollView style={{width: Dimensions.get('window').width * 0.90}} key = {this.state.key}>
+                <ScrollView
+                refreshControl= {
+                  <RefreshControl
+                  refreshing = {this.state.refresh}
+                  onRefresh={() => this.refreshScreen()}
+                  snapToStart = {true}
+                />
+              }
+                  key = {this.state.key}
+                  style={{width: Dimensions.get('window').width * 0.90}}
+                >
+
 
                     <Card isDark = {true} style={styles.cardStyle}>
                         <CardTitle
@@ -211,6 +225,14 @@ EmployerAccountRef.update({
         {text:'Cancel',onPress:()=>console.log('cancel pressed')}
       ]
     )
+    }
+
+    refreshScreen(){
+
+    this.setState({ refresh: true });
+    this.componentDidMount().then(()=>{
+      this.setState({refresh: false});
+    });
     }
 
 

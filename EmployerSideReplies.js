@@ -119,7 +119,7 @@ export default class EmployerSideReplies extends React.Component {
     render() {
       const myMenu = <UserMenu/>;
               return (
-            <SideMenu menu = {myMenu}>
+            <SideMenu menu = {myMenu} bounceBackOnOverdraw={false} edgeHitWidth={Dimensions.get('window').width}>
                 <View style={styles.mainContainer}>
                     <View style={styles.textContainer}>
                         <Text style={styles.largeText}>Grand Jobs</Text>

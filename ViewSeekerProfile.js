@@ -5,7 +5,7 @@ import { Actions } from 'react-native-router-flux'
 import { firebase } from './db'
 
 export default class ViewSeekerProfile extends React.Component {
-
+//global.GloablUID
   constructor(props){
     super(props);
 
