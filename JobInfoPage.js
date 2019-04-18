@@ -18,9 +18,19 @@ export default class JobInfoPage extends React.Component {
         this.jobInfo = this.props.jobInfo;
         this.contactedList = [];
         this.loadContacted();
-
-        this.state = {
-            showDialog: false
+        if (!props.contacted){
+            this.state = {
+                showDialog: false,
+                contactOpacity: 1.0,
+                contactDisabled: false,
+            }
+        }
+        else{
+            this.state = {
+                showDialog: false,
+                contactOpacity: 0.5,
+                contactDisabled: true,
+            }
         }
     }
 
@@ -40,9 +50,10 @@ export default class JobInfoPage extends React.Component {
         }
 
         this.setState({
-            showDialog: false
+            showDialog: false,
+            contactOpacity: 0.5,
+            contactDisabled: true,
         });
-        this.backPressed();
     }
 
 
@@ -56,7 +67,7 @@ export default class JobInfoPage extends React.Component {
         return (
             <View style={styles.mainContainer}>
                 <Dialog.Container visible={this.state.showDialog}>
-                    <Dialog.Title>First Name</Dialog.Title>
+                    <Dialog.Title>Contact Company?</Dialog.Title>
                     <Dialog.Description>
                     Are you sure you want to contact this position?
                     </Dialog.Description>
@@ -115,17 +126,17 @@ export default class JobInfoPage extends React.Component {
                     <MapView
                         style={styles.mapStyle}
                         region={{
-                            latitude: 42.9634,
-                            longitude: -85.6681,
+                            latitude: this.jobInfo.lat,
+                            longitude: this.jobInfo.long,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421
                         }}>
-                        <Marker coordinate={{latitude: 42.9634, longitude: -85.6681}}/>
+                        <Marker coordinate={{latitude: this.jobInfo.lat, longitude: this.jobInfo.long}}/>
                     </MapView>
 
                     {/*Container to anchor the buttons to the bottom of the screen.*/}
-                    <View style={styles.bottomContainer}>
-                        <Button style={styles.buttonDesign} onPress={()=>this.contactPressed()}>
+                    <View style={styles.bottomContainer} >
+                        <Button style={[styles.buttonDesign, {opacity:this.state.contactOpacity}]} disabled={this.state.contactDisabled} onPress={()=>this.contactPressed()}>
                         Contact
                         </Button>
                         <Button style={styles.buttonDesign} onPress={()=>this.backPressed()}>
@@ -170,7 +181,12 @@ export default class JobInfoPage extends React.Component {
      * @return {[type]} [description]
      */
     backPressed(){
-        Actions.UserHomePage();
+        if (!this.props.contacted){
+            Actions.UserHomePage();
+        }
+        else{
+            Actions.ContactedPage();
+        }
     }
 }
 

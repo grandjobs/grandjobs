@@ -12,5 +12,6 @@ export default class JobInfo{
         //Company location
         this.lat = 0;
         this.long = 0;
+        this.address = "";
     }
 }

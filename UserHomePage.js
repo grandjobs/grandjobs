@@ -49,7 +49,7 @@ export default class UserHomePage extends React.Component {
                                 title={item.company}
                                 subtitle={item.jobTitle}
                                 />
-                                <CardContent style={{fontSize:50}} text={"Location: " + item.distance}/>
+                                <CardContent style={{fontSize:50}} text={"Location: " + item.address + "\n\nDistance: " + item.distance + " Miles"}/>
                                 <CardAction
                                 separator={true}
                                 inColumn={false}>
@@ -70,20 +70,56 @@ export default class UserHomePage extends React.Component {
 
     //Handle the press of the card and send to the job info page.
     cardPressed(jobInfo){
-        Actions.JobInfoPage({jobInfo: jobInfo});
+        Actions.JobInfoPage({jobInfo: jobInfo, contacted:false});
     }
+
+    /**
+     * Distance between two lat long points...
+     *
+     * https://www.geodatasource.com/developers/javascript
+     */
+    distance(lat1, lon1, lat2, lon2) {
+        if ((lat1 == lat2) && (lon1 == lon2)) {
+            return 0;
+        }
+        else {
+            var radlat1 = Math.PI * lat1/180;
+            var radlat2 = Math.PI * lat2/180;
+            var theta = lon1-lon2;
+            var radtheta = Math.PI * theta/180;
+            var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+            if (dist > 1) {
+                dist = 1;
+            }
+            dist = Math.acos(dist);
+            dist = dist * 180/Math.PI;
+            dist = dist * 60 * 1.1515;
+            return dist;
+        }
+    }
+
+
 
     fbPull(){
         let rootRef = firebase.database().ref();
-        //TODO: Get UID from props.
         let employerRef = rootRef.child('EMPLOYERS');
         let userRef = rootRef.child('USERS').child(global.GloablUID).child('Contacted');
+        let userRefLoc = rootRef.child('USERS').child(global.GloablUID).child('Home Location');
         try {
             contactedJobs = [];
+            userHomeLat = 0;
+            userHomeLong = 0;
             userRef.once('value')
             .then(snapshot => {
                 snap = snapshot.val();
                 contactedJobs = snap;
+            });
+
+            userRefLoc.once('value')
+            .then(snapshot => {
+                snap = snapshot.val();
+                userHomeLat = snap['Latitude'];
+                userHomeLong = snap['Longitude'];
             });
 
             employerRef.once('value')
@@ -118,9 +154,13 @@ export default class UserHomePage extends React.Component {
                                 //Set attributes from loaded job.
                                 curJob.company = employer["Company Name"];
                                 curJob.jobTitle = job["JobTitle"];
-                                curJob.distance = job["JobLocation"];
-                                curJob.skills = ["Skill 1", "Skill 2", "Skill 3", "Skill 4", "Skill 5", "Skill 6"];
+                                curJob.address = job["JobLocation"];
+                                curJob.skills = job["Skills"];
+                                curJob.description = job["JobDetails"];
+                                curJob.lat = job["Coordinate_LAT"];
+                                curJob.long = job["Coordinate_LNG"];
                                 curJob.jobKey = jobKey;
+                                curJob.distance = this.distance(curJob.lat, curJob.long, userHomeLat, userHomeLong).toFixed(2);
                                 loadedJobs.push(curJob);
                             }
                         }
@@ -135,6 +175,8 @@ export default class UserHomePage extends React.Component {
             console.warn(e);
         }
     }
+
+
 }
 
 const styles = StyleSheet.create({
