@@ -36,6 +36,7 @@ export default class EmployerHomepage extends React.Component {
 
 //global.GloablUID
 
+
 		    this.state = {
           companyName: '',
           companyLocation: '',
@@ -45,6 +46,7 @@ export default class EmployerHomepage extends React.Component {
           refreshing: false,
 
         };
+
 
     }
 
@@ -60,6 +62,7 @@ export default class EmployerHomepage extends React.Component {
 
 					console.log('Loaded name: ' + companyInfo['Company Name'])
 					this.setState({ companyName : companyInfo['Company Name'] })
+          global.companyTitle = this.state.companyName;
 					this.setState({ companyLocation : companyInfo['Company Location'] })
 				})
         } catch (e) {
@@ -325,6 +328,7 @@ class UserMenu extends React.Component{
     }
     if(index == 2){
       //create pressed
+
       Actions.EmployerCreateListing({uid: this.props.uid});
     }
     if(index == 3){

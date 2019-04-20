@@ -6,6 +6,7 @@ import { firebase } from './db'
 import Geocode from "react-geocode";
 import Swiper from 'react-native-swiper';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import MapView, { Marker, CallOut } from 'react-native-maps';
 
 export default class EmployerCreateListing extends React.Component {
 
@@ -38,6 +39,7 @@ export default class EmployerCreateListing extends React.Component {
       certs: this.certs,
       userSkills: this.userSkills,
 
+
       jobDetails_1: '',
       jobDetails_2: '',
       jobDetails_3: '',
@@ -52,6 +54,8 @@ export default class EmployerCreateListing extends React.Component {
 
 
     render() {
+      lat = "42.9634";
+      lng = "-85.6681";
         return (
             //Wrap the entire page in "Wrapper". This allows for the sliding
             //mechanism throughout the page.
@@ -81,6 +85,7 @@ export default class EmployerCreateListing extends React.Component {
                     renderDescription={row => row.description} // custom description render
                     onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
                     this.setLatLong(details);}}
+
                     query={{
                       // available options: https://developers.google.com/places/web-service/autocomplete
                       key: 'AIzaSyARMQhGlo4u3NMTNXhcY_Q6FGzAJf01q6Y',
@@ -100,7 +105,7 @@ export default class EmployerCreateListing extends React.Component {
                         textAlign: 'center',
                         borderColor: '#fff',
                         color: '#fff',
-                        fontSize: 25,
+                        fontSize: 23,
                         textAlign: 'center',
                         color:'white',
                         fontFamily: 'Roboto-Thin',
@@ -143,7 +148,10 @@ export default class EmployerCreateListing extends React.Component {
 
                     </View>
                 {/*second slide of the wrapper*/}
+
+
                 <View style={styles.slide2_formFill}>
+                <ScrollView>
                     <Text style={styles.largeText}>Job Details</Text>
                     <Text style={styles.mainText}>Bulleted list of details. Please fill out at least three fields.</Text>
 
@@ -208,18 +216,15 @@ export default class EmployerCreateListing extends React.Component {
 
                     </View>
 
-                    <View style={styles.bottomContainer}>
-                    <Button style={styles.buttonDesign} onPress={()=>this.cancelPressed()}>
-                    Cancel
-                    </Button>
-                    </View>
-
-
+                </ScrollView>
                 </View>
 
 
+
                 <View style={styles.slide1_Skills}>
+                {this.makeDetailArray()}
                     <Text style={styles.largeText}>Skills</Text>
+                    <Text style={styles.mainText}>Must choose 3 or more skills.</Text>
                     <View style={styles.labelContainer}>
                     {/*
                     Mapping each item in the loaded list of skills to the
@@ -230,6 +235,7 @@ export default class EmployerCreateListing extends React.Component {
                         (
                             <Text
                             onPress={() => this.labelSelected(0, key)}
+
                             key = {key}
                             style = { [styles.label, { opacity: this.state.skills[key].opacity } ] }>
                             { item.label }
@@ -273,29 +279,94 @@ export default class EmployerCreateListing extends React.Component {
                     </View>
 
                 </View>
+
+                <View style={styles.slide4_Skills}>
+                <View style={listing_style.mainContainer}>
+                    <Text style={listing_style.largeText}>{global.companyTitle}</Text>
+                    <Text style={listing_style.mainText}>{this.state.JobTitle}</Text>
+                    {/*Main ScrollView for the jobs*/}
+                    <ScrollView style={listing_style.infoContainer}>
+                        {/*Map the description of the jobs to the text.*/}
+                        <Text style={listing_style.sectionText}>Job Description</Text>
+                        {
+
+
+                            jobDetailsArray.map(( item, key ) =>
+                            (
+                                <Text
+                                key = {key}
+                                style = {listing_style.descripText}>
+                                {" - " + item}
+                                </Text>
+                            ))
+                        }
+                        <Text style={[listing_style.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Wanted Skills</Text>
+                        {/*Map the skills of the job to the screen*/}
+                        <View style={listing_style.skillsContainer}>
+                        {
+                          this.userSkills.map(( item, key ) =>
+                          (
+                              <Text
+                              key = {key}
+                              style = { [styles.label] }>
+                              { item.label }
+                              </Text>
+                          ))
+                        }
+                        </View>
+                        {console.log(lat)}
+                        {console.log(lng)}
+
+                        <Text style={listing_style.sectionText}>Location</Text>
+
+                        {/*Display all other information to the screen.*/}
+                        <Text style={listing_style.distanceText}>
+                            Distance from home:
+                            <Text style={[listing_style.distanceText, {color: "#a9fcd4"}]}>
+                            {" " + "0" + " "}
+                            </Text>
+                            miles
+                        </Text>
+
+                        {
+                            /*Display the map on the page for the user view the jobs
+                            location*/
+                        }
+                        <MapView
+                            style={listing_style.mapStyle}
+                            region={{
+                                latitude: lat,
+                                longitude: lng,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421
+                            }}
+                            onPress={e => this.handlePress(e)}
+                            >
+                            <Marker coordinate={{latitude: lat, longitude: lng}}/>
+                        </MapView>
+
+                        {/*Container to anchor the buttons to the bottom of the screen.*/}
+                        <View style={listing_style.bottomContainer}>
+                            <Button style={listing_style.buttonDesign} onPress={console.log("hello")}>
+                            Contact
+                            </Button>
+                            <Button style={listing_style.buttonDesign} onPress={console.log("hello")}>
+                            Back
+                            </Button>
+                        </View>
+
+                    </ScrollView>
+                </View>
+
+                </View>
+
                 <View style={styles.slide3_Skills}>
-                    <Text style={[styles.largeText, {marginBottom: 20}]}>Selected</Text>
+                    <Text style={[styles.largeText, {marginBottom: 20}]}>Confirm</Text>
                     <Text
                         style={styles.mainText}>
-                        These are the currently selected Skills and Certifications. Must choose more than 3.
+                        Press create listing below to confirm your new job listing.
                     </Text>
-                    <View style={styles.labelContainer}>
-                    {/*
-                    Mapping each item in the list of user selected skills to the
-                    labels on the page. (This shrinks and expands as the user
-                    selects and deselects labels)
-                    */}
-                    {
-                        this.userSkills.map(( item, key ) =>
-                        (
-                            <Text
-                            key = {key}
-                            style = { [styles.label] }>
-                            { item.label }
-                            </Text>
-                        ))
-                    }
-                    </View>
+
                     {/*Bottom container that holds the next button. (Also on the
                     last wrapper page)*/}
                     <View style={styles.bottomContainer}>
@@ -326,6 +397,7 @@ export default class EmployerCreateListing extends React.Component {
     }
 
     makeDetailArray(){
+      jobDetailsArray = [];
       if(this.state.jobDetails_1 != ""){
         jobDetailsArray.push(this.state.jobDetails_1);
       }
@@ -358,6 +430,12 @@ export default class EmployerCreateListing extends React.Component {
       lat = details["geometry"]["location"]["lat"];
       lng = details["geometry"]["location"]["lng"];
       this.state.jobLocation = details['formatted_address'];
+
+      this.state.lat = lat;
+      this.state.lng = lng;
+
+
+
       console.log(lat);
       console.log(lng);
       console.log(this.state.jobLocation);
@@ -543,7 +621,7 @@ const styles = StyleSheet.create({
     inputText:{
         borderColor: '#fff',
         color: '#fff',
-        fontSize: 25,
+        fontSize: 23,
         textAlign: 'center',
         color:'white',
         fontFamily: 'Roboto-Thin',
@@ -552,7 +630,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 30,
         width: Dimensions.get('window').width * .9,
-        height: 60,
+        height: 58,
     },
     labelContainer:{
         flexDirection: 'row',
@@ -581,6 +659,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#1E2027',
         padding: 10
+    },
+    slide4_Skills:{
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: '#1E2027',
+      padding: 10,
     },
     slide1_formFill: {
         flex: 1,
@@ -619,6 +703,103 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         marginBottom: 10
     },
+
+
+
+
+});
+
+const listing_style = StyleSheet.create({
+  mainContainer: {
+      flex: 1,
+      backgroundColor: '#1E2027',
+      // padding: 10,
+      alignItems: 'center'
+  },
+  infoContainer:{
+      flex: 1,
+      paddingHorizontal: 20,
+  },
+  skillsContainer:{
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+      alignItems: 'flex-start',
+      paddingVertical: 20,
+  },
+  largeText:{
+      paddingTop: Dimensions.get('window').height * 0.02,
+      fontSize: 65,
+      textAlign: 'center',
+      color: '#d6d6d6',
+      fontFamily: 'Roboto-Thin'
+  },
+  mainText:{
+      fontSize: 40,
+      textAlign: 'center',
+      paddingBottom: 10,
+      color: '#a9fcd4',
+      fontFamily: 'Roboto-Thin'
+  },
+  descripText:{
+      fontSize: 18,
+      color: '#d6d6d6',
+      fontFamily: 'Roboto-Thin',
+      paddingBottom: 10
+  },
+  distanceText:{
+      fontSize: 25,
+      color: '#d6d6d6',
+      fontFamily: 'Roboto-Thin',
+      paddingBottom: 10
+  },
+  sectionText:{
+      fontSize: 25,
+      color: '#d6d6d6',
+      fontFamily: 'Roboto-Thin',
+      textDecorationLine: 'underline',
+      padding: 20,
+      textAlign: 'center',
+  },
+  skillLabel:{
+      fontSize: 22,
+      textAlign: 'center',
+      color: '#d6d6d6',
+      fontFamily: 'Roboto-Thin',
+      borderWidth: 1,
+      borderColor: '#a9fcd4',
+      borderRadius: 30,
+      paddingHorizontal: 20,
+      marginTop: 25,
+      marginHorizontal: 5,
+  },
+  bottomContainer:{
+      flex: 1,
+      justifyContent: 'flex-end',
+      marginBottom: 10,
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+  },
+  buttonDesign:{
+      fontSize: 20,
+      fontWeight: 'normal',
+      fontFamily: 'Roboto-Thin',
+      padding: 10,
+      marginVertical: 30,
+      width: 150,
+      color: '#fff',
+      borderRadius: 30,
+      borderColor: '#a9fcd4',
+      borderWidth: 1,
+  },
+  mapStyle:{
+      height: Dimensions.get('window').height * 0.50,
+      width: Dimensions.get('window').width * 0.85,
+      margin: 10
+  },
+
 });
 
 class SkillElement{
