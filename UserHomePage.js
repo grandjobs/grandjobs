@@ -49,7 +49,7 @@ export default class UserHomePage extends React.Component {
                                 title={item.company}
                                 subtitle={item.jobTitle}
                                 />
-                                <CardContent style={{fontSize:50}} text={"Location: " + item.address + "\n\nDistance: " + item.distance + " Miles"}/>
+                                <CardContent style={{fontSize:50}} text={"Location: " + item.address + "\n\nDistance from home: " + item.distance + " Miles" + item.longBusDescrip}/>
                                 <CardAction
                                 separator={true}
                                 inColumn={false}>
@@ -103,26 +103,44 @@ export default class UserHomePage extends React.Component {
     fbPull(){
         let rootRef = firebase.database().ref();
         let employerRef = rootRef.child('EMPLOYERS');
-        let userRef = rootRef.child('USERS').child(global.GloablUID).child('Contacted');
-        let userRefLoc = rootRef.child('USERS').child(global.GloablUID);
+        let userRefContact = rootRef.child('USERS').child(global.GloablUID).child('Contacted');
+        let userRefBase = rootRef.child('USERS').child(global.GloablUID);
+        let busRef = rootRef.child('BUSES');
+
         try {
             contactedJobs = [];
+            userBusRoutes = [];
             userHomeLat = 0;
             userHomeLong = 0;
             userRange = 0;
-            userRef.once('value')
+            allBusRoutes = [];
+            //Grab the users contacted jobs
+            userRefContact.once('value')
             .then(snapshot => {
                 snap = snapshot.val();
                 contactedJobs = snap;
             });
 
-            userRefLoc.once('value')
+            //Grab user info (location and bus routes)
+            userRefBase.once('value')
             .then(snapshot => {
                 snap = snapshot.val();
                 userHomeLat = snap['Home Location']['Latitude'];
                 userHomeLong = snap['Home Location']['Longitude'];
                 userRange = parseInt(snap['Travel']['Range']);
+
+                if (typeof snap['Travel']['Bus Routes'] !== 'undefined'){
+                    userBusRoutes = snap['Travel']['Bus Routes'];
+                }
             });
+
+            //Get bus route information
+            busRef.once('value')
+            .then(snapshot => {
+                allBusRoutes = snapshot.val();
+            });
+
+
 
             employerRef.once('value')
             .then(snapshot => {
@@ -163,6 +181,18 @@ export default class UserHomePage extends React.Component {
                                 curJob.jobKey = jobKey;
 
                                 if (curJob.distance <= userRange){
+                                    if (userBusRoutes.length > 0){
+                                        results = this.getClosestStop(allBusRoutes, userBusRoutes, curJob.lat, curJob.long);
+                                        curJob.busLat = results[0];
+                                        curJob.busLong = results[1];
+                                        curJob.busLine = results[2];
+                                        curJob.busDescrip = results[3];
+                                        curJob.busDistance = results[4];
+                                        tab = "    - ";
+                                        curJob.longBusDescrip = "\n\nClosest Bus Line: " + curJob.busLine;
+                                        curJob.longBusDescrip += "\n" + tab + "Closest Bus Stop: " + curJob.busDescrip;
+                                        curJob.longBusDescrip += "\n" + tab + "Closest Bus Distance: " + curJob.busDistance + " Miles";
+                                    }
                                     loadedJobs.push(curJob);
                                 }
                             }
@@ -177,6 +207,33 @@ export default class UserHomePage extends React.Component {
         } catch (e) {
             console.warn(e);
         }
+    }
+
+    getClosestStop(allRoutes, userRoutes, jobLat, jobLong){
+        closeLat = 0;
+        closeLong = 0;
+        descrip = "";
+        minDist = 999999;
+        line = "";
+
+        for (var i in userRoutes){
+            route = allRoutes[userRoutes[i]]['Stops']
+            for (stop in route){
+                curStop = route[stop];
+                curLat = curStop['Latitude'];
+                curLong = curStop['Longitude'];
+                tempDist = this.distance(jobLat, jobLong, curLat, curLong);
+                if (tempDist < minDist){
+                    minDist = tempDist;
+                    closeLat = curLat;
+                    closeLong = curLong;
+                    descrip = curStop['Description'];
+                    line = userRoutes[i];
+                }
+            }
+        }
+        minDist = minDist.toFixed(2);
+        return [closeLat, closeLong, line, descrip, minDist];
     }
 
 

@@ -186,6 +186,8 @@ export default class TempSkillsPage extends Component {
         this.setState({
             markerLat: tempLat,
             markerLong:  tempLong,
+            disable: false,
+            opac: 1,
         });
         this.GooglePlacesRef.setAddressText("");
         const region = {

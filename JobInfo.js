@@ -13,5 +13,11 @@ export default class JobInfo{
         this.lat = 0;
         this.long = 0;
         this.address = "";
+        this.busDistance = -1;
+        this.busDescrip = "";
+        this.busLine = -1;
+        this.busLat = 0;
+        this.busLong = 0;
+        this.longBusDescrip = "";
     }
 }
