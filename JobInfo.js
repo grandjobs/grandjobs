@@ -19,5 +19,6 @@ export default class JobInfo{
         this.busLat = 0;
         this.busLong = 0;
         this.longBusDescrip = "";
+        this.matchPercent = 0;
     }
 }

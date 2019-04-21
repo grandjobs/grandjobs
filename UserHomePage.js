@@ -46,7 +46,7 @@ export default class UserHomePage extends React.Component {
                             <Card isDark = {true} style={styles.cardStyle} key = {key}>
                                 <CardTitle
                                 style={{fontSize:50}}
-                                title={item.company}
+                                title={item.company  + " (" + item.matchPercent * 100 + "%)"}
                                 subtitle={item.jobTitle}
                                 />
                                 <CardContent style={{fontSize:50}} text={"Location: " + item.address + "\n\nDistance from home: " + item.distance + " Miles" + item.longBusDescrip}/>
@@ -110,6 +110,7 @@ export default class UserHomePage extends React.Component {
         try {
             contactedJobs = [];
             userBusRoutes = [];
+            userSkills = [];
             userHomeLat = 0;
             userHomeLong = 0;
             userRange = 0;
@@ -128,6 +129,7 @@ export default class UserHomePage extends React.Component {
                 userHomeLat = snap['Home Location']['Latitude'];
                 userHomeLong = snap['Home Location']['Longitude'];
                 userRange = parseInt(snap['Travel']['Range']);
+                userSkills = snap['Skills'];
 
                 if (typeof snap['Travel']['Bus Routes'] !== 'undefined'){
                     userBusRoutes = snap['Travel']['Bus Routes'];
@@ -179,8 +181,9 @@ export default class UserHomePage extends React.Component {
                                 curJob.long = job["Coordinate_LNG"];
                                 curJob.distance = this.distance(curJob.lat, curJob.long, userHomeLat, userHomeLong).toFixed(2);
                                 curJob.jobKey = jobKey;
+                                curJob.matchPercent = this.getSkillMatchPercent(userSkills, curJob.skills);
 
-                                if (curJob.distance <= userRange){
+                                if (curJob.distance <= userRange && curJob.matchPercent > 0.0){
                                     if (userBusRoutes.length > 0){
                                         results = this.getClosestStop(allBusRoutes, userBusRoutes, curJob.lat, curJob.long);
                                         curJob.busLat = results[0];
@@ -188,10 +191,10 @@ export default class UserHomePage extends React.Component {
                                         curJob.busLine = results[2];
                                         curJob.busDescrip = results[3];
                                         curJob.busDistance = results[4];
-                                        tab = "    - ";
+                                        tab = "        - ";
                                         curJob.longBusDescrip = "\n\nClosest Bus Line: " + curJob.busLine;
                                         curJob.longBusDescrip += "\n" + tab + "Closest Bus Stop: " + curJob.busDescrip;
-                                        curJob.longBusDescrip += "\n" + tab + "Closest Bus Distance: " + curJob.busDistance + " Miles";
+                                        curJob.longBusDescrip += "\n" + tab + "Distance: " + curJob.busDistance + " Miles";
                                     }
                                     loadedJobs.push(curJob);
                                 }
@@ -234,6 +237,23 @@ export default class UserHomePage extends React.Component {
         }
         minDist = minDist.toFixed(2);
         return [closeLat, closeLong, line, descrip, minDist];
+    }
+
+    getSkillMatchPercent(userSkills, jobSkills){
+        numMatches = 0;
+        for (var i in jobSkills){
+            jSkill = jobSkills[i];
+            for (var j in userSkills){
+                uSkill = userSkills[j];
+                if (jSkill === uSkill){
+                    numMatches += 1;
+                }
+            }
+        }
+        percent = numMatches / (jobSkills.length * 1.0);
+        percent = percent.toFixed(2);
+        console.log(percent);
+        return percent;
     }
 
 
