@@ -24,15 +24,21 @@ const menu = [
     id: 'four'}
 ]
 
+let reply_arr = [];
 let arr = [];
-let key_arr = [];
+let job_arr = [];
+
+let index_values = [];
 
 export default class EmployerHomepage extends React.Component {
+
+
 
     constructor(props){
         super(props);
         arr = [];
-        key_arr = [];
+        reply_arr = [];
+        job_arr = [];
 
 //global.GloablUID
 
@@ -48,7 +54,9 @@ export default class EmployerHomepage extends React.Component {
 
     }
 
+
 	async componentDidMount() {
+
 		let rootRef = firebase.database().ref()
 		let userRef = rootRef.child('EMPLOYERS').child(global.GloablUID)
 
@@ -75,16 +83,33 @@ export default class EmployerHomepage extends React.Component {
         	let jobs = snapshot.val()
 
           arr = [];
-          key_arr = [];
+          job_arr = [];
+          reply_arr = [];
 
         Object.keys(jobs).forEach(key=>{
 
-          arr.push(jobs[key]);
-          key_arr.push(key);
+      if(jobs[key]['Replies'] !== undefined){
+
+
+          for(let j = 0; j < 10000; j++){
+          if(jobs[key]['Replies'][j] !== undefined){
+    //        console.log(j);
+          reply_arr.push(jobs[key]['Replies'][j]);
+          arr.push(jobs[key]['JobTitle']);
+          job_arr.push(key);
+          index_values.push(j);
+        }
+      }
+      }
+
         })
 
-        console.log(arr);
-        console.log(key_arr);
+    //    console.log(index_values);
+  //      console.log(arr);
+    //  console.log(arr["Replies"]);
+
+    //      console.log(reply_arr);
+  //  console.log(job_arr);
     	})
 
     }
@@ -132,7 +157,7 @@ EmployerAccountRef.update({
             <View style={styles.mainContainer}>
                 <View style={styles.textContainer}>
                     <Text style={styles.largeText}>Grand Jobs</Text>
-                    <Text style={styles.mainText}>Homepage</Text>
+                    <Text style={styles.mainText}>Replies</Text>
                 </View>
                 <ScrollView
                 refreshControl= {
@@ -180,23 +205,26 @@ EmployerAccountRef.update({
 
     for(let i = 0; i < arr.length; i++){
 
+  //    console.log(arr[i]['JobTitle']);
+  //    console.log(arr[i]['Replies']);
+
 
       elements.push(<Card isDark = {true} style={styles.cardStyle}>
                             <CardTitle
                             title= "New Reply"
                             />
-                            <CardContent text={"Position: Professor"}/>
+                            <CardContent text={"Position: " + arr[i]}/>
 
                             <CardAction
                             separator={true}
                             inColumn={false}>
                             <CardButton
-                            onPress={() => this.viewPressed()}
+                            onPress={() => this.viewPressed(reply_arr[i])}
                             title="View "
                             color="#a9fcd4"
                             />
                             <CardButton
-                            onPress={() => this.deletePosting()}
+                            onPress={() => this.deletePosting(i)}
                             title="Remove "
                             color="#a9fcd4"
                             alignSelf="right"
@@ -221,8 +249,9 @@ EmployerAccountRef.update({
 
     }
 
-    viewPressed(){
-      Actions.ViewSeekerProfile();
+    viewPressed(id){
+      console.log({useridkey: id});
+      Actions.ViewSeekerProfile({useridkey: id});
     }
 
 
@@ -230,7 +259,7 @@ EmployerAccountRef.update({
       console.log(id);
       Alert.alert(
       'Delete',
-      'Are you sure you want to delete this posting?',
+      'Are you sure you want to delete this reply?',
       [
         {text:'Delete',onPress:()=>this.deleteCardFB(id)},
         {text:'Cancel',onPress:()=>console.log('cancel pressed')}
@@ -249,12 +278,19 @@ EmployerAccountRef.update({
 
     deleteCardFB(id){
 
+      console.log(id);
+  //    console.log(reply_arr[id]);
+    //  console.log(job_arr[id]);
+
       let rootRef = firebase.database().ref();
-      rootRef.child('EMPLOYERS').child(global.GloablUID).child('JOBS').child(key_arr[id]).remove();
-      key_arr.splice(id,1);
-      console.log(key_arr);
+
+      rootRef.child('EMPLOYERS').child(global.GloablUID).child('JOBS').child(job_arr[id]).child('Replies').child(index_values[id]).remove();
+      reply_arr.splice(id,1);
+    //  console.log(reply_arr);
       arr = [];
-      key_arr = [];
+      reply_arr = [];
+      job_arr = [];
+      index_values = [];
       this.componentDidMount();
       this.setState({ key: Math.random() });
 

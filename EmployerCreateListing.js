@@ -468,6 +468,7 @@ export default class EmployerCreateListing extends React.Component {
               'Coordinate_LAT' : lat,
               'Coordinate_LNG' : lng,
               'Skills': skillsArray,
+            
             })
 
 

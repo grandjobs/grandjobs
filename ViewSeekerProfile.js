@@ -29,7 +29,7 @@ export default class ViewSeekerProfile extends React.Component {
       let rootRef = firebase.database().ref()
 
         try{
-      let userRef = rootRef.child('USERS').child('xaeuG01hzdPkOz2U8y3ma19rlBl1')
+      let userRef = rootRef.child('USERS').child(this.props.useridkey)
       if (userRef != undefined) {
         userRef.once('value')
           .then(snapshot => {

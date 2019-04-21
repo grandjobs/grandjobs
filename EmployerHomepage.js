@@ -81,13 +81,13 @@ export default class EmployerHomepage extends React.Component {
           key_arr = [];
 
         Object.keys(jobs).forEach(key=>{
-  
+
           arr.push(jobs[key]);
           key_arr.push(key);
         })
 
-        console.log(arr);
-        console.log(key_arr);
+    //    console.log(arr);
+    //    console.log(key_arr);
     	})
 
     }
