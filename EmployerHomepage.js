@@ -81,7 +81,7 @@ export default class EmployerHomepage extends React.Component {
           key_arr = [];
 
         Object.keys(jobs).forEach(key=>{
-
+  
           arr.push(jobs[key]);
           key_arr.push(key);
         })
@@ -103,7 +103,7 @@ console.log(this.state.companyLocation);
 let rootRef = firebase.database().ref();
 let userRef = rootRef.child('EMPLOYERS');
     //TODO: Get UID from props?
-EmployerAccountRef = userRef.child(this.props.uid);
+EmployerAccountRef = userRef.child(global.GloablUID);
 EmployerAccountRef.update({
   'Company Location' : this.state.companyLocation,
 });
@@ -115,7 +115,7 @@ EmployerAccountRef.update({
     render() {
 
 
-      const myMenu = <UserMenu uid={this.props.uid}/>;
+      const myMenu = <UserMenu uid={global.GloablUID}/>;
 
       return (
             <SideMenu menu = {myMenu} bounceBackOnOverdraw={false} edgeHitWidth={Dimensions.get('window').width}>

@@ -100,7 +100,7 @@ console.log(this.state.companyLocation);
 let rootRef = firebase.database().ref();
 let userRef = rootRef.child('EMPLOYERS');
     //TODO: Get UID from props?
-EmployerAccountRef = userRef.child(this.props.uid);
+EmployerAccountRef = userRef.child(global.GloablUID);
 EmployerAccountRef.update({
   'Company Location' : this.state.companyLocation,
 });
@@ -112,7 +112,7 @@ EmployerAccountRef.update({
     render() {
 
 
-      const myMenu = <UserMenu uid={this.props.uid}/>;
+      const myMenu = <UserMenu uid={global.GloablUID}/>;
 
       return (
             <SideMenu menu = {myMenu} bounceBackOnOverdraw={false} edgeHitWidth={Dimensions.get('window').width}>
@@ -182,20 +182,27 @@ EmployerAccountRef.update({
 
 
       elements.push(<Card isDark = {true} style={styles.cardStyle}>
-          <CardTitle
-          title= "Created Listing"/>
-          <CardContent text={"Job Title: " + arr[i]['JobTitle']}/>
-          <CardContent text={"Job Location: " + arr[i]['JobLocation']}/>
-          <CardAction
-          separator={true}
-          inColumn={false}>
-          <CardButton
-          onPress={() => this.deletePosting(i)}
-          title="Remove "
-          color="#a9fcd4"
-          />
-          </CardAction>
-      </Card>);
+                            <CardTitle
+                            title= "New Reply"
+                            />
+                            <CardContent text={"Position: Professor"}/>
+
+                            <CardAction
+                            separator={true}
+                            inColumn={false}>
+                            <CardButton
+                            onPress={() => this.viewPressed()}
+                            title="View "
+                            color="#a9fcd4"
+                            />
+                            <CardButton
+                            onPress={() => this.deletePosting()}
+                            title="Remove "
+                            color="#a9fcd4"
+                            alignSelf="right"
+                            />
+                            </CardAction>
+                        </Card>);
 
     }
 
@@ -212,6 +219,10 @@ EmployerAccountRef.update({
 
         })
 
+    }
+
+    viewPressed(){
+      Actions.ViewSeekerProfile();
     }
 
 
@@ -239,7 +250,7 @@ EmployerAccountRef.update({
     deleteCardFB(id){
 
       let rootRef = firebase.database().ref();
-      rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').child(key_arr[id]).remove();
+      rootRef.child('EMPLOYERS').child(global.GloablUID).child('JOBS').child(key_arr[id]).remove();
       key_arr.splice(id,1);
       console.log(key_arr);
       arr = [];

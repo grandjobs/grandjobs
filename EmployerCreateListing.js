@@ -7,6 +7,7 @@ import Geocode from "react-geocode";
 import Swiper from 'react-native-swiper';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import MapView, { Marker, CallOut } from 'react-native-maps';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default class EmployerCreateListing extends React.Component {
 
@@ -54,8 +55,9 @@ export default class EmployerCreateListing extends React.Component {
 
 
     render() {
-      lat = "42.9634";
-      lng = "-85.6681";
+      lat = "";
+      lng = "";
+
         return (
             //Wrap the entire page in "Wrapper". This allows for the sliding
             //mechanism throughout the page.
@@ -156,6 +158,7 @@ export default class EmployerCreateListing extends React.Component {
                     <Text style={styles.mainText}>Bulleted list of details. Please fill out at least three fields.</Text>
 
                     <View style={styles.fillContainer}>
+                    <KeyboardAwareScrollView>
 
                     <TextInput style={styles.inputText}
                     onChangeText={(jobDetails_1) => this.setState({jobDetails_1})}
@@ -213,7 +216,7 @@ export default class EmployerCreateListing extends React.Component {
                     placeholder='Job Details (8)'
                     multiline = {true}
                     />
-
+                    </KeyboardAwareScrollView>
                     </View>
 
                 </ScrollView>
@@ -335,14 +338,14 @@ export default class EmployerCreateListing extends React.Component {
                         <MapView
                             style={listing_style.mapStyle}
                             region={{
-                                latitude: lat,
-                                longitude: lng,
+                                latitude: 42.9634,
+                                longitude: -85.6681,
                                 latitudeDelta: 0.0922,
                                 longitudeDelta: 0.0421
                             }}
                             onPress={e => this.handlePress(e)}
                             >
-                            <Marker coordinate={{latitude: lat, longitude: lng}}/>
+                            <Marker coordinate={{latitude: 42.9634, longitude: -85.6681}}/>
                         </MapView>
 
                         {/*Container to anchor the buttons to the bottom of the screen.*/}
@@ -430,11 +433,6 @@ export default class EmployerCreateListing extends React.Component {
       lat = details["geometry"]["location"]["lat"];
       lng = details["geometry"]["location"]["lng"];
       this.state.jobLocation = details['formatted_address'];
-
-      this.state.lat = lat;
-      this.state.lng = lng;
-
-
 
       console.log(lat);
       console.log(lng);
