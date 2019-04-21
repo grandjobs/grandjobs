@@ -16,7 +16,10 @@ export default class JobInfoPage extends React.Component {
     constructor(props) {
         super(props);
         this.jobInfo = this.props.jobInfo;
+        console.log(this.obInfo);
         this.contactedList = [];
+        this.replyList = [];
+        this.employerKey = "";
         this.loadContacted();
         if (!props.contacted){
             this.state = {
@@ -38,12 +41,17 @@ export default class JobInfoPage extends React.Component {
         try{
             let rootRef = firebase.database().ref();
     		let userRef = rootRef.child('USERS').child(global.GloablUID);
+            let employerRef = rootRef.child('EMPLOYERS').child(this.employerKey).child('JOBS').child(this.jobInfo.jobKey);
 
             this.contactedList.push(this.jobInfo.jobKey);
+            this.replyList.push(global.GloablUID);
 
             userRef.update({
                 'Contacted' : this.contactedList
     		});
+            employerRef.update({
+                'Replies' : this.replyList
+     		});
         }
         catch(e){
             console.warn(e);
@@ -163,6 +171,8 @@ export default class JobInfoPage extends React.Component {
         try{
             let rootRef = firebase.database().ref();
     		let userRef = rootRef.child('USERS').child(global.GloablUID).child('Contacted');
+            let employerRef = rootRef.child('EMPLOYERS');
+
             userRef.once('value')
             .then(snapshot => {
                 contacted = snapshot.val();
@@ -170,6 +180,25 @@ export default class JobInfoPage extends React.Component {
                     this.contactedList = contacted;
                 }
             });
+
+            employerRef.once('value')
+            .then(snapshot => {
+                employers = snapshot.val();
+
+                for (var e in employers){
+                    for (var j in employers[e]['JOBS']){
+                        if (j === this.jobInfo.jobKey){
+                            this.employerKey = e;
+                            if (typeof employers[e]['JOBS'][j]['Replies'] !== 'undefined'){
+                                this.replyList = employers[e]['JOBS'][j]['Replies'];
+                            }
+                        }
+                    }
+                }
+                console.log(this.replyList);
+            });
+
+
         }
         catch(e){
             console.warn(e);

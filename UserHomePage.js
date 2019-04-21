@@ -104,11 +104,12 @@ export default class UserHomePage extends React.Component {
         let rootRef = firebase.database().ref();
         let employerRef = rootRef.child('EMPLOYERS');
         let userRef = rootRef.child('USERS').child(global.GloablUID).child('Contacted');
-        let userRefLoc = rootRef.child('USERS').child(global.GloablUID).child('Home Location');
+        let userRefLoc = rootRef.child('USERS').child(global.GloablUID);
         try {
             contactedJobs = [];
             userHomeLat = 0;
             userHomeLong = 0;
+            userRange = 0;
             userRef.once('value')
             .then(snapshot => {
                 snap = snapshot.val();
@@ -118,8 +119,9 @@ export default class UserHomePage extends React.Component {
             userRefLoc.once('value')
             .then(snapshot => {
                 snap = snapshot.val();
-                userHomeLat = snap['Latitude'];
-                userHomeLong = snap['Longitude'];
+                userHomeLat = snap['Home Location']['Latitude'];
+                userHomeLong = snap['Home Location']['Longitude'];
+                userRange = parseInt(snap['Travel']['Range']);
             });
 
             employerRef.once('value')
@@ -150,8 +152,6 @@ export default class UserHomePage extends React.Component {
 
                                 //Create a job info object.
                                 curJob = new JobInfo();
-
-                                //Set attributes from loaded job.
                                 curJob.company = employer["Company Name"];
                                 curJob.jobTitle = job["JobTitle"];
                                 curJob.address = job["JobLocation"];
@@ -159,9 +159,12 @@ export default class UserHomePage extends React.Component {
                                 curJob.description = job["JobDetails"];
                                 curJob.lat = job["Coordinate_LAT"];
                                 curJob.long = job["Coordinate_LNG"];
-                                curJob.jobKey = jobKey;
                                 curJob.distance = this.distance(curJob.lat, curJob.long, userHomeLat, userHomeLong).toFixed(2);
-                                loadedJobs.push(curJob);
+                                curJob.jobKey = jobKey;
+
+                                if (curJob.distance <= userRange){
+                                    loadedJobs.push(curJob);
+                                }
                             }
                         }
                     }
