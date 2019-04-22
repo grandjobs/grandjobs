@@ -98,7 +98,7 @@ export default class ViewSeekerProfile extends React.Component {
                     {this.state.shiftTime}
                     </Text>
 
-                    <Text style={[styles.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Desired Employement Length</Text>
+                    <Text style={[styles.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Desired Employment Length</Text>
 
                     <Text
                     style = {styles.descripText}>
