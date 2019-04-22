@@ -36,6 +36,7 @@ export default class EmployerHomepage extends React.Component {
 
 //global.GloablUID
 
+
 		    this.state = {
           companyName: '',
           companyLocation: '',
@@ -45,6 +46,7 @@ export default class EmployerHomepage extends React.Component {
           refreshing: false,
 
         };
+
 
     }
 
@@ -60,6 +62,7 @@ export default class EmployerHomepage extends React.Component {
 
 					console.log('Loaded name: ' + companyInfo['Company Name'])
 					this.setState({ companyName : companyInfo['Company Name'] })
+          global.companyTitle = this.state.companyName;
 					this.setState({ companyLocation : companyInfo['Company Location'] })
 				})
         } catch (e) {
@@ -83,8 +86,8 @@ export default class EmployerHomepage extends React.Component {
           key_arr.push(key);
         })
 
-        console.log(arr);
-        console.log(key_arr);
+    //    console.log(arr);
+    //    console.log(key_arr);
     	})
 
     }
@@ -100,7 +103,7 @@ console.log(this.state.companyLocation);
 let rootRef = firebase.database().ref();
 let userRef = rootRef.child('EMPLOYERS');
     //TODO: Get UID from props?
-EmployerAccountRef = userRef.child(this.props.uid);
+EmployerAccountRef = userRef.child(global.GloablUID);
 EmployerAccountRef.update({
   'Company Location' : this.state.companyLocation,
 });
@@ -112,7 +115,7 @@ EmployerAccountRef.update({
     render() {
 
 
-      const myMenu = <UserMenu uid={this.props.uid}/>;
+      const myMenu = <UserMenu uid={global.GloablUID}/>;
 
       return (
             <SideMenu menu = {myMenu} bounceBackOnOverdraw={false} edgeHitWidth={Dimensions.get('window').width}>
@@ -325,6 +328,7 @@ class UserMenu extends React.Component{
     }
     if(index == 2){
       //create pressed
+
       Actions.EmployerCreateListing({uid: this.props.uid});
     }
     if(index == 3){
