@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, Dimensions } from 'react-native';
-import MapView, { Marker, CallOut } from 'react-native-maps';
+import {StyleSheet, Text, View, Dimensions } from 'react-native';
+import MapView, { Marker } from 'react-native-maps';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 
 
-export default class TempSkillsPage extends Component {
-
+export default class MapsPage extends Component {
     constructor(props){
         super(props);
 

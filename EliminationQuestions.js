@@ -1,12 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { Dropdown } from 'react-native-material-dropdown';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import UserInfo from './UserInfo.js';
 
-
-export default class AccountSetup extends React.Component {
-
+export default class Elimination extends React.Component {
     constructor(props) {
         super(props);
 
@@ -23,33 +22,58 @@ export default class AccountSetup extends React.Component {
                 {/*Container for the text...*/}
                 <View style={styles.textContainer}>
                     <Text style={styles.largeText}>Awesome!</Text>
-                    <Text style={styles.mainText}>Lets fill out some information.</Text>
+                    <Text style={styles.mainText}>We have a few questions about</Text>
+                    <Text style={styles.mainText}>what kind of work you are seeking</Text>
                 </View>
                 {/*Container to hold all of the input fields.*/}
                 <View style={styles.fillContainer}>
-                    <TextInput style={styles.inputText}
-                        selectTextOnFocus={true}
-                        placeholder='First Name (Optional)'
-                        //Update the state when the field is changed
-                        onChangeText={(firstNameText) => this.setState({firstNameText})}
-                    />
-                    <TextInput style={styles.inputText}
-                        selectTextOnFocus={true}
-                        placeholder='Last Name (Optional)'
-                        //Update the state when the field is changed
-                        onChangeText={(lastNameText) => this.setState({lastNameText})}
-                    />
-                    <TextInput style={styles.inputText}
-                        selectTextOnFocus={true}
-                        placeholder='Email (Optional)'
-                        //Update the state when the field is changed
-                        onChangeText={(emailText) => this.setState({emailText})}
-                    />
+					<Dropdown
+                        baseColor='#ffffff'
+                        textColor='#ffffff'
+                        itemColor='#000000'
+                        disabledItemColor='#000000'
+                        selectedItemColor='#000000'
+                        containerStyle={{
+                            width: 300
+                        }}
+                        onChangeText={(value) => this.setState({shift: value})}
+                        label='What shift do you work?'
+                        data={[{
+                            value: '1st Shift',
+                        }, {
+                            value: '2nd Shift',
+                        }, {
+                            value: '3rd Shift',
+                        }]}
+					/>
+                    <Dropdown
+                        baseColor='#ffffff'
+                        textColor='#ffffff'
+                        itemColor='#000000'
+                        disabledItemColor='#000000'
+                        selectedItemColor='#000000'
+                        containerStyle={{
+                            width: 300
+                        }}
+                        onChangeText={(value) => this.setState({employmentTerm: value})}
+                        label='How long are you looking to work?'
+                        data={[{
+                            value: 'Less than 6 months',
+                        }, {
+                            value: '6 months - 1 year',
+                        }, {
+                            value: 'More than a year',
+                        }]}
+					/>
                 </View>
 
                 {/*Container for setting the button to be at the bottom of the page*/}
                 <View style={styles.bottomContainer}>
-                    <Button style={styles.buttonDesign} onPress={()=>this.nextPressed()}>
+                    <Button 
+                        style={!this.state.employmentTerm || !this.state.shift ? styles.disabledButton : styles.buttonDesign}
+                        onPress={()=>this.nextPressed()}
+                        disabled={!this.state.employmentTerm || !this.state.shift}
+                    >
                     Next
                     </Button>
                 </View>
@@ -62,19 +86,21 @@ export default class AccountSetup extends React.Component {
         //Create the user info object that will hold all information that the user
         //Gives the application.
         var userInfo = new UserInfo();
-		userInfo.phoneNum = this.props.phone
+        userInfo.shift = this.state.shift;
+        userInfo.employmentTerm = this.state.employmentTerm;
+		userInfo.phoneNum = this.props.phone;
         userInfo.firstName = this.state.firstNameText;
         userInfo.lastName = this.state.lastNameText;
         userInfo.email = this.state.emailText;
 		userInfo.uid = this.props.uid;
 
         //Head to the next page (also passing the userInfo object).
-        Actions.SkillPage({userInfo: userInfo});
+        Actions.SkillsPage({userInfo: userInfo});
     }
 }
 
 const styles = StyleSheet.create({
-    mainContainer: {
+	mainContainer: {
         flex: 1,
         backgroundColor: '#1E2027',
         // padding: 10,
@@ -106,7 +132,7 @@ const styles = StyleSheet.create({
     inputText:{
         borderColor: '#fff',
         color: '#fff',
-        fontSize: 25,
+        //fontSize: 25,
         textAlign: 'center',
         color:'white',
         fontFamily: 'Roboto-Thin',
@@ -115,16 +141,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 30,
         width: Dimensions.get('window').width * 0.8
-    },
-    inputPhone:{
-        borderColor: '#fff',
-        color: '#fff',
-        padding: 12,
-        margin: 20,
-        borderWidth: 1,
-        borderRadius: 30,
-        textAlign: 'center',
-        width: Dimensions.get('window').width * 0.8,
     },
     bottomContainer:{
         flex: 1,
@@ -142,5 +158,19 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         borderColor: '#a9fcd4',
         borderWidth: 1,
+        opacity: 1
     },
+    disabledButton: {
+        fontSize: 20,
+        fontWeight: 'normal',
+        fontFamily: 'Roboto-Thin',
+        padding: 10,
+        margin: 30,
+        width: 150,
+        color: '#fff',
+        borderRadius: 30,
+        borderColor: '#a9fcd4',
+        borderWidth: 1,
+        opacity: 0.2
+    }
 });

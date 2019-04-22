@@ -1,9 +1,7 @@
 import React from 'react'
-import { StyleSheet, Text, View, Dimensions, TextInput, Slider } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, Slider } from 'react-native'
 import Button from 'react-native-button'
 import { Actions } from 'react-native-router-flux'
-import { firebase } from './db'
-
 
 export default class Range extends React.Component {
 
@@ -58,36 +56,15 @@ export default class Range extends React.Component {
         //Grab the users desired range.
         this.props.userInfo.homeRange = this.state.range;
 
-        //If the user does not take the bus, then they are done with the account
-        //setup process, so they are uploaded to firebase and sent to the main
-        //pages.
+        //Car/Private Transportation
         if (this.props.travelVal == 0){
-			let rootRef = firebase.database().ref()
-			let userRef = rootRef.child('USERS')
-			newAccountRef = userRef.child(this.props.userInfo.uid)
-			newAccountRef.set({
-				'Travel' : {
-					'Type': 'car',
-					'Range': this.props.userInfo.homeRange
-				},
-				'Email' : this.props.userInfo.email,
-				'First Name' : this.props.userInfo.firstName,
-				'Last Name' : this.props.userInfo.lastName,
-				'Home Location' : {
-					'Latitude' : this.props.userInfo.homeLat,
-					'Longitude' : this.props.userInfo.homeLong
-				},
-				'Skills' : this.props.userInfo.skills,
-				'Phone Number': this.props.userInfo.phoneNum
-			})
-
-            //Actually launch to the hompage along with passing the user info object.
-            Actions.UserHomePage();
+            this.props.userInfo.travelType = 'Car'
+            Actions.AdditionalInfo({userInfo: this.props.userInfo})
         }
-        //If the user has access to public transportation, then we move on to bus access.
+        //Public Transportation
         else if (this.props.travelVal == 1){
-            console.log("User is public.");
-            Actions.BusPage({userInfo: this.props.userInfo});
+            this.props.userInfo.travelType = 'Bus'
+            Actions.BusPage({userInfo: this.props.userInfo})
         }
     }
 

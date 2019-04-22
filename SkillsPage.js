@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import Button from 'react-native-button';
 import Swiper from 'react-native-swiper';
 import { Actions } from 'react-native-router-flux';
-import UserInfo from './UserInfo.js';
 
 export default class SkillsPage extends Component {
 
@@ -210,16 +209,19 @@ export default class SkillsPage extends Component {
 
     //Handle sending to the next page.
     nextPressed(){
-        this.setInfoObj();
+		let userInfo = this.setInfoObj(this.props.userInfo);
         //Also send the updated user info to the next page.
-        Actions.MapsPage({userInfo: this.props.userInfo});
+		//actually send to skip page
+        Actions.SkipPage({userInfo: userInfo});
     }
 
     //Update the userInfo object with the skills/certs that the user selected.
-    setInfoObj(){
+    setInfoObj(userInfo){
         for (var i = 0; i < this.userSkills.length; i++){
-            this.props.userInfo.skills.push(this.userSkills[i].label);
+            userInfo.skills.push(this.userSkills[i].label);
         }
+		
+		return userInfo
     }
 }
 

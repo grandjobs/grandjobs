@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import { AppRegistry, StyleSheet, Text, View, Dimensions } from 'react-native'
+import { AppRegistry, StyleSheet, Text, View } from 'react-native'
 import Button from 'react-native-button'
 import Swiper from 'react-native-swiper'
 import { Actions } from 'react-native-router-flux'
-import { firebase } from './db'
-
 
 export default class BusOptions extends Component {
 
@@ -161,39 +159,9 @@ export default class BusOptions extends Component {
      * Handle the press of the next button.
      */
     nextPressed(){
-
         //Update the state of the userinfo object.
         this.setInfoObj();
-        //The public transport user is now done, so add the to firebase.
-		let rootRef = firebase.database().ref()
-		let userRef = rootRef.child('USERS')
-		newAccountRef = userRef.child(global.GloablUID)
-        if (!this.props.editing){
-            newAccountRef.set({
-				'Travel' : {
-					'Type': 'public',
-					'Bus Routes': this.props.userInfo.busAccess,
-					'Range': this.props.userInfo.homeRange
-				},
-				'Email' : this.props.userInfo.email,
-				'First Name' : this.props.userInfo.firstName,
-				'Last Name' : this.props.userInfo.lastName,
-				'Home Location' : {
-					'Latitude' : this.props.userInfo.homeLat,
-					'Longitude' : this.props.userInfo.homeLong
-				},
-				'Skills' : this.props.userInfo.skills,
-				'Phone Number': this.props.userInfo.phoneNum
-			})
-        }
-        else{
-            newAccountRef.child('Travel').update({
-				'Bus Routes': this.props.userInfo.busAccess
-    		})
-        }
-
-        //Head to the main page.
-        Actions.UserInfoPage();
+        Actions.AdditionalInfo({userInfo: this.props.userInfo});
     }
 
     /**
