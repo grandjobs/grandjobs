@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { StyleSheet, Dimensions, Text, View, ScrollView, TextInput, Alert} from 'react-native'
+import { StyleSheet, Dimensions, Text, View, TextInput, Alert} from 'react-native'
 import Button from 'react-native-button'
 import {Linking, WebBrowser} from 'expo'
 import { firebase } from './db'
@@ -53,7 +53,9 @@ export default class seekerAuthentication extends React.Component {
 					verify: () => Promise.resolve(token)
 				}
 				try {
+					console.log('before')
 					const confirmationResult = await firebase.auth().signInWithPhoneNumber(phone, captchaVerifier)
+					console.log('after')
 					this.setState({confirmationResult})
 				} catch (e) {
 					console.warn(e)
@@ -83,8 +85,8 @@ export default class seekerAuthentication extends React.Component {
     }
 
 	//If an user is unregistered this function will direct them to the account setup flow
-	directToAccountSetup = async () => {
-        Actions.AccountSetup({uid : this.state.user['uid'], phone : this.state.user['phoneNumber']});
+	directToQuestions = async () => {
+        Actions.Elimination({uid : this.state.user['uid'], phone : this.state.user['phoneNumber']});
     }
   
 	//Function to check whether a phone number has a registered account in our database
@@ -120,7 +122,7 @@ export default class seekerAuthentication extends React.Component {
 					<View style={styles.bottomContainer}>
 						<Button
 							style={styles.buttonDesign}
-							onPress={this.directToAccountSetup}
+							onPress={this.directToQuestions}
 						>
 							Create Account
 						</Button>
@@ -142,7 +144,7 @@ export default class seekerAuthentication extends React.Component {
 							style={styles.inputText}
 							placeholder='Phone Number'
 							onChangeText={(phone) => this.setState({phone})}
-              placeholderTextColor= 'white'
+              				placeholderTextColor= 'white'
 							keyboardType="phone-pad"
 							selectTextOnFocus={true}
 						/>
@@ -172,7 +174,7 @@ export default class seekerAuthentication extends React.Component {
 							style={styles.inputText}
 							placeholder='SMS Code'
 							onChangeText={(code) => this.setState({code})}
-              placeholderTextColor= 'white'
+              				placeholderTextColor= 'white'
 							value={this.state.code}
 							keyboardType="numeric"
 							selectTextOnFocus={true}

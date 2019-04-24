@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, Alert, View, ScrollView, Dimensions, TextInput,Platform, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, RefreshControl,Text, Alert, View, ScrollView, Dimensions, TextInput,Platform, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import { DrawerNavigator } from 'react-navigation';
@@ -8,6 +8,7 @@ import Drawer from 'react-native-drawer';
 import SideMenu from 'react-native-side-menu';
 import { firebase } from './db'
 import Dialog from "react-native-dialog";
+import Geocoder from 'react-native-geocoding';
 
 
 
@@ -33,22 +34,26 @@ export default class EmployerHomepage extends React.Component {
         arr = [];
         key_arr = [];
 
+//global.GloablUID
+
 
 		    this.state = {
           companyName: '',
           companyLocation: '',
-          refresh: true,
           showLocationDialog: false,
           showEmailDialog: false,
+          key: 1,
+          refreshing: false,
 
         };
+
 
     }
 
 	async componentDidMount() {
-		console.log(this.state.user)
 		let rootRef = firebase.database().ref()
-		let userRef = rootRef.child('EMPLOYERS').child(this.props.uid)
+		let userRef = rootRef.child('EMPLOYERS').child(global.GloablUID)
+
 
 		try {
             userRef.once('value')
@@ -57,6 +62,7 @@ export default class EmployerHomepage extends React.Component {
 
 					console.log('Loaded name: ' + companyInfo['Company Name'])
 					this.setState({ companyName : companyInfo['Company Name'] })
+          global.companyTitle = this.state.companyName;
 					this.setState({ companyLocation : companyInfo['Company Location'] })
 				})
         } catch (e) {
@@ -65,22 +71,23 @@ export default class EmployerHomepage extends React.Component {
 
 
       try{
-    let employerJobRef = rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS')
+    let employerJobRef = rootRef.child('EMPLOYERS').child(global.GloablUID).child('JOBS')
     if (employerJobRef != undefined) {
       employerJobRef.once('value')
       	.then(snapshot => {
         	let jobs = snapshot.val()
 
+          arr = [];
+          key_arr = [];
+
         Object.keys(jobs).forEach(key=>{
-          //have to figure out how to add this key when pushing to array
-      //    console.log(key);
+
           arr.push(jobs[key]);
           key_arr.push(key);
         })
 
-
-        console.log(arr);
-        console.log(key_arr);
+    //    console.log(arr);
+    //    console.log(key_arr);
     	})
 
     }
@@ -96,20 +103,22 @@ console.log(this.state.companyLocation);
 let rootRef = firebase.database().ref();
 let userRef = rootRef.child('EMPLOYERS');
     //TODO: Get UID from props?
-EmployerAccountRef = userRef.child(this.props.uid);
+EmployerAccountRef = userRef.child(global.GloablUID);
 EmployerAccountRef.update({
   'Company Location' : this.state.companyLocation,
 });
+
+
 }
 
 
-
     render() {
-      const {refresh} = this.state;
-      const myMenu = <UserMenu uid={this.props.uid}/>;
+
+
+      const myMenu = <UserMenu uid={global.GloablUID}/>;
 
       return (
-            <SideMenu menu = {myMenu}>
+            <SideMenu menu = {myMenu} bounceBackOnOverdraw={false} edgeHitWidth={Dimensions.get('window').width}>
 
             <Dialog.Container visible={this.state.showLocationDialog}>
             <Dialog.Title>Location</Dialog.Title>
@@ -128,7 +137,18 @@ EmployerAccountRef.update({
                     <Text style={styles.largeText}>Grand Jobs</Text>
                     <Text style={styles.mainText}>Homepage</Text>
                 </View>
-                <ScrollView style={{width: Dimensions.get('window').width * 0.90}}>
+                <ScrollView
+                refreshControl= {
+                  <RefreshControl
+                  refreshing = {this.state.refresh}
+                  onRefresh={() => this.refreshScreen()}
+                  snapToStart = {true}
+                />
+              }
+                  key = {this.state.key}
+                  style={{width: Dimensions.get('window').width * 0.90}}
+                >
+
 
                     <Card isDark = {true} style={styles.cardStyle}>
                         <CardTitle
@@ -210,6 +230,14 @@ EmployerAccountRef.update({
     )
     }
 
+    refreshScreen(){
+
+    this.setState({ refresh: true });
+    this.componentDidMount().then(()=>{
+      this.setState({refresh: false});
+    });
+    }
+
 
     deleteCardFB(id){
 
@@ -217,11 +245,11 @@ EmployerAccountRef.update({
       rootRef.child('EMPLOYERS').child(this.props.uid).child('JOBS').child(key_arr[id]).remove();
       key_arr.splice(id,1);
       console.log(key_arr);
+      arr = [];
+      key_arr = [];
+      this.componentDidMount();
+      this.setState({ key: Math.random() });
 
-      // this.setState({
-      //     refresh: true,
-      //
-      // })
 
 
     }
@@ -292,17 +320,19 @@ class UserMenu extends React.Component{
   onPress(item, index){
     if(index == 0){
       //home pressed
-      Actions.EmployerHomepage();
+      Actions.EmployerHomepage({uid: this.props.uid});
     }
     if(index == 1){
       //replies pressed
-      Actions.EmployerSideReplies();
+      Actions.EmployerSideReplies({uid: this.props.uid});
     }
     if(index == 2){
       //create pressed
+
       Actions.EmployerCreateListing({uid: this.props.uid});
     }
     if(index == 3){
+      //sign out pressed
       this.onSignOut()
     }
   }

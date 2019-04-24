@@ -1,168 +1,237 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions,ScrollView, TextInput, Alert, TouchableOpacity, SafeAreaView, Platform } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput } from 'react-native';
 import Button from 'react-native-button';
-import { Actions } from 'react-native-router-flux'
+import { Actions } from 'react-native-router-flux';
+import call from 'react-native-phone-call';
 import { firebase } from './db'
+
+  let arr = [];
+  let phonenumber = "";
 
 export default class ViewSeekerProfile extends React.Component {
 
-  constructor(props){
-    super(props);
+
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+          Name: 'Interested User',
+          phoneNumber: '',
+          skills: [],
+          shiftTime: '',
+          employLength: '',
+
+        };
+
+    //    this.jobInfo = this.props.jobInfo;
+    }
+
+    async componentDidMount() {
+
+      let rootRef = firebase.database().ref()
+
+        try{
+      let userRef = rootRef.child('USERS').child(this.props.useridkey)
+      if (userRef != undefined) {
+        userRef.once('value')
+          .then(snapshot => {
+            let userinformation = snapshot.val()
+
+            arr = [];
+
+          this.setState({phoneNumber: userinformation["Phone Number"]})
+          this.setState({skills: userinformation["Skills"]})
+          this.setState({shiftTime: userinformation["Desired Shift"]})
+          this.setState({employLength: userinformation["Desired Employement Length"]})
+          if(userinformation["First Name"] != "" && userinformation["Last Name"] != ""){
+          this.setState({Name: userinformation["First Name"] + " " + userinformation["Last Name"]})
+          }
+
+        })
+
+      }
+    }
+    catch (e) {
+        console.warn(e)
+    }
 
   }
 
     render() {
         return (
-          <ScrollView style = {styles.mainContainer}>
             <View style={styles.mainContainer}>
-                <View style={styles.textContainer}>
-                <Text style={styles.largeText}>Tom</Text>
-                <Text style={styles.mainText}>Professor</Text>
-                </View>
-                <View style={styles.textContainer}>
-                <Text style={styles.descriptionText}>          </Text>
-                <Text style={styles.mainText}>Phone:</Text>
-                <Text style={styles.descriptionText}>          </Text>
-                <Text style={styles.descriptionText}>616-999-9999</Text>
-                <Text style={styles.descriptionText}>          </Text>
-                <Text style={styles.mainText}>Qualifications</Text>
-                <Text style={styles.descriptionText}>          </Text>
-                <Text style={styles.descriptionText}> Master's Degree in Mathematics</Text>
-                <Text style={styles.descriptionText}>          </Text>
-                <Text style={styles.mainText}>Skills</Text>
-                <Text style={styles.descriptionText}>          </Text>
-                <View style={styles.buttonRowContainer}>
-                <Button style={styles.buttonDesign} onPress={console.log("hello")}>
-                Skill 1
-                </Button>
-                <Button style={styles.buttonDesign} onPress={console.log("hello")}>
-                Skill 2
-                </Button>
-                </View>
-                <View style = {styles.buttonRowContainer}>
-                <Button style={styles.buttonDesign} onPress={console.log("hello")}>
-                Skill 3
-                </Button>
-                <Button style={styles.buttonDesign} onPress={console.log("hello")}>
-                Skill 4
-                </Button>
-                </View>
-                </View>
-                <View style={styles.fillContainer}>
+                <Text style={styles.largeText}>{this.state.Name}</Text>
+                <Text style={styles.mainText}>Below is the list of skills of the user. Press contact to call.</Text>
+                {/*Main ScrollView for the jobs*/}
+                <ScrollView style={styles.infoContainer}>
+                    {/*Map the description of the jobs to the text.*/}
 
-                    <Button style={styles.buttonDesign} onPress={()=>this.contactPressed()}>
-                    Contact
-                    </Button>
-                    <Button style={styles.buttonDesign} onPress={()=>this.cancelPressed()}>
-                    Cancel
-                    </Button>
+                    <Text style={[styles.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Skills</Text>
+                    {/*Map the skills of the job to the screen*/}
+                    <View style={styles.skillsContainer}>
+                        {
+                            this.state.skills.map(( item, key ) =>
+                            (
+                                <Text
+                                key = {key}
+                                style = {styles.skillLabel}>
+                                {item}
+                                </Text>
+                            ))
+                        }
+                    </View>
 
-                </View>
+
+                    {/*Container to anchor the buttons to the bottom of the screen.*/}
+                    <Text style={[styles.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Phone Number</Text>
+
+                    <Text
+                    style = {styles.descripText}>
+                    {this.state.phoneNumber}
+                    </Text>
+
+                    <Text style={[styles.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Desired Shift Time</Text>
+
+                    <Text
+                    style = {styles.descripText}>
+                    {this.state.shiftTime}
+                    </Text>
+
+                    <Text style={[styles.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Desired Employment Length</Text>
+
+                    <Text
+                    style = {styles.descripText}>
+                    {this.state.employLength}
+                    </Text>
+
+
+                    <View style={styles.bottomContainer}>
+                        <Button style={styles.buttonDesign} onPress={()=>this.contactPressed()}>
+                        Contact
+                        </Button>
+                        <Button style={styles.buttonDesign} onPress={()=>this.backPressed()}>
+                        Back
+                        </Button>
+                    </View>
+
+                </ScrollView>
             </View>
-            </ScrollView>
         );
     }
 
-    cancelPressed(){
-      Actions.EmployerSideReplies();
 
-    }
+
+    /**
+     * Handler for the user contacting this job.
+     * @return {[type]} [description]
+     */
     contactPressed(){
-      Actions.EmployerSideReplies();
+
+      const args = {
+        number: this.state.phoneNumber, // String value with the number to call
+        prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
+      }
+
+      call(args).catch(console.error)
+    }
+
+    /**
+     * Handler for the user exiting this job.
+     * @return {[type]} [description]
+     */
+    backPressed(){
+        Actions.EmployerSideReplies();
     }
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
-        paddingTop: Platform.OS === 'android' ? 25 : 0,
         flex: 1,
         backgroundColor: '#1E2027',
-
-        // justifyContent: 'center'
-    },
-    textContainer:{
-        top: Dimensions.get('window').height * 0.005,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    buttonContainer:{
-        alignItems: 'center',
-        top: Dimensions.get('window').height * 0.005
-    },
-    buttonRowContainer:{
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-between'
-    },
-    fillContainer:{
-        top: Dimensions.get('window').height * 0.05,
-        justifyContent: 'center',
+        // padding: 10,
         alignItems: 'center'
     },
-    bottomContainer:{
+    infoContainer:{
         flex: 1,
-        justifyContent: 'flex-end',
-        marginBottom: 0
+        paddingHorizontal: 20,
+    },
+    skillsContainer:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        alignItems: 'flex-start',
+        paddingVertical: 20,
     },
     largeText:{
+        paddingTop: Dimensions.get('window').height * 0.02,
         fontSize: 65,
         textAlign: 'center',
-        top: 20,
         color: '#d6d6d6',
         fontFamily: 'Roboto-Thin'
     },
     mainText:{
-        fontSize: 25,
+        fontSize: 40,
         textAlign: 'center',
-        top: 20,
+        paddingBottom: 10,
         color: '#a9fcd4',
         fontFamily: 'Roboto-Thin'
     },
-    descriptionText:{
+    descripText:{
         fontSize: 25,
         textAlign: 'center',
-        top: 20,
         color: '#d6d6d6',
-        fontFamily: 'Roboto-Thin'
+        fontFamily: 'Roboto-Thin',
+        paddingBottom: 10,
+        paddingTop: 10,
+    },
+    distanceText:{
+        fontSize: 25,
+        color: '#d6d6d6',
+        fontFamily: 'Roboto-Thin',
+        paddingBottom: 10
+    },
+    sectionText:{
+        fontSize: 25,
+        color: '#d6d6d6',
+        fontFamily: 'Roboto-Thin',
+        textDecorationLine: 'underline',
+        padding: 20,
+        textAlign: 'center',
+    },
+    skillLabel:{
+        fontSize: 22,
+        textAlign: 'center',
+        color: '#d6d6d6',
+        fontFamily: 'Roboto-Thin',
+        borderWidth: 1,
+        borderColor: '#a9fcd4',
+        borderRadius: 30,
+        paddingHorizontal: 20,
+        marginTop: 25,
+        marginHorizontal: 5,
+    },
+    bottomContainer:{
+        flex: 1,
+        justifyContent: 'flex-end',
+        marginBottom: 10,
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
     },
     buttonDesign:{
         fontSize: 20,
         fontWeight: 'normal',
         fontFamily: 'Roboto-Thin',
         padding: 10,
-        margin: 10,
-        width: 200,
+        marginVertical: 30,
+        width: 150,
         color: '#fff',
         borderRadius: 30,
         borderColor: '#a9fcd4',
         borderWidth: 1,
+        marginHorizontal: 10,
     },
-    inputText:{
-        borderColor: '#fff',
-        color: '#fff',
-        fontSize: 25,
-        textAlign: 'center',
-        color:'white',
-        fontFamily: 'Roboto-Thin',
-        padding: 13,
-        margin: 5,
-        borderWidth: 1,
-        borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8
-    },
-    inputText2:{
-        borderColor: '#fff',
-        color: '#fff',
-        fontSize: 25,
-        textAlignVertical: 'top',
-        textAlign: 'center',
-        color:'white',
-        fontFamily: 'Roboto-Thin',
-        padding: 65,
-        margin: 5,
-        borderWidth: 1,
-        borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8,
-        height: Dimensions.get('window').height * 0.18
-    },
+
 });

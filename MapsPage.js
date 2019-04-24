@@ -7,8 +7,7 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 
 
 
-export default class TempSkillsPage extends Component {
-
+export default class MapsPage extends Component {
     constructor(props){
         super(props);
         this.GooglePlacesRef = null;

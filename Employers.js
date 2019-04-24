@@ -1,12 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, TextInput, Alert } from 'react-native';
+import { StyleSheet,Platform, Text, View, Dimensions, TextInput, Alert } from 'react-native';
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux'
 import { firebase } from './db'
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 export default class Employers extends React.Component {
   constructor(props){
     super(props);
+
     this.state = {
       companyName: '',
       companyLocation: '',
@@ -33,6 +35,7 @@ export default class Employers extends React.Component {
                         placeholderTextColor="#fff"
                         placeholder='Company Location'
                     />
+
                     <View style={styles.buttonContainer}>
                     <Button style={styles.buttonDesign} onPress={()=>this.createPressed()}>
                     Create Account
@@ -71,13 +74,18 @@ export default class Employers extends React.Component {
 			console.log("error");
 		}
 	}
+
+  // setLocation(details){
+  //   this.state.companyLocation = details['formatted_address'];
+  //   console.log(this.state.companyLocation);
+  // }
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex: 1,
-        backgroundColor: '#1E2027',
-        padding: 10,
+      paddingTop: Platform.OS === 'android' ? 25 : 0,
+      flex: 1,
+      backgroundColor: '#1E2027',
         // justifyContent: 'center'
     },
     textContainer:{
@@ -122,7 +130,7 @@ const styles = StyleSheet.create({
         margin: 5,
         borderWidth: 1,
         borderRadius: 30,
-        width: Dimensions.get('window').width * 0.8
+        width: Dimensions.get('window').width * 0.9
     },
     inputPhone:{
         borderColor: '#fff',
