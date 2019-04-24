@@ -468,7 +468,7 @@ export default class EmployerCreateListing extends React.Component {
               'Coordinate_LAT' : lat,
               'Coordinate_LNG' : lng,
               'Skills': skillsArray,
-            
+
             })
 
 
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 30,
         width: Dimensions.get('window').width * .9,
-        height: 58,
+        height: 60,
     },
     labelContainer:{
         flexDirection: 'row',

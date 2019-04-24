@@ -33,7 +33,7 @@ export default class UserHomePage extends React.Component {
                 {/*Main container for this page*/}
                 <View style={styles.mainContainer}>
                     <View style={styles.textContainer}>
-                        <Text style={styles.largeText}>Explore</Text>
+                        <Text style={styles.largeText}>Contacted</Text>
                     </View>
 
                     {/*Make the cards view scrollable so we can reach the cards that will be rendered
@@ -46,10 +46,10 @@ export default class UserHomePage extends React.Component {
                             <Card isDark = {true} style={styles.cardStyle} key = {key}>
                                 <CardTitle
                                 style={{fontSize:50}}
-                                title={item.company  + " (" + item.matchPercent * 100 + "%)"}
+                                title={item.company}
                                 subtitle={item.jobTitle}
                                 />
-                                <CardContent style={{fontSize:50}} text={"Location: " + item.address + "\n\nDistance from home: " + item.distance + " Miles" + item.longBusDescrip}/>
+                                <CardContent style={{fontSize:50}} text={"Location: " + item.address + "\n\nDistance: " + item.distance + " Miles"}/>
                                 <CardAction
                                 separator={true}
                                 inColumn={false}>
@@ -70,7 +70,7 @@ export default class UserHomePage extends React.Component {
 
     //Handle the press of the card and send to the job info page.
     cardPressed(jobInfo){
-        Actions.JobInfoPage({jobInfo: jobInfo, contacted:false});
+        Actions.JobInfoPage({jobInfo: jobInfo, contacted:true});
     }
 
     /**
@@ -93,56 +93,26 @@ export default class UserHomePage extends React.Component {
             }
             dist = Math.acos(dist);
             dist = dist * 180/Math.PI;
-            dist = dist * 60 * 1.1515;
+            dist = dist * 60 * 1.1515;    
             return dist;
         }
     }
 
-
-
+    /**
+    * Pull user information from firebase
+    */
     fbPull(){
         let rootRef = firebase.database().ref();
+        //TODO: Get UID from props.
         let employerRef = rootRef.child('EMPLOYERS');
-        let userRefContact = rootRef.child('USERS').child(global.GloablUID).child('Contacted');
-        let userRefBase = rootRef.child('USERS').child(global.GloablUID);
-        let busRef = rootRef.child('BUSES');
-
+        let userRef = rootRef.child('USERS').child(global.GloablUID).child('Contacted');
         try {
             contactedJobs = [];
-            userBusRoutes = [];
-            userSkills = [];
-            userHomeLat = 0;
-            userHomeLong = 0;
-            userRange = 0;
-            allBusRoutes = [];
-            //Grab the users contacted jobs
-            userRefContact.once('value')
+            userRef.once('value')
             .then(snapshot => {
                 snap = snapshot.val();
                 contactedJobs = snap;
             });
-
-            //Grab user info (location and bus routes)
-            userRefBase.once('value')
-            .then(snapshot => {
-                snap = snapshot.val();
-                userHomeLat = snap['Home Location']['Latitude'];
-                userHomeLong = snap['Home Location']['Longitude'];
-                userRange = parseInt(snap['Travel']['Range']);
-                userSkills = snap['Skills'];
-
-                if (typeof snap['Travel']['Bus Routes'] !== 'undefined'){
-                    userBusRoutes = snap['Travel']['Bus Routes'];
-                }
-            });
-
-            //Get bus route information
-            busRef.once('value')
-            .then(snapshot => {
-                allBusRoutes = snapshot.val();
-            });
-
-
 
             employerRef.once('value')
             .then(snapshot => {
@@ -158,44 +128,25 @@ export default class UserHomePage extends React.Component {
                         //Loop through all of the jobs that this employer has posted.
                         for (var jobKey in snap[employerKey]["JOBS"]) {
                             // console.log(snap[employerKey]["JOBS"]);
-                            contacted = false;
-
                             for (var i in contactedJobs){
                                 contactJob = contactedJobs[i];
                                 if (contactJob === jobKey){
-                                    contacted = true;
-                                }
-                            }
-                            if (!contacted){
-                                //Store this job for convenience
-                                job = snap[employerKey]["JOBS"][jobKey];
+                                    //Store this job for convenience
+                                    job = snap[employerKey]["JOBS"][jobKey];
 
-                                //Create a job info object.
-                                curJob = new JobInfo();
-                                curJob.company = employer["Company Name"];
-                                curJob.jobTitle = job["JobTitle"];
-                                curJob.address = job["JobLocation"];
-                                curJob.skills = job["Skills"];
-                                curJob.description = job["JobDetails"];
-                                curJob.lat = job["Coordinate_LAT"];
-                                curJob.long = job["Coordinate_LNG"];
-                                curJob.distance = this.distance(curJob.lat, curJob.long, userHomeLat, userHomeLong).toFixed(2);
-                                curJob.jobKey = jobKey;
-                                curJob.matchPercent = this.getSkillMatchPercent(userSkills, curJob.skills);
+                                    //Create a job info object.
+                                    curJob = new JobInfo();
 
-                                if (curJob.distance <= userRange && curJob.matchPercent > 0.0){
-                                    if (userBusRoutes.length > 0){
-                                        results = this.getClosestStop(allBusRoutes, userBusRoutes, curJob.lat, curJob.long);
-                                        curJob.busLat = results[0];
-                                        curJob.busLong = results[1];
-                                        curJob.busLine = results[2];
-                                        curJob.busDescrip = results[3];
-                                        curJob.busDistance = results[4];
-                                        tab = "        - ";
-                                        curJob.longBusDescrip = "\n\nClosest Bus Line: " + curJob.busLine;
-                                        curJob.longBusDescrip += "\n" + tab + "Closest Bus Stop: " + curJob.busDescrip;
-                                        curJob.longBusDescrip += "\n" + tab + "Distance: " + curJob.busDistance + " Miles";
-                                    }
+                                    //Set attributes from loaded job.
+                                    curJob.company = employer["Company Name"];
+                                    curJob.jobTitle = job["JobTitle"];
+                                    curJob.address = job["JobLocation"];
+                                    curJob.skills = job["Skills"];
+                                    curJob.description = job["JobDetails"];
+                                    curJob.lat = job["Coordinate_LAT"];
+                                    curJob.long = job["Coordinate_LNG"];
+                                    curJob.jobKey = jobKey;
+                                    curJob.distance = this.distance(curJob.lat, curJob.long, userHomeLat, userHomeLong).toFixed(2);
                                     loadedJobs.push(curJob);
                                 }
                             }
@@ -211,52 +162,6 @@ export default class UserHomePage extends React.Component {
             console.warn(e);
         }
     }
-
-    getClosestStop(allRoutes, userRoutes, jobLat, jobLong){
-        closeLat = 0;
-        closeLong = 0;
-        descrip = "";
-        minDist = 999999;
-        line = "";
-
-        for (var i in userRoutes){
-            route = allRoutes[userRoutes[i]]['Stops']
-            for (stop in route){
-                curStop = route[stop];
-                curLat = curStop['Latitude'];
-                curLong = curStop['Longitude'];
-                tempDist = this.distance(jobLat, jobLong, curLat, curLong);
-                if (tempDist < minDist){
-                    minDist = tempDist;
-                    closeLat = curLat;
-                    closeLong = curLong;
-                    descrip = curStop['Description'];
-                    line = userRoutes[i];
-                }
-            }
-        }
-        minDist = minDist.toFixed(2);
-        return [closeLat, closeLong, line, descrip, minDist];
-    }
-
-    getSkillMatchPercent(userSkills, jobSkills){
-        numMatches = 0;
-        for (var i in jobSkills){
-            jSkill = jobSkills[i];
-            for (var j in userSkills){
-                uSkill = userSkills[j];
-                if (jSkill === uSkill){
-                    numMatches += 1;
-                }
-            }
-        }
-        percent = numMatches / (jobSkills.length * 1.0);
-        percent = percent.toFixed(2);
-        console.log(percent);
-        return percent;
-    }
-
-
 }
 
 const styles = StyleSheet.create({

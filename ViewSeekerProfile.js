@@ -19,6 +19,8 @@ export default class ViewSeekerProfile extends React.Component {
           Name: 'Interested User',
           phoneNumber: '',
           skills: [],
+          shiftTime: '',
+          employLength: '',
 
         };
 
@@ -26,6 +28,7 @@ export default class ViewSeekerProfile extends React.Component {
     }
 
     async componentDidMount() {
+
       let rootRef = firebase.database().ref()
 
         try{
@@ -39,6 +42,8 @@ export default class ViewSeekerProfile extends React.Component {
 
           this.setState({phoneNumber: userinformation["Phone Number"]})
           this.setState({skills: userinformation["Skills"]})
+          this.setState({shiftTime: userinformation["Desired Shift"]})
+          this.setState({employLength: userinformation["Desired Employement Length"]})
           if(userinformation["First Name"] != "" && userinformation["Last Name"] != ""){
           this.setState({Name: userinformation["First Name"] + " " + userinformation["Last Name"]})
           }
@@ -85,6 +90,21 @@ export default class ViewSeekerProfile extends React.Component {
                     style = {styles.descripText}>
                     {this.state.phoneNumber}
                     </Text>
+
+                    <Text style={[styles.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Desired Shift Time</Text>
+
+                    <Text
+                    style = {styles.descripText}>
+                    {this.state.shiftTime}
+                    </Text>
+
+                    <Text style={[styles.sectionText, {paddingBottom: 0, paddingTop: 10 }]}>Desired Employment Length</Text>
+
+                    <Text
+                    style = {styles.descripText}>
+                    {this.state.employLength}
+                    </Text>
+
 
                     <View style={styles.bottomContainer}>
                         <Button style={styles.buttonDesign} onPress={()=>this.contactPressed()}>

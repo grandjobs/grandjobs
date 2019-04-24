@@ -48,6 +48,7 @@ export default class AccountSetup extends React.Component {
     }
 
     contactedPressed(){
+        Actions.ContactedPage();
         console.log("Contacted");
     }
 

@@ -30,6 +30,8 @@ let job_arr = [];
 
 let index_values = [];
 
+
+
 export default class EmployerHomepage extends React.Component {
 
 
@@ -39,6 +41,7 @@ export default class EmployerHomepage extends React.Component {
         arr = [];
         reply_arr = [];
         job_arr = [];
+        index_values = [];
 
 //global.GloablUID
 
@@ -85,6 +88,7 @@ export default class EmployerHomepage extends React.Component {
           arr = [];
           job_arr = [];
           reply_arr = [];
+          index_values = [];
 
         Object.keys(jobs).forEach(key=>{
 
@@ -98,12 +102,14 @@ export default class EmployerHomepage extends React.Component {
           arr.push(jobs[key]['JobTitle']);
           job_arr.push(key);
           index_values.push(j);
+
         }
       }
       }
 
-        })
 
+        })
+    //    console.log();
     //    console.log(index_values);
   //      console.log(arr);
     //  console.log(arr["Replies"]);
@@ -117,6 +123,7 @@ export default class EmployerHomepage extends React.Component {
   catch (e) {
       console.warn(e)
   }
+
 
 }
 
@@ -205,8 +212,8 @@ EmployerAccountRef.update({
 
     for(let i = 0; i < arr.length; i++){
 
-  //    console.log(arr[i]['JobTitle']);
-  //    console.log(arr[i]['Replies']);
+
+
 
 
       elements.push(<Card isDark = {true} style={styles.cardStyle}>
@@ -234,6 +241,8 @@ EmployerAccountRef.update({
 
     }
 
+
+
     return(
       elements
     );
@@ -249,7 +258,7 @@ EmployerAccountRef.update({
 
     }
 
-    viewPressed(id){
+    viewPressed(id,shift,emplength){
       console.log({useridkey: id});
       Actions.ViewSeekerProfile({useridkey: id});
     }
