@@ -3,17 +3,88 @@ import { StyleSheet, Text, View, ScrollView, Dimensions, TextInput } from 'react
 import Button from 'react-native-button';
 import { Actions } from 'react-native-router-flux';
 import MapView, { Marker, CallOut } from 'react-native-maps';
+import { firebase } from './db';
+import Dialog from "react-native-dialog";
+import { ToastContainer, toast } from 'react-toastify';
+
+
 
 
 export default class JobInfoPage extends React.Component {
+
+
     constructor(props) {
         super(props);
         this.jobInfo = this.props.jobInfo;
+        console.log(this.obInfo);
+        this.contactedList = [];
+        this.replyList = [];
+        this.employerKey = "";
+        this.loadContacted();
+        if (!props.contacted){
+            this.state = {
+                showDialog: false,
+                contactOpacity: 1.0,
+                contactDisabled: false,
+            }
+        }
+        else{
+            this.state = {
+                showDialog: false,
+                contactOpacity: 0.5,
+                contactDisabled: true,
+            }
+        }
+    }
+
+    dialogConfirm(){
+        try{
+            let rootRef = firebase.database().ref();
+    		let userRef = rootRef.child('USERS').child(global.GloablUID);
+            let employerRef = rootRef.child('EMPLOYERS').child(this.employerKey).child('JOBS').child(this.jobInfo.jobKey);
+
+            this.contactedList.push(this.jobInfo.jobKey);
+            this.replyList.push(global.GloablUID);
+
+            userRef.update({
+                'Contacted' : this.contactedList
+    		});
+            employerRef.update({
+                'Replies' : this.replyList
+     		});
+        }
+        catch(e){
+            console.warn(e);
+        }
+
+        this.setState({
+            showDialog: false,
+            contactOpacity: 0.5,
+            contactDisabled: true,
+        });
+    }
+
+
+    dialogCancel(){
+        this.setState({
+            showDialog: false
+        });
     }
 
     render() {
         return (
             <View style={styles.mainContainer}>
+                <Dialog.Container visible={this.state.showDialog}>
+                    <Dialog.Title>Contact Company?</Dialog.Title>
+                    <Dialog.Description>
+                    Are you sure you want to contact this position?
+                    </Dialog.Description>
+                    {/*OnPress will auto enable the last name edit*/}
+                    <Dialog.Button label="Confirm " onPress={() => this.dialogConfirm()}/>
+                    <Dialog.Button label="Cancel " onPress={() => this.dialogCancel()}/>
+                </Dialog.Container>
+
+
                 <Text style={styles.largeText}>{this.jobInfo.company}</Text>
                 <Text style={styles.mainText}>{this.jobInfo.jobTitle}</Text>
                 {/*Main ScrollView for the jobs*/}
@@ -63,19 +134,17 @@ export default class JobInfoPage extends React.Component {
                     <MapView
                         style={styles.mapStyle}
                         region={{
-                            latitude: 42.9634,
-                            longitude: -85.6681,
+                            latitude: this.jobInfo.lat,
+                            longitude: this.jobInfo.long,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421
-                        }}
-                        onPress={e => this.handlePress(e)}
-                        >
-                        <Marker coordinate={{latitude: 42.9634, longitude: -85.6681}}/>
+                        }}>
+                        <Marker coordinate={{latitude: this.jobInfo.lat, longitude: this.jobInfo.long}}/>
                     </MapView>
 
                     {/*Container to anchor the buttons to the bottom of the screen.*/}
-                    <View style={styles.bottomContainer}>
-                        <Button style={styles.buttonDesign} onPress={()=>this.contactPressed()}>
+                    <View style={styles.bottomContainer} >
+                        <Button style={[styles.buttonDesign, {opacity:this.state.contactOpacity}]} disabled={this.state.contactDisabled} onPress={()=>this.contactPressed()}>
                         Contact
                         </Button>
                         <Button style={styles.buttonDesign} onPress={()=>this.backPressed()}>
@@ -93,7 +162,47 @@ export default class JobInfoPage extends React.Component {
      * @return {[type]} [description]
      */
     contactPressed(){
-        console.log("Contact");
+        this.setState({
+            showDialog: true
+        });
+    }
+
+    loadContacted(){
+        try{
+            let rootRef = firebase.database().ref();
+    		let userRef = rootRef.child('USERS').child(global.GloablUID).child('Contacted');
+            let employerRef = rootRef.child('EMPLOYERS');
+
+            userRef.once('value')
+            .then(snapshot => {
+                contacted = snapshot.val();
+                if (contacted !== null){
+                    this.contactedList = contacted;
+                }
+            });
+
+            employerRef.once('value')
+            .then(snapshot => {
+                employers = snapshot.val();
+
+                for (var e in employers){
+                    for (var j in employers[e]['JOBS']){
+                        if (j === this.jobInfo.jobKey){
+                            this.employerKey = e;
+                            if (typeof employers[e]['JOBS'][j]['Replies'] !== 'undefined'){
+                                this.replyList = employers[e]['JOBS'][j]['Replies'];
+                            }
+                        }
+                    }
+                }
+                console.log(this.replyList);
+            });
+
+
+        }
+        catch(e){
+            console.warn(e);
+        }
     }
 
     /**
@@ -101,7 +210,12 @@ export default class JobInfoPage extends React.Component {
      * @return {[type]} [description]
      */
     backPressed(){
-        Actions.UserHomePage();
+        if (!this.props.contacted){
+            Actions.UserHomePage();
+        }
+        else{
+            Actions.ContactedPage();
+        }
     }
 }
 

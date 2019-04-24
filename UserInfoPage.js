@@ -61,14 +61,16 @@ export default class UserInfoPage extends React.Component {
                         skillInfoText += "- " + this.firebaseUser['Skills'][i] + spacing;
                     }
                 }
-
                 busInfoText = "";
-                for (var i = 0; i < this.firebaseUser['Travel']['Bus Routes'].length; i++){
-                    if (i <  this.firebaseUser['Travel']['Bus Routes'].length - 1){
-                        busInfoText +=  this.firebaseUser['Travel']['Bus Routes'][i] + ", ";
-                    }
-                    else{
-                        busInfoText +=  this.firebaseUser['Travel']['Bus Routes'][i];
+
+                if (typeof this.firebaseUser['Travel']['Bus Routes'] !== 'undefined'){
+                    for (var i = 0; i < this.firebaseUser['Travel']['Bus Routes'].length; i++){
+                        if (i <  this.firebaseUser['Travel']['Bus Routes'].length - 1){
+                            busInfoText +=  this.firebaseUser['Travel']['Bus Routes'][i] + ", ";
+                        }
+                        else{
+                            busInfoText +=  this.firebaseUser['Travel']['Bus Routes'][i];
+                        }
                     }
                 }
 
@@ -88,10 +90,9 @@ export default class UserInfoPage extends React.Component {
 
     fbPush(){
         let rootRef = firebase.database().ref();
-		let userRef = rootRef.child('USERS');
+		let userRef = rootRef.child('USERS').child(global.GloablUID);
         //TODO: Get UID from props?
-		newAccountRef = userRef.child(global.GloablUID);
-		newAccountRef.update({
+		userRef.update({
 			'Email' : this.state.email,
 			'First Name' : this.state.firstName,
 			'Last Name' : this.state.lastName,

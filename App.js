@@ -1,5 +1,10 @@
 import React from 'react';
-import {Router, Scene} from 'react-native-router-flux';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import Button from 'react-native-button'
+import {Router, Scene,Actions, DefaultRenderer} from 'react-native-router-flux';
+import { TabNavigator } from "react-navigation";
+import { ToastContainer, toast } from 'react-toastify';
+import AccountSetup from './AccountSetup';
 import StartPage from './StartPage';
 import Employers from './Employers';
 import EmployerHomepage from './EmployerHomepage';
@@ -16,6 +21,7 @@ import seekerAuthentication from './seekerAuthentication';
 import employerAuthentication from './employerAuthentication';
 import EmployerSideReplies from './EmployerSideReplies';
 import ViewSeekerProfile from './ViewSeekerProfile';
+import ContactedPage from './ContactedPage';
 import Elimination from './EliminationQuestions'
 import SkipPage from './SkipPage'
 import AdditionalInfo from './AdditionalInfo';
@@ -25,10 +31,11 @@ const App = () => {
     return (
         <Router>
         <Scene key="root">
+
                 <Scene key="StartPage" component={StartPage} hideNavBar={true} panHandlers={null}/>
                 <Scene key="Employers" component={Employers} hideNavBar={true} panHandlers={null}/>
-				<Scene key="seekerAuthentication" component={seekerAuthentication} hideNavBar={true} panHandlers={null}/>
-				<Scene key="employerAuthentication" component={employerAuthentication} hideNavBar={true} panHandlers={null}/>
+				        <Scene key="seekerAuthentication" component={seekerAuthentication} hideNavBar={true} panHandlers={null}/>
+				        <Scene key="employerAuthentication" component={employerAuthentication} hideNavBar={true} panHandlers={null}/>
                 <Scene key="AdditionalInfo" component={AdditionalInfo} hideNavBar={true} panHandlers={null}/>
                 <Scene key="Elimination" component = {Elimination} hideNavBar={true} panHandlers={null}/>
                 <Scene key="SkipPage" component = {SkipPage} hideNavBar={true} panHandlers={null}/>
@@ -44,6 +51,8 @@ const App = () => {
                 <Scene key="UserInfoPage" component={UserInfoPage} hideNavBar={true} panHandlers={null}/>
                 <Scene key="UserHomePage" component={UserHomePage} hideNavBar={true} panHandlers={null}/>
                 <Scene key="JobInfoPage" component={JobInfoPage} hideNavBar={true} panHandlers={null}/>
+                <Scene key = "ContactedPage" component = {ContactedPage} hideNavBar={true}/>
+
             </Scene>
         </Router>
     )
